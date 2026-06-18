@@ -8,6 +8,8 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sp
 
+from modules.stage import Stage
+
 
 @dataclass
 class BipartiteGraph:
@@ -30,8 +32,14 @@ class BipartiteGraph:
         return out
 
 
-class BipartiteBuilder:
+class BipartiteBuilder(Stage):
     """Constrói o BipartiteGraph a partir do DataFrame de retweets filtrado."""
+
+    FILES = (
+        "bipartite_B.npz",
+        "bipartite_user_index.parquet",
+        "bipartite_tweet_index.parquet",
+    )
 
     def build(self, df: pd.DataFrame) -> BipartiteGraph:
         user_codes, user_index = pd.factorize(df["author_id"])
@@ -58,3 +66,13 @@ class BipartiteBuilder:
         user_index = pd.read_parquet(in_ / "bipartite_user_index.parquet")["user_id"].values
         tweet_index = pd.read_parquet(in_ / "bipartite_tweet_index.parquet")["tweet_id"].values
         return BipartiteGraph(B=B, user_index=user_index, tweet_index=tweet_index)
+
+    # --- hooks de cache (Stage) ---
+    def _compute(self, df: pd.DataFrame) -> BipartiteGraph:
+        return self.build(df)
+
+    def _save(self, bg: BipartiteGraph, out_dir) -> None:
+        bg.save(out_dir)
+
+    def _load(self, out_dir) -> BipartiteGraph:
+        return self.load(out_dir)

@@ -219,10 +219,30 @@ score(u) = (R_right(u) - R_left(u)) / (R_right(u) + R_left(u))
 
 ---
 
+## D13. Idempotência da pipeline por cache de estágio
+
+**Decisão:** cada módulo da pipeline (M1–M6) implementa uma interface uniforme de estágio (classe base `Stage`) com um método `run(..., force=False)` que carrega os artefatos do disco se já existem, ou recalcula e persiste caso contrário. No notebook, um único parâmetro `FORCE_FROM = N` recalcula o módulo N e todos os posteriores (cascata).
+
+**Por quê:**
+- A pipeline é iterada muitas vezes (especialmente o M4, projeção). Re-executar o notebook inteiro a cada mudança reprocessaria etapas caras (carga de ~1,1M linhas, filtragem, bipartida) sem necessidade.
+- Centralizar a lógica de cache numa classe base (padrão **Template Method**) mantém a interface pública descritiva dos módulos intacta (`build`, `project`, `apply`, `extract`, `detect`) e a política de persistência num só lugar, testável isoladamente (`tests/test_stage.py`).
+- `load()` reconstrói o objeto completo em memória, inclusive `stats` — o caminho `compute → save → load` faz round-trip para um estado equivalente, sem leituras especiais de disco nas células de inspeção.
+
+**Mecânica de invalidação:** por **existência de arquivo**, não por hash de conteúdo ou de código (escola leve, estilo Make). Consequência assumida: se o código de um módulo muda, o cache não percebe sozinho — é preciso forçar o recálculo via `FORCE_FROM`. Essa disciplina está documentada na célula de configuração do notebook.
+
+**Alternativas rejeitadas:**
+- Framework de pipeline (DVC, Dagster, Snakemake, Ploomber) — fariam invalidação por hash e gestão de dependências, mas adicionam maquinário desproporcional a um TCC com pandas/igraph/scipy. Registrado como próximo degrau caso o projeto escale.
+- Cache por hash de entrada/código — mais robusto, porém mais complexo; YAGNI para o porte atual.
+- Função utilitária solta (`materialize`) em vez de método de classe — preferiu-se a interface interna às classes pela ergonomia de chamada no notebook (`Stage(...).run(...)`).
+
+**Trade-off assumido:** acoplar a política de cache à hierarquia de classes reduz um pouco a separação de responsabilidades, mas a lógica fica inteira na base `Stage` (DRY e coberta por testes).
+
+---
+
 ## Histórico de decisões revisadas
 
 Este espaço é para registrar mudanças futuras de decisão. Toda vez que uma decisão acima for revisada, registrar aqui:
 
 | Data | Decisão revisada | O que mudou | Por quê |
 |---|---|---|---|
-| - | - | - | - |
+| 2026-06-17 | D5 — filtragem de ruído | Removido o filtro de tweets virais; mantido apenas o filtro de usuários inativos | Tweets de alto alcance são o material central da análise narrativa, não ruído; e o limiar de 30% não removia nenhum tweet na validação preliminar |

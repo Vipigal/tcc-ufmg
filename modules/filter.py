@@ -6,6 +6,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from modules.stage import Stage
+
 
 def _counts(df: pd.DataFrame) -> dict:
     return {
@@ -15,12 +17,14 @@ def _counts(df: pd.DataFrame) -> dict:
     }
 
 
-class NoiseFilter:
+class NoiseFilter(Stage):
     """Descarta usuários inativos (menos de N retweets no evento).
 
     Tweets virais são preservados deliberadamente: carregam sinal relevante
     para a análise narrativa (ver decisão D5 em decisoes-metodologicas.md).
     """
+
+    FILES = ("filtered_retweets.parquet", "filter_stats.json")
 
     def __init__(self, min_user_retweets: int = 3):
         self.min_user_retweets = min_user_retweets
@@ -43,3 +47,15 @@ class NoiseFilter:
         with open(out / "filter_stats.json", "w") as f:
             json.dump(self.stats, f, indent=2)
         return out / "filtered_retweets.parquet"
+
+    # --- hooks de cache (Stage) ---
+    def _compute(self, df: pd.DataFrame) -> pd.DataFrame:
+        return self.apply(df)
+
+    def _save(self, df: pd.DataFrame, out_dir) -> None:
+        self.save(df, out_dir)
+
+    def _load(self, out_dir) -> pd.DataFrame:
+        out = Path(out_dir)
+        self.stats = json.loads((out / "filter_stats.json").read_text())
+        return pd.read_parquet(out / "filtered_retweets.parquet")

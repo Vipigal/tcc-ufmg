@@ -9,6 +9,7 @@ import pandas as pd
 import scipy.sparse as sp
 
 from modules.bipartite import BipartiteGraph
+from modules.stage import Stage
 
 
 @dataclass
@@ -28,14 +29,16 @@ class ProjectedGraph:
         return out
 
 
-class JaccardProjector:
+class JaccardProjector(Stage):
     """Projeta a matriz bipartida em grafo de co-retweet com peso Jaccard."""
 
+    FILES = ("projection_W.npz", "projection_user_index.parquet")
+
     def project(self, bg: BipartiteGraph) -> ProjectedGraph:
-        # int64 evita overflow no produto B·Bᵀ (B é int8)
+        # int32 evita overflow no produto B·Bᵀ (B é int8)
         B = bg.B.astype(np.int32)
         B = B.tocsr()
-        C = (B @ B.T)                     # |T_u ∩ T_v|
+        C = (B @ B.T).tocoo()             # |T_u ∩ T_v|
         deg = np.asarray(B.sum(axis=1)).ravel()   # |T_u|
 
         # apenas triângulo superior (i < j), sem diagonal
@@ -49,3 +52,16 @@ class JaccardProjector:
         n = len(bg.user_index)
         W = sp.coo_matrix((jac, (rows, cols)), shape=(n, n)).tocsr()
         return ProjectedGraph(W=W, user_index=bg.user_index)
+
+    # --- hooks de cache (Stage) ---
+    def _compute(self, bg: BipartiteGraph) -> ProjectedGraph:
+        return self.project(bg)
+
+    def _save(self, pg: ProjectedGraph, out_dir) -> None:
+        pg.save(out_dir, prefix="projection")
+
+    def _load(self, out_dir) -> ProjectedGraph:
+        out = Path(out_dir)
+        W = sp.load_npz(out / "projection_W.npz").tocsr()
+        user_index = pd.read_parquet(out / "projection_user_index.parquet")["user_id"].values
+        return ProjectedGraph(W=W, user_index=user_index)

@@ -5,6 +5,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from modules.stage import Stage
+
 
 def _resolve_paths(csv_paths) -> list[Path]:
     if isinstance(csv_paths, (str, Path)):
@@ -15,12 +17,14 @@ def _resolve_paths(csv_paths) -> list[Path]:
     return [Path(x) for x in csv_paths]
 
 
-class RetweetLoader:
+class RetweetLoader(Stage):
     """Lê os CSV(s) de um evento e mantém apenas os retweets.
 
     Aceita um caminho de arquivo, uma lista de caminhos ou um diretório
     (carrega todos os .csv contidos). Um evento pode ter vários CSVs.
     """
+
+    FILES = ("retweets.parquet",)
 
     def __init__(self, csv_paths):
         self.paths = _resolve_paths(csv_paths)
@@ -53,3 +57,13 @@ class RetweetLoader:
         path = out / "retweets.parquet"
         df.to_parquet(path, index=False)
         return path
+
+    # --- hooks de cache (Stage) ---
+    def _compute(self) -> pd.DataFrame:
+        return self.load()
+
+    def _save(self, df: pd.DataFrame, out_dir) -> None:
+        self.save(df, out_dir)
+
+    def _load(self, out_dir) -> pd.DataFrame:
+        return pd.read_parquet(Path(out_dir) / "retweets.parquet")

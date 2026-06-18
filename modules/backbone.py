@@ -5,13 +5,21 @@ import json
 from pathlib import Path
 
 import numpy as np
+import pandas as pd
 import scipy.sparse as sp
 
 from modules.project import ProjectedGraph
+from modules.stage import Stage
 
 
-class BackboneExtractor:
+class BackboneExtractor(Stage):
     """Mantém arestas com peso ≥ tau e descarta nós que ficaram isolados."""
+
+    FILES = (
+        "backbone_W.npz",
+        "backbone_user_index.parquet",
+        "backbone_stats.json",
+    )
 
     def __init__(self, tau: float = 0.1):
         self.tau = tau
@@ -50,3 +58,18 @@ class BackboneExtractor:
         with open(path, "w") as f:
             json.dump(self.stats, f, indent=2)
         return path
+
+    # --- hooks de cache (Stage) ---
+    def _compute(self, pg: ProjectedGraph) -> ProjectedGraph:
+        return self.extract(pg)
+
+    def _save(self, pg: ProjectedGraph, out_dir) -> None:
+        pg.save(out_dir, prefix="backbone")
+        self.save_stats(out_dir)
+
+    def _load(self, out_dir) -> ProjectedGraph:
+        out = Path(out_dir)
+        W = sp.load_npz(out / "backbone_W.npz").tocsr()
+        user_index = pd.read_parquet(out / "backbone_user_index.parquet")["user_id"].values
+        self.stats = json.loads((out / "backbone_stats.json").read_text())
+        return ProjectedGraph(W=W, user_index=user_index)

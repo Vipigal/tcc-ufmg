@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 
 from modules.project import ProjectedGraph
+from modules.stage import Stage
 
 
 @dataclass
@@ -30,8 +31,10 @@ class CommunityResult:
         return out
 
 
-class CommunityDetector:
+class CommunityDetector(Stage):
     """Roda Leiden (objetivo de modularidade) sobre o grafo de backbone."""
+
+    FILES = ("community_graph.graphml", "membership.parquet")
 
     def __init__(self, resolution: float = 1.0,
                  objective_function: str = "modularity",
@@ -63,4 +66,26 @@ class CommunityDetector:
             partition=partition,
             membership=membership,
             user_index=pg.user_index,
+        )
+
+    # --- hooks de cache (Stage) ---
+    def _compute(self, pg: ProjectedGraph) -> CommunityResult:
+        return self.detect(pg)
+
+    def _save(self, cr: CommunityResult, out_dir) -> None:
+        cr.save(out_dir)
+
+    def _load(self, out_dir) -> CommunityResult:
+        out = Path(out_dir)
+        g = ig.Graph.Read_GraphML(str(out / "community_graph.graphml"))
+        mdf = pd.read_parquet(out / "membership.parquet")
+        membership = mdf["community"].astype(int).tolist()
+        partition = ig.VertexClustering(
+            g, membership, modularity_params={"weights": "weight"}
+        )
+        return CommunityResult(
+            g=g,
+            partition=partition,
+            membership=membership,
+            user_index=mdf["user_id"].values,
         )
