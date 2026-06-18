@@ -1,0 +1,17 @@
+{
+  "initial": {
+    "rows": 1100026,
+    "users": 321268,
+    "tweets": 29206
+  },
+  "after_user_filter": {
+    "rows": 813100,
+    "users": 85087,
+    "tweets": 24104
+  },
+  "after_viral_filter": {
+    "rows": 813100,
+    "users": 85087,
+    "tweets": 24104
+  }
+}

@@ -10,6 +10,8 @@
 
 **Specs:** `docs/superpowers/specs/2026-05-23-pipeline-modulos-1-3-design.md`, `docs/superpowers/specs/2026-05-23-pipeline-modulos-4-6-design.md`.
 
+> **Política de commits (alteração 2026-05-23):** Os agentes de codificação NÃO devem fazer commits para o git. O usuário fará todos os commits manualmente após revisar o código localmente. Os passos de "Commit" abaixo ficam como referência da granularidade pretendida, mas estão marcados como pulados.
+
 ---
 
 ## Task 1: Setup do projeto e scaffolding de testes
@@ -71,12 +73,7 @@ def test_imports_work():
 Run: `.venv/bin/pytest tests/test_smoke.py -v`
 Expected: PASS.
 
-- [ ] **Step 7: Commit**
-
-```bash
-git add modules/__init__.py requirements.txt pytest.ini tests/test_smoke.py
-git commit -m "chore: setup de dependências e scaffolding de testes da pipeline"
-```
+- [ ] ~~**Step 7: Commit**~~ — *pulado: o usuário fará o commit manualmente após a revisão local.*
 
 ---
 
@@ -92,17 +89,7 @@ git commit -m "chore: setup de dependências e scaffolding de testes da pipeline
 
 ```python
 import pandas as pd
-from modules.load import RetweetLoader, parse_referenced_tweets
-
-
-def test_parse_referenced_tweets_extracts_id_and_type():
-    val = "[<ReferencedTweet id=5001 type=retweeted]"
-    assert parse_referenced_tweets(val) == [("5001", "retweeted")]
-
-
-def test_parse_referenced_tweets_empty():
-    assert parse_referenced_tweets(None) == []
-    assert parse_referenced_tweets(float("nan")) == []
+from modules.load import RetweetLoader
 
 
 def test_loader_keeps_only_retweets(tmp_path):
@@ -112,13 +99,29 @@ def test_loader_keeps_only_retweets(tmp_path):
         "111,2023-01-08 18:00:00-03:00,1001,[<ReferencedTweet id=5001 type=retweeted]\n"
         "112,2023-01-08 18:01:00-03:00,1002,[<ReferencedTweet id=5002 type=replied_to]\n"
         "113,2023-01-08 18:02:00-03:00,1003,[<ReferencedTweet id=5003 type=quoted]\n"
-        "114,2023-01-08 18:03:00-03:00,1004,\n"
     )
     df = RetweetLoader(csv).load()
     assert list(df.columns) == ["author_id", "referenced_tweet_id", "created_at"]
     assert len(df) == 1
     assert df.loc[0, "author_id"] == "1001"
     assert df.loc[0, "referenced_tweet_id"] == "5001"
+    # replied_to e quoted não entram
+    assert "5002" not in set(df["referenced_tweet_id"])
+    assert "5003" not in set(df["referenced_tweet_id"])
+
+
+def test_loader_drops_null_and_malformed_referenced_tweets(tmp_path):
+    """Bordas do parsing exercitadas pelo caminho real (load), não por função à parte."""
+    csv = tmp_path / "event.csv"
+    csv.write_text(
+        "conversation_id,Created_at_convert,author_id,referenced_tweets\n"
+        "111,2023-01-08 18:00:00-03:00,1001,[<ReferencedTweet id=5001 type=retweeted]\n"
+        "114,2023-01-08 18:03:00-03:00,1004,\n"                         # campo nulo/vazio
+        "115,2023-01-08 18:04:00-03:00,1005,not-a-referenced-tweet\n"   # sem match do regex
+    )
+    df = RetweetLoader(csv).load()
+    assert len(df) == 1                       # só o retweet válido sobrevive
+    assert set(df["author_id"]) == {"1001"}   # 1004 (nulo) e 1005 (malformado) descartados
 
 
 def test_loader_reads_directory(tmp_path):
@@ -159,24 +162,9 @@ Expected: FAIL com `ModuleNotFoundError: No module named 'modules.load'`.
 """Módulo 1 — carga e filtragem para retweets."""
 from __future__ import annotations
 
-import re
 from pathlib import Path
 
 import pandas as pd
-
-_REF_RE = re.compile(r"<ReferencedTweet id=(\d+) type=(\w+)")
-
-
-def parse_referenced_tweets(value) -> list[tuple[str, str]]:
-    """Extrai (id, type) do repr Python do campo referenced_tweets.
-
-    O campo NÃO é JSON; é um repr de objeto, ex.:
-        [<ReferencedTweet id=123 type=retweeted]
-    Retorna lista de tuplas (id, type); vazia se nulo/sem match.
-    """
-    if value is None or (isinstance(value, float) and pd.isna(value)):
-        return []
-    return [(m.group(1), m.group(2)) for m in _REF_RE.finditer(str(value))]
 
 
 def _resolve_paths(csv_paths) -> list[Path]:
@@ -231,14 +219,9 @@ class RetweetLoader:
 - [ ] **Step 4: Rodar para confirmar que passa**
 
 Run: `.venv/bin/pytest tests/test_load.py -v`
-Expected: PASS (5 testes).
+Expected: PASS (4 testes).
 
-- [ ] **Step 5: Commit**
-
-```bash
-git add modules/load.py tests/test_load.py
-git commit -m "feat: módulo 1 RetweetLoader (carga e filtragem para retweets)"
-```
+- [ ] ~~**Step 5: Commit**~~ — *pulado: o usuário fará o commit manualmente após a revisão local.*
 
 ---
 
@@ -362,12 +345,7 @@ class NoiseFilter:
 Run: `.venv/bin/pytest tests/test_filter.py -v`
 Expected: PASS (4 testes).
 
-- [ ] **Step 5: Commit**
-
-```bash
-git add modules/filter.py tests/test_filter.py
-git commit -m "feat: módulo 2 NoiseFilter (filtragem de usuários e tweets virais)"
-```
+- [ ] ~~**Step 5: Commit**~~ — *pulado: o usuário fará o commit manualmente após a revisão local.*
 
 ---
 
@@ -491,12 +469,7 @@ class BipartiteBuilder:
 Run: `.venv/bin/pytest tests/test_bipartite.py -v`
 Expected: PASS (3 testes).
 
-- [ ] **Step 5: Commit**
-
-```bash
-git add modules/bipartite.py tests/test_bipartite.py
-git commit -m "feat: módulo 3 BipartiteBuilder (matriz esparsa usuário × tweet)"
-```
+- [ ] ~~**Step 5: Commit**~~ — *pulado: o usuário fará o commit manualmente após a revisão local.*
 
 ---
 
@@ -619,12 +592,7 @@ class JaccardProjector:
 Run: `.venv/bin/pytest tests/test_project.py -v`
 Expected: PASS (3 testes).
 
-- [ ] **Step 5: Commit**
-
-```bash
-git add modules/project.py tests/test_project.py
-git commit -m "feat: módulo 4 JaccardProjector (projeção co-retweet com peso Jaccard)"
-```
+- [ ] ~~**Step 5: Commit**~~ — *pulado: o usuário fará o commit manualmente após a revisão local.*
 
 ---
 
@@ -747,12 +715,7 @@ class BackboneExtractor:
 Run: `.venv/bin/pytest tests/test_backbone.py -v`
 Expected: PASS (3 testes).
 
-- [ ] **Step 5: Commit**
-
-```bash
-git add modules/backbone.py tests/test_backbone.py
-git commit -m "feat: módulo 5 BackboneExtractor (universal threshold + remoção de isolados)"
-```
+- [ ] ~~**Step 5: Commit**~~ — *pulado: o usuário fará o commit manualmente após a revisão local.*
 
 ---
 
@@ -888,12 +851,7 @@ class CommunityDetector:
 Run: `.venv/bin/pytest tests/test_community.py -v`
 Expected: PASS (3 testes).
 
-- [ ] **Step 5: Commit**
-
-```bash
-git add modules/community.py tests/test_community.py
-git commit -m "feat: módulo 6 CommunityDetector (Leiden com objetivo de modularidade)"
-```
+- [ ] ~~**Step 5: Commit**~~ — *pulado: o usuário fará o commit manualmente após a revisão local.*
 
 ---
 
@@ -953,12 +911,7 @@ Expected: PASS. (Se falhar, indica incompatibilidade de contrato entre módulos 
 Run: `.venv/bin/pytest -v`
 Expected: PASS em todos os testes (smoke + 6 módulos + integração).
 
-- [ ] **Step 4: Commit**
-
-```bash
-git add tests/test_integration.py
-git commit -m "test: integração ponta-a-ponta dos módulos 1-6 (recupera 2 comunidades)"
-```
+- [ ] ~~**Step 4: Commit**~~ — *pulado: o usuário fará o commit manualmente após a revisão local.*
 
 ---
 
