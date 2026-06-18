@@ -1,234 +1,124 @@
-# RASCUNHO DA PROPOSTA — TCC
+# PROPOSTA DE TCC
 
-## 1. Capa
-
-**Título proposto** (três opções, escolhe a que te soa melhor):
-
-A. *Bolhas em colisão: análise comparativa e visualização interativa das comunidades políticas no Twitter brasileiro em torno dos ataques de 8 de janeiro de 2023*
-
-B. *Duas realidades, um mesmo fato: análise de bolhas de eco no Twitter brasileiro durante eventos políticos de 2022 e 2023*
-
-C. *Como dois lados enxergam o mesmo evento: análise estrutural e visualização das comunidades polarizadas no Twitter brasileiro durante o 8 de janeiro de 2023*
-
-**Tipo de Pesquisa:** Mista (científica e tecnológica). A frente científica corresponde à análise quantitativa de redes sociais e à comparação de métricas estruturais entre eventos; a frente tecnológica corresponde ao desenvolvimento de uma pipeline computacional reutilizável e de uma aplicação web interativa para visualização dos resultados.
-
-**Orientadora:** Eliane
-
-**Coorientador:** não há
+## Informações Gerais
+* [cite_start]**Título:** Arestas, comunidades e narrativas: análise estrutural da polarização no Twitter brasileiro durante o ciclo eleitoral de 2022 [cite: 2]
+* [cite_start]**Aluno:** Vinícius Pinho Galvão [cite: 3]
+* [cite_start]**Orientadora:** Eliane Cristina de Freitas Rocha [cite: 3]
+* [cite_start]**Tipo de pesquisa:** Científica [cite: 4]
+* [cite_start]**Local e Data:** Belo Horizonte, Abril 2026 [cite: 5, 6]
 
 ---
 
-## 2. Introdução
+## [cite_start]1. Introdução [cite: 7, 8]
+[cite_start]O ciclo eleitoral brasileiro de 2022 foi um dos períodos mais polarizados da história política recente do país[cite: 9]. [cite_start]O debate público em torno da disputa entre Lula e Jair Bolsonaro migrou de forma substancial para as plataformas digitais, com o Twitter (atualmente X) ocupando posição central como espaço de circulação de notícias, manifestações políticas e mobilização de apoiadores[cite: 10]. [cite_start]A plataforma serviu simultaneamente como canal oficial de comunicação para políticos, veículos de imprensa e influenciadores, e como ambiente em que narrativas concorrentes sobre os mesmos fatos eram construídas, amplificadas e contestadas[cite: 11].
 
-### 2.1. Problema e justificativa
+[cite_start]O desfecho mais visível dessa polarização ocorreu em 8 de janeiro de 2023, quando apoiadores do então ex-presidente Bolsonaro invadiram as sedes dos três poderes em Brasília, num ato de contestação ao resultado eleitoral e às instituições democráticas[cite: 12]. [cite_start]O evento marcou o ápice de um processo de tensão que vinha se acumulando há meses, e tornou explícito o quanto duas parcelas da sociedade brasileira haviam passado a operar a partir de leituras radicalmente distintas da mesma realidade política[cite: 13].
 
-A polarização política nas redes sociais é um fenômeno bem documentado, e o Brasil viveu uma das suas manifestações mais intensas no ciclo eleitoral de 2022 e seu desdobramento em 8 de janeiro de 2023, quando apoiadores do ex-presidente Jair Bolsonaro invadiram as sedes dos três poderes em Brasília. O Twitter (atualmente X) foi um dos canais centrais em que esse processo se manifestou publicamente, servindo simultaneamente como meio de mobilização, de disseminação de narrativas e de formação de opinião.
+[cite_start]Esse descompasso entre leituras de um mesmo fato é o problema central que este trabalho busca caracterizar[cite: 14]. [cite_start]Para uma parcela significativa dos brasileiros, o Twitter funciona como fonte primária de informação sobre política nacional, e a linha do tempo de cada usuário é moldada por suas próprias escolhas de quem seguir e o que retweetar, em interação com o que o algoritmo da plataforma decide promover[cite: 15]. [cite_start]O resultado prático é que dois usuários expostos ao mesmo evento podem ter experiências de leitura completamente diferentes da realidade[cite: 16].
 
-Este trabalho parte de uma observação simples e bastante reconhecível por qualquer usuário de redes sociais brasileiro: dois usuários do Twitter, expostos ao mesmo evento político, podem ter experiências de leitura completamente diferentes da realidade. Um pode ver linhas do tempo dominadas por mensagens descrevendo o 8 de janeiro como um ataque à democracia; o outro pode ver linhas do tempo dominadas por mensagens descrevendo o mesmo evento como uma manifestação patriótica infiltrada por agentes da esquerda. Essa divergência informacional não é apenas uma curiosidade — ela tem efeitos diretos sobre como o debate público se organiza e sobre a possibilidade de consenso mínimo sobre o que aconteceu.
+[cite_start]A hipótese que orienta este trabalho é que essa divergência não surgiu pronta no 8 de janeiro: ela foi construída ao longo do ciclo eleitoral, em uma sequência de eventos em que o descontentamento foi sendo intensificado em uma comunidade enquanto era enquadrado de forma muito distinta na comunidade oposta[cite: 17]. [cite_start]Para investigar essa hipótese, propõe-se analisar não apenas o 8 de janeiro isoladamente, mas também eventos anteriores que compõem o arco narrativo que culmina nele, observando como as comunidades políticas no Twitter se organizaram em torno de cada um deles e como suas leituras divergiram[cite: 18].
 
-O problema que este trabalho aborda é, portanto: **como caracterizar e tornar visível, de forma defensável e replicável, a divergência informacional entre comunidades políticas opostas no Twitter brasileiro em torno do 8 de janeiro de 2023?**
+Para isso, será utilizado como base o dataset Tweet_Eleições_2022, desenvolvido por Silva et al. (2024)[cite_start], que contém aproximadamente 9,5 milhões de tweets coletados entre abril de 2022 e janeiro de 2023[cite: 20, 21]. [cite_start]O dataset foi desenvolvido com o objetivo de evidenciar a dinâmica de comportamento das redes sociais de acordo com a ocorrência de eventos politicamente relevantes no cenário nacional e noticiados na imprensa, e está organizado em 110 arquivos correspondentes a eventos políticos específicos do período, abrangendo desde discussões pré-eleitorais até a cobertura direta dos ataques de 8 de janeiro em janelas de três horas[cite: 21]. [cite_start]Essa segmentação por evento permite tanto a análise focada de momentos políticos individuais quanto a comparação entre eles, oferecendo cobertura temporal e temática adequada à investigação proposta neste trabalho[cite: 22].
 
-A importância do problema é tripla. Em primeiro lugar, há uma motivação técnica: a análise estruturada de grafos de retweet é uma aplicação concreta de conceitos centrais da computação (estruturas de dados em grafos, algoritmos de detecção de comunidade, projeções bipartidas, processamento de grandes volumes de dados), aplicada a um problema do mundo real. Em segundo lugar, há uma motivação social: tornar visível a estrutura das bolhas pode ajudar leitores não-técnicos a compreender melhor sua própria exposição informacional. Em terceiro lugar, há uma motivação de delimitação: ao escolher um evento polarizador específico e bem documentado, é possível conduzir uma análise focada e factível dentro do escopo de um TCC, sem precisar resolver o problema geral da polarização nas redes.
+### [cite_start]Objetivos Gerais [cite: 23]
+Caracterizar a estrutura das comunidades políticas no Twitter brasileiro em torno do 8 de janeiro de 2023, e desenvolver uma visualização interativa que torne essa estrutura compreensível para um público não-técnico, usando como dataset os tweets coletados por Silva et al. (2024) [cite_start][cite: 23, 24].
 
-### 2.2. Pergunta central
-
-*Como apoiadores de esquerda e de direita no Twitter brasileiro construíram e amplificaram narrativas distintas sobre o mesmo evento — os ataques de 8 de janeiro de 2023 — e como essa divergência pode ser tornada visível e navegável para um leitor?*
-
-### 2.3. Objetivo geral
-
-Caracterizar a estrutura das comunidades políticas no Twitter brasileiro em torno do 8 de janeiro de 2023, e desenvolver uma visualização interativa que torne essa estrutura compreensível para um público não-técnico, usando como dataset os tweets coletados por Silva et al. (2024).
-
-### 2.4. Objetivos específicos
-
-1. Desenvolver uma pipeline computacional reutilizável que receba como entrada um arquivo do dataset Silva et al. (2024) e produza como saída um grafo de co-retweet com comunidades detectadas e métricas estruturais associadas.
-
-2. Aplicar essa pipeline a quatro eventos políticos do dataset, escolhidos por compor um arco narrativo que culmina no 8 de janeiro: a mobilização de 7 de setembro de 2022, o caso Roberto Jefferson (outubro de 2022), o debate sobre democracia no dia do segundo turno (30 de outubro de 2022) e os ataques de 8 de janeiro de 2023.
-
-3. Hidratar seletivamente um conjunto reduzido de tweets originais mais retuitados em cada evento para permitir a classificação manual de fontes ideológicas e a caracterização das narrativas predominantes em cada comunidade.
-
-4. Construir uma aplicação web interativa que permita a um leitor explorar os grafos resultantes, comparar lado a lado os tweets dominantes em cada comunidade, e observar a evolução temporal do grafo do 8 de janeiro ao longo do dia.
-
-5. Documentar criticamente as limitações metodológicas da abordagem, incluindo o que o grafo de co-retweet permite e não permite afirmar.
+### [cite_start]Objetivos Específicos [cite: 25]
+1. Desenvolver uma pipeline computacional reutilizável que receba como entrada um arquivo do dataset Silva et al. (2024) [cite_start]e produza como saída um grafo de co-retweet com comunidades detectadas e métricas estruturais associadas[cite: 26, 27].
+2. [cite_start]Aplicar essa pipeline a quatro eventos políticos do dataset, escolhidos por compor um arco narrativo que culmina no 8 de janeiro: a mobilização de 7 de setembro de 2022, o caso Roberto Jefferson (outubro de 2022), o debate sobre democracia no dia do segundo turno (30 de outubro de 2022) e os ataques de 8 de janeiro de 2023[cite: 28].
+3. [cite_start]Hidratar seletivamente um conjunto reduzido de tweets originais mais retuitados em cada evento para permitir a classificação manual de fontes ideológicas e a caracterização das narrativas predominantes em cada comunidade[cite: 29].
+4. [cite_start]Construir uma aplicação web interativa que permita a um leitor explorar os grafos resultantes, comparar lado a lado os tweets dominantes em cada comunidade, e observar a evolução temporal do grafo do 8 de janeiro ao longo do dia[cite: 30].
 
 ---
 
-## 3. Referencial Teórico
+## [cite_start]2. Referencial Teórico [cite: 32, 33]
 
-### 3.1. Bolhas de eco e câmaras de eco
+### 2.1. [cite_start]Bolhas de eco e câmaras de eco [cite: 34]
+[cite_start]O conceito de bolhas de eco, popularizado por Pariser (2011) como filter bubble, descreve o fenômeno em que um usuário de redes sociais passa a consumir predominantemente conteúdo que reforça suas próprias opiniões e visões de mundo[cite: 35]. [cite_start]Isso acontece por uma combinação de dois fatores: as escolhas do próprio usuário, que tende a seguir contas e amplificar conteúdos com os quais já concorda; e a ação dos algoritmos de recomendação das plataformas, que aprendem essas preferências e passam a entregar mais conteúdo do mesmo tipo[cite: 36, 37]. [cite_start]Com o tempo, o resultado é um ambiente informacional cada vez mais homogêneo, em que o usuário tem pouco contato com perspectivas divergentes[cite: 38]. 
 
-O termo *filter bubble*, popularizado por Pariser (2011), descreve o efeito da personalização algorítmica em criar ambientes informacionais individualizados que limitam a exposição a perspectivas divergentes. Sunstein (2017) trabalha o conceito complementar de *echo chambers*, enfatizando o componente de autossegregação voluntária dos usuários, não apenas o algorítmico. Bruns (2019) apresenta um contraponto importante, argumentando que as evidências empíricas das bolhas são mais fracas do que o discurso popular sugere, e que o grau de hermetismo varia significativamente por plataforma e contexto. Bail et al. (2018) acrescentam um paradoxo relevante: a exposição a conteúdo de visão oposta pode, em certos casos, aumentar a polarização em vez de reduzi-la.
+[cite_start]No contexto político, isso tem efeitos concretos[cite: 39]. [cite_start]Comunidades opostas passam a habitar realidades informacionais paralelas, em que os mesmos fatos são descritos com vocabulário, ênfase e enquadramento radicalmente diferentes[cite: 39]. [cite_start]Esse fenômeno é o que torna possível que um mesmo evento, como os ataques de 8 de janeiro, seja interpretado por um lado como um atentado à democracia e pelo outro como uma manifestação patriótica, sem que haja um espaço comum em que essas leituras se confrontam de forma produtiva[cite: 40].
 
-Este trabalho adota uma postura intencionalmente moderada nessa discussão: a existência de bolhas não é tratada como hipótese a ser provada, mas como ferramenta de leitura para entender como comunidades distintas processam o mesmo evento. O foco está na visualização da divergência observável, não em afirmações fortes sobre causalidade algorítmica.
+### 2.2. [cite_start]Análise de polarização em redes sociais brasileiras [cite: 41]
+[cite_start]A análise de polarização política no Twitter brasileiro tem na pesquisadora Raquel Recuero uma de suas principais referências[cite: 42]. [cite_start]Os trabalhos do grupo de Recuero têm mostrado, em diferentes eventos do contexto político nacional como na eleição presidencial de 2018 (Recuero, Soares e Gruzd, 2020; Soares e Recuero, 2021) à circulação de desinformação sobre a pandemia de Covid-19 (Recuero, Soares e Zago, 2021), que as comunidades de esquerda e de direita no Twitter formam estruturas claramente segmentadas, com pouca interação entre si, e que essas estruturas são detectáveis a partir do padrão de retweets entre os usuários[cite: 43]. [cite_start]A premissa metodológica é que o retweet funciona como uma forma de endosso: ao retuitar uma mensagem, o usuário sinaliza concordância ou pelo menos disposição a amplificar aquele conteúdo dentro de sua própria rede[cite: 44]. [cite_start]Essa noção é a base da maior parte dos estudos quantitativos sobre polarização em redes sociais, incluindo este trabalho[cite: 45].
 
-### 3.2. Análise de polarização em redes de retweet
+### 2.3. [cite_start]Rede de co-retweet como ferramenta de análise [cite: 47]
+[cite_start]A maneira mais direta de estudar polarização em uma rede de retweets é construir um grafo em que os usuários são os nós e existe uma aresta dirigida de A para B quando A retuita B[cite: 48]. Conover et al. (2011)[cite_start], em um dos trabalhos seminais sobre o tema, aplicaram essa abordagem ao Twitter político americano e demonstraram que ela revela duas comunidades claramente segregadas, com pouquíssima interação entre si[cite: 48, 49]. [cite_start]Essa construção, no entanto, exige conhecer o autor de cada tweet retuitado, informação que não está disponível diretamente no dataset utilizado neste trabalho, e cuja recuperação completa via API teria custo proibitivo[cite: 50].
 
-Conover et al. (2011) estabeleceram que redes de retweet refletem alinhamento ideológico de forma mais fiel do que redes de menção ou reply — retweet funciona como proxy de endosso, enquanto menções frequentemente representam confronto. Essa distinção justifica a escolha deste trabalho de construir o grafo exclusivamente sobre retweets. Garimella et al. (2018) propuseram o *Random Walk Controversy score* (RWC) como métrica para quantificar polarização em grafos bipartidos, baseado na probabilidade de que um random walk iniciado em uma comunidade permaneça nela.
-
-No contexto brasileiro, Recuero et al. (2019) aplicaram análise de redes sociais para identificar papéis de usuários em conversas polarizadas no Twitter. Silva et al. (2024) desenvolveram o pipeline de coleta que originou o dataset utilizado neste trabalho. Bastos e Recuero (2023) analisaram especificamente as narrativas que sustentaram a tentativa de insurreição de 8 de janeiro, com foco em pronunciamentos de parlamentares. Ozawa et al. (2024) analisaram a interação entre WhatsApp, Twitter e mídia jornalística no mesmo evento, com técnicas de modelagem de tópicos.
-
-### 3.3. Co-retweet networks e projeções bipartidas
-
-A construção clássica de uma rede de retweet — em que uma aresta dirigida liga o usuário A ao usuário B se A retuitou B — exige conhecer o autor original do tweet retuitado. No dataset Silva et al. (2024), essa informação não está disponível diretamente, porque o dataset preserva apenas o ID do tweet referenciado, e não o ID de seu autor. Recuperar o autor exigiria hidratação massiva via API, com custo proibitivo para o escopo deste trabalho.
-
-A alternativa adotada é a construção de uma *co-retweet network*, em que dois usuários são ligados por uma aresta se compartilham retweets de tweets em comum. Formalmente, trata-se de uma projeção unipartida de uma rede bipartida usuário-tweet. Essa abordagem foi utilizada, entre outros, por Tien et al. (2020) para analisar a polarização em torno do evento de Charlottesville, por Pena et al. (2025) para o referendo do aborto irlandês, e em estudo recente sobre a eleição americana de 2020 publicado em *Frontiers in Political Science*. A justificativa metodológica é direta: usuários que amplificam consistentemente o mesmo material habitam o mesmo ambiente informacional, mesmo que não interajam diretamente entre si.
-
-Projeções bipartidas tendem a gerar redes densas e ruidosas, problema bem reconhecido na literatura (Neal et al., 2021). A solução padrão é a aplicação de uma técnica de *backbone extraction*, que mantém apenas as arestas estatisticamente mais significativas. Este trabalho adota um *universal threshold* sobre o peso de Jaccard como técnica de backbone, por sua simplicidade e adequação ao escopo de um TCC.
-
-### 3.4. Limitações reconhecidas pela literatura
-
-Duas limitações importantes da abordagem precisam ser registradas desde já. Em primeiro lugar, Guerra et al. (2017), trabalhando com datasets brasileiros do Twitter sobre política e futebol, demonstraram empiricamente que comunidades antagônicas podem retweetar umas às outras com frequência alta — seja por citação irônica, exposição ao ridículo ou contestação direta. Isso questiona a premissa simples de que retweet equivale a endosso. Em segundo lugar, Rao et al. (2022) mostraram que grafos de retweet tendem a *superestimar* o efeito de câmara de eco em comparação com grafos baseados em relações de following. Ambas as limitações serão explicitadas e discutidas como ressalvas da análise, não como problemas a serem resolvidos no escopo deste trabalho.
+[cite_start]A alternativa adotada é a construção de uma rede de co-retweet (co-retweet network), em que dois usuários são ligados por uma aresta sempre que compartilham o retweet de um mesmo tweet[cite: 51]. [cite_start]A intuição é simples: usuários que amplificam consistentemente o mesmo material habitam o mesmo ambiente informacional, ainda que não interajam diretamente entre si[cite: 52]. [cite_start]Trabalhos recentes têm aplicado variantes dessa abordagem em diferentes contextos eleitorais[cite: 53]. [cite_start]Pena, Maccarron e O'Sullivan (2025) utilizam co-retweet networks para investigar a polarização no Twitter irlandês em torno do referendo do aborto, demonstrando a capacidade da técnica de revelar comunidades ideologicamente coerentes mesmo sem acesso à cadeia direta de retweets[cite: 54]. Flamino et al. (2023) [cite_start]evidenciaram o aumento da segregação informacional em redes de similaridade derivadas do padrão de retweets no contexto eleitoral americano[cite: 55].
 
 ---
 
-## 4. Metodologia
+## [cite_start]3. Metodologia [cite: 56, 57]
 
-### 4.1. Dataset
+### 3.1. [cite_start]Dataset [cite: 58]
+[cite_start]O trabalho utiliza o dataset Tweet_Eleições_2022 (Silva et al., 2024), disponível publicamente no Zenodo sob licença CC-BY 4.0[cite: 59]. [cite_start]O dataset contém aproximadamente 9,47 milhões de tweets coletados entre abril de 2022 e janeiro de 2023, organizados em 110 arquivos por evento político[cite: 60]. [cite_start]O dataset está desidratado por razões éticas; cada registro contém apenas: data de criação, ID do autor da ação, ID da conversa, e campo referenciando tweets com o ID e o tipo de tweet referenciado (retweeted, replied_to, quoted)[cite: 61, 63]. [cite_start]O campo referenced_tweets é central para a construção do grafo[cite: 64]. [cite_start]Quando vazio, indica que o tweet é original[cite: 64]. [cite_start]Quando preenchido, contém o ID do tweet referenciado e o tipo da referência[cite: 65].
 
-O trabalho utiliza o dataset Tweet_Eleições_2022 (Silva et al., 2024), disponível publicamente no Zenodo sob licença CC-BY 4.0. O dataset contém aproximadamente 9,47 milhões de tweets coletados entre abril de 2022 e janeiro de 2023, organizados em 110 arquivos por evento político. O dataset está desidratado por razões éticas; cada registro contém apenas: data de criação, ID do autor da ação, ID da conversa, e campo `referenced_tweets` com o ID e o tipo de tweet referenciado (retweeted, replied_to, quoted).
+[cite_start]Quatro eventos do dataset foram selecionados para análise, escolhidos por compor um arco narrativo de tensionamento institucional progressivo: [cite: 66]
+1. [cite_start]Mobilização do 7 de setembro de 2022 com aproximadamente 242 mil tweets; [cite: 67]
+2. [cite_start]Caso Roberto Jefferson (out/2022) com aproximadamente 966 mil tweets; [cite: 68]
+3. [cite_start]Debate sobre a "democracia" no $2^{\circ}$ turno (30/10/2022): ~299 mil tweets; [cite: 69]
+4. [cite_start]Ataques de 8 de janeiro de 2023: ~1,23 milhão de tweets. [cite: 70]
 
-Quatro eventos foram selecionados para análise, escolhidos por compor um arco narrativo de tensionamento institucional progressivo:
+### 3.2. [cite_start]Construção do grafo de co-retweet [cite: 71]
+[cite_start]O processamento parte do arquivo CSV de cada evento[cite: 72]. [cite_start]O primeiro passo é filtrar apenas registros com type=retweeted no campo referenced_tweets, descartando respostas, citações e tweets originais[cite: 72]. [cite_start]Dessa filtragem resulta um conjunto de pares (usuário, tweet retweetado)[cite: 73].
 
-| Evento | Pasta no dataset | Volume aproximado |
-|---|---|---|
-| Mobilização do 7 de setembro de 2022 | `0709_mobilizacao` | ~242 mil tweets |
-| Caso Roberto Jefferson (out/2022) | `2310_robertojefferson_*` (4 arquivos) | ~966 mil tweets |
-| Debate "democracia" no 2º turno (30/10/2022) | `3010_democracia` | ~299 mil tweets |
-| Ataques de 8 de janeiro de 2023 | `0801_invasao_*` e `0901_invasao_*` (7 arquivos) | ~1,23 milhão de tweets |
+A partir desses pares, constrói-se uma representação bipartida do evento na forma de uma matriz bipartida usuário tweet B de dimensões $|U| [cite_start]\times |T|$ onde U é o conjunto de usuários ativos no evento e T é o conjunto de tweets que foram retuitados pelo menos uma vez[cite: 74]. [cite_start]Nesse caso $B_{u,t}=1$ caso o usuário u tenha retweetado o tweet t e 0 caso contrário[cite: 75].
 
-### 4.2. Construção do grafo de co-retweet
+[cite_start]A matriz bipartida é então projetada em um grafo unipartido de usuários: dois usuários são ligados por uma aresta se compartilharam o retweet de pelo menos um tweet em comum[cite: 76]. [cite_start]O peso atribuído à aresta entre os usuários u e v é dado pelo coeficiente de Jaccard sobre os conjuntos de tweets retuitados por cada um: [cite: 77]
 
-Para cada evento, a pipeline executa os seguintes passos:
+$$J(u,v)=\frac{|T_{u}\cap T_{v}|}{|T_{u}\cup T_{v}|}$$
 
-1. **Filtragem.** Carregar o(s) arquivo(s) CSV do evento; selecionar apenas registros com `type=retweeted`; descartar usuários que aparecem como retweetadores menos de N vezes no evento (N a ser definido empiricamente, candidato inicial N=3).
+[cite_start]Onde $T_{u}$ denota o conjunto de tweets retuitados pelo usuário u[cite: 77]. [cite_start]O coeficiente varia entre 0 (nenhum tweet em comum) e 1 (os dois usuários retuitaram exatamente o mesmo conjunto de tweets)[cite: 77, 78, 80]. [cite_start]A escolha do Jaccard normaliza a similaridade pela atividade total de cada usuário, evitando que usuários hiperativos apareçam como artificialmente próximos[cite: 80].
 
-2. **Construção da bipartida.** Montar uma matriz esparsa B de dimensões (usuários × tweets), com B[u,t] = 1 se o usuário u retuitou o tweet t no evento, 0 caso contrário.
+### 3.3. [cite_start]Limpeza e detecção de comunidades [cite: 81]
+[cite_start]Grafos construídos por projeção bipartida tendem a ser densos e ruidosos[cite: 82]. [cite_start]Para que a análise produza resultados interpretáveis, é necessário aplicar etapas de limpeza[cite: 83]. [cite_start]Usuários que retuitaram poucas vezes no evento (limiar inicial: menos de três retweets) são descartados antes da projeção, o que reduz o número de nós do grafo sem perda informativa relevante[cite: 84, 85].
 
-3. **Projeção unipartida com peso Jaccard.** Para cada par (u, v) de usuários, calcular o peso da aresta como J(u,v) = |T_u ∩ T_v| / |T_u ∪ T_v|, onde T_u é o conjunto de tweets retuitados pelo usuário u. Pares com peso zero não geram aresta.
+[cite_start]Após a projeção, retém-se apenas as arestas com peso de Jaccard $\ge \tau$, com $\tau$ inicial $=0,1$[cite: 86]. [cite_start]Esse corte elimina ligações fracas, que conectam usuários com apenas um ou dois tweets em comum entre dezenas de retweets cada um[cite: 87]. [cite_start]A escolha de $\tau$ será acompanhada de análise de sensibilidade em $\tau=0.05$ е $\tau=0.15$, documentada após análise exploratória[cite: 88].
 
-4. **Backbone extraction via universal threshold.** Reter apenas arestas com J(u,v) ≥ τ. O valor inicial proposto é τ = 0,1, com análise de sensibilidade documentada no apêndice (rodar a pipeline também com τ = 0,05 e τ = 0,15 para verificar robustez).
+[cite_start]Sobre o grafo resultante é aplicado o algoritmo de Leiden (Traag, Waltman e van Eck, 2019) para detecção de comunidades[cite: 89]. [cite_start]Esse algoritmo busca uma partição dos nós que maximize a modularidade Q, produzindo uma partição dos usuários em comunidades e métricas de separação[cite: 90, 91].
 
-5. **Detecção de comunidades.** Aplicar o algoritmo de Leiden sobre o grafo resultante. Reportar modularidade Q, número de comunidades, tamanho relativo das duas maiores comunidades, e fluxo de arestas entre elas.
+### 3.4. [cite_start]Rotulagem ideológica dos clusters [cite: 92]
+[cite_start]Para cada evento, são identificados os tweets que foram mais retuitados dentro do dataset e é feita a hidratação de uma amostra desses tweets via API do X para recuperar o texto e o autor original[cite: 96]. [cite_start]Com essa amostra em mãos, classifica-se os autores em categorias ideológicas amplas (esquerda, direita, mídia jornalística, neutro), e infere-se a posição predominante de cada comunidade detectada no grafo, com base em quem seus membros amplificam com mais frequência[cite: 97]. [cite_start]A classificação dos autores será feita com auxílio de um modelo de linguagem (LLM) em uma primeira passada automática, seguida de revisão manual[cite: 98]. [cite_start]Esse processo será documentado de forma transparente no trabalho final[cite: 99].
 
-### 4.3. Rotulagem ideológica dos clusters
+### 3.5. [cite_start]Análise narrativa das comunidades [cite: 100]
+[cite_start]Uma vez que cada comunidade esteja rotulada, são selecionados os tweets mais retuitados internamente a cada comunidade, e o conteúdo desses tweets é analisado qualitativamente novamente com apoio de um modelo de linguagem para sugerir categorias narrativas predominantes, seguido de revisão manual[cite: 101, 102]. [cite_start]O objetivo é produzir, para cada par (evento, comunidade), uma descrição curta de "o que essa comunidade amplificou neste evento", que possa ser apresentada de forma legível ao leitor final na aplicação web[cite: 103].
 
-A rotulagem dos clusters em "esquerda", "direita", "neutro" ou outras categorias é feita em três passos:
-
-1. **Ranking dos tweets mais retuitados.** Para cada evento, agregar o campo `referenced_tweets` por ID de tweet e contar quantas vezes cada tweet foi retuitado dentro do dataset. Selecionar os top-200 tweets por evento.
-
-2. **Hidratação via API do X.** Recuperar o texto e o autor desses 200 tweets via endpoint `/2/tweets`. Custo estimado: $0,03 por lookup × 200 tweets × 4 eventos ≈ $24 no total. Os autores recuperados são salvos em um cache local, permitindo reaproveitamento entre eventos quando o mesmo autor aparece.
-
-3. **Classificação manual + LLM das fontes.** Para cada autor recuperado, atribuir uma das categorias: esquerda, direita, mídia jornalística institucional, neutro/indefinido. Um modelo de linguagem (LLM) será usado para uma primeira passada de classificação automática a partir do texto do tweet e do handle do autor; a classificação será revisada manualmente. Os critérios e a planilha de classificação serão incluídos como apêndice.
-
-4. **Cálculo do score ideológico por usuário.** Para cada usuário u do grafo, computar:
-
-   ```
-   score(u) = (R_dir(u) − R_esq(u)) / (R_dir(u) + R_esq(u))
-   ```
-
-   onde R_dir(u) é o número de retweets de u a tweets de autores classificados como direita, e análogo para esquerda. O score varia entre −1 e +1.
-
-5. **Rotulagem do cluster.** Cada cluster detectado pelo Leiden é rotulado como "predominantemente direita", "predominantemente esquerda" ou "misto" com base no score médio de seus membros.
-
-### 4.4. Análise narrativa por cluster
-
-Para cada um dos dois principais clusters de cada evento, selecionar os top-50 tweets originais mais retuitados *internamente* àquele cluster (filtrando o ranking de retweets pelos retweets feitos por usuários daquele cluster). Esses 50 tweets já estão hidratados dentre os 200 do passo anterior — sem chamada extra à API. Para cada conjunto de 50 tweets, fazer uma análise qualitativa de enquadramento: usar o LLM para sugerir 3 a 5 categorias narrativas predominantes, revisar manualmente e produzir uma síntese curta de "o que esse cluster amplificou neste evento". O produto é, para cada par (evento, cluster), uma página descritiva curta com exemplos.
-
-### 4.5. Validação metodológica preliminar
-
-Antes de aplicar a pipeline aos quatro eventos, será realizada uma validação preliminar em um único arquivo do 8 de janeiro (provavelmente `0801_invasao-18hr-21hr`, por ser o de maior volume). O objetivo é verificar empiricamente se a estrutura bimodal emerge de forma visível, ou se ajustes adicionais nos filtros são necessários. Os resultados dessa validação serão documentados no TCC como apêndice e justificarão eventuais ajustes nos parâmetros default (N de usuário inativo, τ do backbone).
-
-### 4.6. Visualização interativa
-
-A entrega final do trabalho inclui uma aplicação web desenvolvida em React, hospedada publicamente, com três componentes principais:
-
-- **Mapa de grafo**: visualização do grafo de cada evento, com nós coloridos por cluster e tamanho proporcional ao grau ponderado, layout ForceAtlas2 pré-computado e renderização via Sigma.js.
-
-- **"Habite a bolha"**: para cada evento e cada cluster, uma lista lado a lado dos 15 tweets mais retuitados internamente, permitindo ao leitor comparar diretamente o que cada comunidade amplificou.
-
-- **Filtro temporal (apenas para o 8 de janeiro)**: slider de hora que controla a opacidade dos nós e arestas conforme a janela horária em que o usuário esteve ativo. O grafo é estático, mas a visualização revela como a rede se preenche ao longo do dia. Um painel adicional mostra a modularidade Q calculada por janela de 3 horas, indicando se a polarização cresce, decresce ou permanece estável durante o evento.
-
-### 4.7. Stack técnica
-
-| Camada | Ferramenta |
-|---|---|
-| Processamento de dados | Python, pandas |
-| Construção e análise de grafos | igraph |
-| Detecção de comunidades | Leiden (via igraph) |
-| Hidratação | API v2 do X, requests, cache local em SQLite |
-| Classificação assistida | API de LLM (Claude ou equivalente) |
-| Layout do grafo | ForceAtlas2 (precomputado) |
-| Frontend | React, Sigma.js, Tailwind |
-| Hospedagem | Vercel ou similar |
-
-### 4.8. Limitações da metodologia
-
-Cinco limitações são explicitadas e discutidas no TCC:
-
-1. **Co-retweet ≠ fluxo de influência.** O grafo mede similaridade de consumo, não cadeia causal.
-2. **Viés de seleção do dataset.** A análise reconstrói apenas a bolha de quem participou da conversa filtrada por keywords de Silva et al. (2024).
-3. **Retweet ≠ endosso (Guerra et al., 2017).** Possibilidade de retweets antagônicos não tratada explicitamente; será discutida em uma seção dedicada do TCC.
-4. **Twitter ≠ ecossistema digital completo.** A literatura indica que parte significativa da organização do 8 de janeiro ocorreu em WhatsApp e Telegram, fora do escopo deste trabalho.
-5. **Hidratação parcial.** Contas suspensas ou tweets deletados após janeiro de 2023 não poderão ser recuperados, e a taxa de perda pode ser assimétrica entre comunidades.
+### 3.6. [cite_start]Visualização interativa [cite: 104]
+[cite_start]O produto final do trabalho inclui uma aplicação web pública, desenvolvida em React, que permite ao leitor explorar os resultados da análise de forma interativa[cite: 105]. [cite_start]A aplicação deve: [cite: 106]
+* [cite_start]Oferecer uma representação visual dos grafos de cada evento, com as comunidades coloridas e identificáveis; [cite: 106]
+* [cite_start]Permitir que o leitor compare lado a lado o conteúdo amplificado por cada comunidade, tornando palpável a noção de "duas realidades sobre o mesmo fato"; [cite: 107]
+* [cite_start]E, no caso do 8 de janeiro, oferecer um controle temporal que permita observar como a rede se preenche ao longo do dia do evento[cite: 108].
 
 ---
 
-## 5. Resultados Esperados
+## [cite_start]4. Resultados Esperados [cite: 111, 112]
+[cite_start]Ao final do trabalho, espera-se ter produzido um conjunto integrado de resultados em três frentes: [cite: 113]
 
-Ao final do trabalho, espera-se ter produzido:
+* [cite_start]**Na frente analítica:** Espera-se ter caracterizado a estrutura das comunidades políticas no Twitter em torno dos quatro eventos selecionados, com métricas que permitam comparar o grau de polarização entre eles[cite: 114]. [cite_start]A expectativa preliminar é que a polarização se intensifique ao longo do ciclo eleitoral[cite: 115]. [cite_start]Para cada evento, espera-se ter identificado quais foram as narrativas predominantes em cada comunidade[cite: 116].
+* [cite_start]**Na frente técnica:** Espera-se ter desenvolvido uma pipeline computacional documentada, capaz de processar arquivos do dataset de ponta a ponta, permitindo reaplicação a outros eventos[cite: 117, 118, 119].
+* [cite_start]**Na frente de comunicação:** Espera-se ter disponibilizado publicamente uma aplicação web interativa que torne os resultados acessíveis a um leitor não-especialista, demonstrando como duas comunidades políticas viram e amplificaram leituras diferentes do mesmo conjunto de eventos[cite: 120, 121]. 
 
-- **Quatro grafos** correspondentes aos eventos selecionados, com clusters detectados, métricas estruturais (modularidade, tamanho relativo, fluxo inter-cluster) e listas dos usuários mais centrais em cada cluster.
-
-- **Uma tabela comparativa** das métricas entre os quatro eventos, permitindo observar se a polarização medida varia significativamente ao longo do ciclo eleitoral. A hipótese de trabalho é que a polarização cresce do 7 de setembro até o 8 de janeiro, mas o resultado pode contrariar essa expectativa, o que seria igualmente interessante.
-
-- **Caracterização narrativa** de cada cluster em cada evento, com 3 a 5 categorias de enquadramento identificadas e exemplos de tweets representativos.
-
-- **Pipeline computacional documentada** em Python, parametrizada, capaz de ser aplicada a outros arquivos do dataset (ou potencialmente a outros datasets em formato similar).
-
-- **Aplicação web pública** que permita a qualquer leitor explorar os grafos, comparar bolhas e visualizar a evolução temporal do 8 de janeiro.
-
-- **Documento do TCC** descrevendo o método, os resultados, as limitações e as discussões pertinentes.
-
-Não se pretende afirmar que este trabalho descobre fenômenos inéditos sobre o 8 de janeiro — a literatura recente (Bastos & Recuero, 2023; Ozawa et al., 2024) já abordou o evento por outros ângulos. A contribuição esperada é instrumental: oferecer uma visualização clara e navegável de algo que tende a ser discutido em termos abstratos, e demonstrar a aplicação de técnicas computacionais consolidadas a um problema social concreto.
+[cite_start]A contribuição esperada é instrumental: aplicar técnicas computacionais consolidadas a um problema social concreto, e produzir um artefato visual que torne o problema mais legível para quem não está familiarizado com a literatura técnica[cite: 123].
 
 ---
 
-## 6. Etapas e Cronograma
-
-Cronograma assumindo entrega da proposta no fim de maio de 2026 e defesa final em novembro de 2026 (24 semanas):
-
-| Semanas | Período | Atividade |
-|---|---|---|
-| 1–2 | Jun/2026 | Validação metodológica preliminar (um arquivo do 8 de janeiro); ajuste de parâmetros default |
-| 3–6 | Jun–Jul/2026 | Implementação da pipeline (parsing, projeção bipartida, backbone, detecção de comunidades, métricas) |
-| 7–10 | Jul–Ago/2026 | Aplicação da pipeline aos 4 eventos; geração dos grafos e métricas; análise de sensibilidade ao threshold |
-| 11–12 | Ago/2026 | Hidratação dos top-200 por evento; cache de autores |
-| 13–14 | Set/2026 | Classificação manual e via LLM das fontes; cálculo dos scores ideológicos; rotulagem dos clusters |
-| 15–16 | Set/2026 | Análise narrativa por cluster (top-50 internos, enquadramentos) |
-| 17–20 | Out/2026 | Desenvolvimento da aplicação web (mapa, "habite a bolha", filtro temporal) |
-| 21–22 | Out–Nov/2026 | Redação do documento final do TCC |
-| 23 | Nov/2026 | Revisão, ajustes finais, preparação de apresentação |
-| 24 | Nov/2026 | Defesa |
-
-Há folga de aproximadamente 2 semanas distribuídas ao longo do cronograma para imprevistos, em particular durante a hidratação (caso a API apresente limitações inesperadas) e durante o desenvolvimento web.
+## [cite_start]5. Etapas e Cronograma [cite: 124]
+* [cite_start]**Semana 1:** Estudo aprofundado da literatura relevante e experimentação inicial com um arquivo do dataset para validar as escolhas metodológicas[cite: 126].
+* [cite_start]**Semana 2:** Implementação da pipeline de construção do grafo: leitura dos arquivos, projeção bipartida, limpeza, detecção de comunidades[cite: 127].
+* [cite_start]**Semana 3:** Aplicação da pipeline aos quatro eventos selecionados; geração dos grafos e das métricas estruturais[cite: 128].
+* [cite_start]**Semana 4:** Hidratação seletiva dos tweets mais retuitados, classificação dos autores, rotulagem ideológica das comunidades e análise narrativa[cite: 129].
+* [cite_start]**Semana 5:** Desenvolvimento da aplicação web interativa e integração com os resultados da análise[cite: 130].
+* [cite_start]**Semana 6:** Redação final do documento, revisão, ajustes finais e defesa[cite: 131].
 
 ---
 
-## 7. Referências Bibliográficas (lista parcial)
-
-- Bail, C. A. et al. (2018). Exposure to Opposing Views on Social Media Can Increase Political Polarization. *PNAS*, 115(37), 9216–9221.
-- Bastos, M. T. & Recuero, R. (2023). The Insurrectionist Playbook: Jair Bolsonaro and the National Congress of Brazil. *Social Media + Society*, 9(4).
-- Bruns, A. (2019). *Are Filter Bubbles Real?* Polity Press.
-- Conover, M. D. et al. (2011). Political Polarization on Twitter. *Proceedings of ICWSM*.
-- Garimella, K. et al. (2018). Quantifying Controversy on Social Media. *ACM Transactions on Social Computing*, 1(1).
-- Guerra, P. C. et al. (2017). Antagonism also Flows through Retweets: The Impact of Out-of-Context Quotes in Opinion Polarization Analysis. *Proceedings of ICWSM*.
-- Neal, Z. P. et al. (2021). Comparing alternatives to the fixed degree sequence model for extracting the backbone of bipartite projections. *Scientific Reports*.
-- Ozawa, J. V. S., Lukito, J., Bailez, F. & Fakhouri, L. G. P. (2024). Brazilian Capitol attack: The interaction between Bolsonaro's supporters' content, WhatsApp, Twitter, and news media. *HKS Misinformation Review*.
-- Pariser, E. (2011). *The Filter Bubble*. Penguin Press.
-- Pena, C. B., MacCarron, P. & O'Sullivan, D. J. P. (2025). Finding polarized communities and tracking information diffusion on Twitter: the Irish Abortion Referendum. *Royal Society Open Science*.
-- Rao, A., Morstatter, F. & Lerman, K. (2022). Retweets Amplify the Echo Chamber Effect. *arXiv:2211.16480*.
-- Recuero, R., Zago, G. & Soares, F. (2019). Using Social Network Analysis and Social Capital to Identify User Roles on Polarized Political Conversations on Twitter. *Social Media + Society*, 5(2).
-- Silva, L. J. et al. (2024). Tweet_Eleições_2022. *Zenodo*. DOI: 10.5281/zenodo.11206577.
-- Sunstein, C. R. (2017). *#Republic*. Princeton University Press.
-- Tien, J. H. et al. (2020). Online reactions to the 2017 'Unite the Right' rally in Charlottesville. *Applied Network Science*, 5(1).
-
----
+## [cite_start]6. Referências Bibliográficas [cite: 132]
+1. CONOVER, M. D. et al. Political Polarization on Twitter. [cite_start]In: Proceedings of the Fifth International AAAI Conference on Weblogs and Social Media (ICWSM), 2011[cite: 133, 134].
+2. PARISER, E. The Filter Bubble: How the New Personalized Web Is Changing What We Read and How We Think. [cite_start]Nova York: Penguin Press, 2011[cite: 135, 136].
+3. PENA, C. B.; MACCARRON, P.; O'SULLIVAN, D. J. P. Finding polarized communities and tracking information diffusion on Twitter: the Irish Abortion Referendum. [cite_start]Royal Society Open Science, 2025[cite: 137, 138].
+4. SILVA, L. J. et al. [cite_start]Tweet_Eleições_2022: Um dataset de tweets durante as eleições presidenciais brasileiras de 2022. Zenodo, 2024. DOI: 10.5281/zenodo.11206577[cite: 139].
+5. FLAMINO, J. et al. Political polarization of news media and influencers on Twitter in the 2016 and 2020 US presidential elections. Nature Human Behaviour, v. 7, n. 6, p. [cite_start]904-916, 2023[cite: 140, 141].
+6. RECUERO, R.; SOARES, F. B.; ZAGO, G. Polarização, hiperpartidarismo e câmaras de eco: como circula a desinformação sobre Covid-19 no Twitter. Contracampo, v. 40, n. [cite_start]1, 2021[cite: 142, 143].
+7. SOARES, F. B.; RECUERO, R. Hashtag Wars: Political Disinformation and Discursive Struggles on Twitter Conversations During the 2018 Brazilian Presidential Campaign. Social Media + Society, v. 7, n. [cite_start]2, 2021[cite: 144, 145].
+8. RECUERO, R.; SOARES, F. B.; GRUZD, A. Hyperpartisanship, Disinformation and Political Conversations on Twitter: The Brazilian Presidential Election of 2018. Proceedings of the International AAAI Conference on Web and Social Media, v. 14, n. 1, p. [cite_start]569-578, 2020[cite: 146, 147].
+9. TRAAG, V. A.; WALTMAN, L.; VAN ECK, N. J. From Louvain to Leiden: guaranteeing well-connected communities. Scientific Reports, v. 9, n. [cite_start]1, 5233, 2019[cite: 148, 149].
