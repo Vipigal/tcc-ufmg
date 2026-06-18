@@ -101,15 +101,13 @@ Para cada evento, a pipeline executa os seguintes passos:
 
 1. **Filtragem.** Carregar o(s) arquivo(s) CSV do evento; selecionar apenas registros com `type=retweeted`; descartar usuários que aparecem como retweetadores menos de N vezes no evento (N a ser definido empiricamente, candidato inicial N=3).
 
-2. **Filtragem de tweets virais espúrios.** Descartar tweets que foram retuitados por uma fração muito grande do grafo, sob a hipótese de que tweets retuitados por todos os lados carregam pouca informação ideológica e funcionam como ruído. Critério inicial: tweets retuitados por mais de 30% dos usuários do evento. Este parâmetro será revisitado após a validação preliminar (seção 4.5).
+2. **Construção da bipartida.** Montar uma matriz esparsa B de dimensões (usuários × tweets), com B[u,t] = 1 se o usuário u retuitou o tweet t no evento, 0 caso contrário.
 
-3. **Construção da bipartida.** Montar uma matriz esparsa B de dimensões (usuários × tweets), com B[u,t] = 1 se o usuário u retuitou o tweet t no evento, 0 caso contrário.
+3. **Projeção unipartida com peso Jaccard.** Para cada par (u, v) de usuários, calcular o peso da aresta como J(u,v) = |T_u ∩ T_v| / |T_u ∪ T_v|, onde T_u é o conjunto de tweets retuitados pelo usuário u. Pares com peso zero não geram aresta.
 
-4. **Projeção unipartida com peso Jaccard.** Para cada par (u, v) de usuários, calcular o peso da aresta como J(u,v) = |T_u ∩ T_v| / |T_u ∪ T_v|, onde T_u é o conjunto de tweets retuitados pelo usuário u. Pares com peso zero não geram aresta.
+4. **Backbone extraction via universal threshold.** Reter apenas arestas com J(u,v) ≥ τ. O valor inicial proposto é τ = 0,1, com análise de sensibilidade documentada no apêndice (rodar a pipeline também com τ = 0,05 e τ = 0,15 para verificar robustez).
 
-5. **Backbone extraction via universal threshold.** Reter apenas arestas com J(u,v) ≥ τ. O valor inicial proposto é τ = 0,1, com análise de sensibilidade documentada no apêndice (rodar a pipeline também com τ = 0,05 e τ = 0,15 para verificar robustez).
-
-6. **Detecção de comunidades.** Aplicar o algoritmo de Leiden sobre o grafo resultante. Reportar modularidade Q, número de comunidades, tamanho relativo das duas maiores comunidades, e fluxo de arestas entre elas.
+5. **Detecção de comunidades.** Aplicar o algoritmo de Leiden sobre o grafo resultante. Reportar modularidade Q, número de comunidades, tamanho relativo das duas maiores comunidades, e fluxo de arestas entre elas.
 
 ### 4.3. Rotulagem ideológica dos clusters
 
@@ -137,7 +135,7 @@ Para cada um dos dois principais clusters de cada evento, selecionar os top-50 t
 
 ### 4.5. Validação metodológica preliminar
 
-Antes de aplicar a pipeline aos quatro eventos, será realizada uma validação preliminar em um único arquivo do 8 de janeiro (provavelmente `0801_invasao-18hr-21hr`, por ser o de maior volume). O objetivo é verificar empiricamente se a estrutura bimodal emerge de forma visível, ou se ajustes adicionais nos filtros são necessários. Os resultados dessa validação serão documentados no TCC como apêndice e justificarão eventuais ajustes nos parâmetros default (N, threshold de tweets virais, τ do backbone).
+Antes de aplicar a pipeline aos quatro eventos, será realizada uma validação preliminar em um único arquivo do 8 de janeiro (provavelmente `0801_invasao-18hr-21hr`, por ser o de maior volume). O objetivo é verificar empiricamente se a estrutura bimodal emerge de forma visível, ou se ajustes adicionais nos filtros são necessários. Os resultados dessa validação serão documentados no TCC como apêndice e justificarão eventuais ajustes nos parâmetros default (N de usuário inativo, τ do backbone).
 
 ### 4.6. Visualização interativa
 

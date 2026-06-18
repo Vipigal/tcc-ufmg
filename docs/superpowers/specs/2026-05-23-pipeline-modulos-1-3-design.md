@@ -19,7 +19,7 @@ Os passos seguintes (projeção Jaccard, backbone, Leiden, métricas) ficam fora
 ## 2. Princípios de design (decididos no brainstorming)
 
 - **Operação em memória, persistência opcional.** Cada classe recebe e retorna objetos em memória. Persistir em `data/processed/<evento>/` é um método `.save(out_dir)` separado, chamado explicitamente no notebook. Isso dá agilidade na fase de calibração de parâmetros.
-- **Parâmetros via construtor.** Os parâmetros calibráveis (N de usuário inativo, X% de tweet viral) são argumentos de `__init__`, explícitos no notebook. Evolução para arquivo de config fica para depois.
+- **Parâmetros via construtor.** O parâmetro calibrável (N de usuário inativo) é argumento de `__init__`, explícito no notebook. Evolução para arquivo de config fica para depois.
 - **Formato de persistência: Parquet + NPZ.** DataFrames em Parquet (compacto, tipado, escala para ~1,2M linhas); matriz esparsa em `.npz` (scipy); mapeamentos em Parquet.
 - **Um arquivo `.py` por etapa, uma classe principal por arquivo.** Mantém cada classe com propósito único.
 - **Localização: `modules/`.** O projeto já usa essa pasta (`modules/fetch_x_data.py`). A spec técnica sugeria `pipeline/`, mas seguimos a convenção existente.
@@ -75,21 +75,18 @@ Colunas reais do CSV: `conversation_id`, `Created_at_convert`, `author_id`, `ref
 
 ## 6. Módulo 2 — `modules/filter.py` → `NoiseFilter`
 
-**Propósito:** aplicar os dois filtros de ruído da especificação (§2.2 passo 2; D5), em sequência.
+**Propósito:** aplicar o filtro de ruído da especificação (§2.2 passo 2; D5) — usuários inativos. O filtro de tweets virais foi removido (ver reversão em D5): tweets de alto alcance são preservados.
 
 **Interface:**
 
-- `__init__(self, min_user_retweets=3, viral_user_fraction=0.30)` — defaults vindos da spec, ajustáveis na calibração preliminar.
+- `__init__(self, min_user_retweets=3)` — default vindo da spec, ajustável na calibração preliminar.
 - `.apply(df) -> pd.DataFrame`:
   1. **Filtro de usuários inativos:** descarta usuários com menos de `min_user_retweets` retweets (contagem de ações, isto é, de linhas).
-  2. **Filtro de tweets virais:** sobre o conjunto de usuários remanescente, descarta tweets retuitados por mais de `viral_user_fraction` dos usuários distintos do evento.
-- `.stats` — dict populado por `.apply()` com contagens antes/depois de cada filtro: nº de usuários, nº de tweets distintos, nº de linhas. Material direto para a calibração.
+- `.stats` — dict populado por `.apply()` com contagens antes/depois do filtro: nº de usuários, nº de tweets distintos, nº de linhas. Material direto para a calibração.
 - `.save(out_dir)` — escreve `filtered_retweets.parquet` + `filter_stats.json`.
 
 **Decisões internas:**
 
-- Ordem fixa: usuários primeiro, depois tweets virais (sequência da spec). A fração de viralidade é computada sobre a base de usuários **já filtrada**.
-- Versão atual faz **uma passada** (sem re-aplicar o filtro de usuários após remover tweets virais). A re-aplicação iterativa fica registrada como possível ajuste futuro, caso a calibração mostre necessidade.
 - "Retweets do usuário" = número de linhas (ações) atribuídas a ele, antes da deduplicação de pares.
 
 ## 7. Módulo 3 — `modules/bipartite.py` → `BipartiteBuilder`
@@ -133,7 +130,7 @@ EVENT = "invasao-3-poderes"
 loader = RetweetLoader(f"data/raw/{EVENT}")
 rt = loader.load()
 
-nf = NoiseFilter(min_user_retweets=3, viral_user_fraction=0.30)
+nf = NoiseFilter(min_user_retweets=3)
 rt_f = nf.apply(rt)
 print(nf.stats)
 

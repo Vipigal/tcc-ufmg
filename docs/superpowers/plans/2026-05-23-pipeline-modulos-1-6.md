@@ -252,33 +252,32 @@ def _df():
 
 
 def test_user_filter_drops_inactive():
-    nf = NoiseFilter(min_user_retweets=2, viral_user_fraction=0.9)
+    nf = NoiseFilter(min_user_retweets=2)
     out = nf.apply(_df())
     assert "U4" not in set(out["author_id"])  # U4 só tem 1 retweet
 
 
-def test_viral_filter_drops_ubiquitous_tweet():
-    nf = NoiseFilter(min_user_retweets=2, viral_user_fraction=0.9)
+def test_viral_tweets_are_preserved():
+    nf = NoiseFilter(min_user_retweets=2)
     out = nf.apply(_df())
-    assert "TV" not in set(out["referenced_tweet_id"])
-    assert set(out["referenced_tweet_id"]) == {"TA", "TB"}
+    # TV é retuitado por todos, mas agora é mantido (sinal relevante para a análise)
+    assert "TV" in set(out["referenced_tweet_id"])
 
 
 def test_stats_recorded():
-    nf = NoiseFilter(min_user_retweets=2, viral_user_fraction=0.9)
+    nf = NoiseFilter(min_user_retweets=2)
     nf.apply(_df())
     assert nf.stats["initial"]["users"] == 4
     assert nf.stats["after_user_filter"]["users"] == 3
-    assert nf.stats["after_viral_filter"]["rows"] == 3
 
 
 def test_filter_save(tmp_path):
-    nf = NoiseFilter(min_user_retweets=2, viral_user_fraction=0.9)
+    nf = NoiseFilter(min_user_retweets=2)
     out = nf.apply(_df())
     nf.save(out, tmp_path)
     assert (tmp_path / "filtered_retweets.parquet").exists()
     stats = json.loads((tmp_path / "filter_stats.json").read_text())
-    assert stats["after_viral_filter"]["rows"] == 3
+    assert stats["after_user_filter"]["users"] == 3
 ```
 
 - [ ] **Step 2: Rodar para confirmar a falha**
@@ -289,7 +288,7 @@ Expected: FAIL com `ModuleNotFoundError: No module named 'modules.filter'`.
 - [ ] **Step 3: Implementar `modules/filter.py`**
 
 ```python
-"""Módulo 2 — filtragem de ruído (usuários inativos + tweets virais)."""
+"""Módulo 2 — filtragem de ruído (usuários inativos)."""
 from __future__ import annotations
 
 import json
@@ -307,27 +306,23 @@ def _counts(df: pd.DataFrame) -> dict:
 
 
 class NoiseFilter:
-    """Dois filtros sequenciais: usuários inativos e tweets virais espúrios."""
+    """Descarta usuários inativos (menos de N retweets no evento).
 
-    def __init__(self, min_user_retweets: int = 3, viral_user_fraction: float = 0.30):
+    Tweets virais são preservados deliberadamente: carregam sinal relevante
+    para a análise narrativa (ver decisão D5 em decisoes-metodologicas.md).
+    """
+
+    def __init__(self, min_user_retweets: int = 3):
         self.min_user_retweets = min_user_retweets
-        self.viral_user_fraction = viral_user_fraction
         self.stats: dict = {}
 
     def apply(self, df: pd.DataFrame) -> pd.DataFrame:
         self.stats = {"initial": _counts(df)}
 
-        # Filtro 1 — usuários com menos de N retweets (ações)
+        # Filtro — usuários com menos de N retweets (ações)
         user_size = df.groupby("author_id")["referenced_tweet_id"].transform("size")
         df = df[user_size >= self.min_user_retweets]
         self.stats["after_user_filter"] = _counts(df)
-
-        # Filtro 2 — tweets retuitados por mais de X% dos usuários remanescentes
-        n_users = df["author_id"].nunique()
-        max_users = self.viral_user_fraction * n_users
-        users_per_tweet = df.groupby("referenced_tweet_id")["author_id"].transform("nunique")
-        df = df[users_per_tweet <= max_users]
-        self.stats["after_viral_filter"] = _counts(df)
 
         return df.reset_index(drop=True)
 
@@ -888,7 +883,7 @@ def test_pipeline_recovers_two_communities():
     df = _two_group_retweets()
 
     # filtros frouxos para preservar o sinal sintético
-    df_f = NoiseFilter(min_user_retweets=1, viral_user_fraction=0.99).apply(df)
+    df_f = NoiseFilter(min_user_retweets=1).apply(df)
     bg = BipartiteBuilder().build(df_f)
     pg = JaccardProjector().project(bg)
     pg_bb = BackboneExtractor(tau=0.1).extract(pg)

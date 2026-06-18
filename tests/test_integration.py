@@ -20,8 +20,8 @@ def _two_group_retweets():
 def test_pipeline_recovers_two_communities():
     df = _two_group_retweets()
 
-    # filtros frouxos para preservar o sinal sintético
-    df_f = NoiseFilter(min_user_retweets=1, viral_user_fraction=0.99).apply(df)
+    # filtro frouxo para preservar o sinal sintético
+    df_f = NoiseFilter(min_user_retweets=1).apply(df)
     bg = BipartiteBuilder().build(df_f)
     pg = JaccardProjector().project(bg)
     pg_bb = BackboneExtractor(tau=0.1).extract(pg)

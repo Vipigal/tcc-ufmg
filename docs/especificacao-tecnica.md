@@ -79,12 +79,13 @@ Saída: grafo + métricas + lista de top tweets por comunidade
 
 **[2] Filtragem de ruído**
 
-Dois filtros, aplicados em sequência:
+Um único filtro:
 
 - **Filtragem de usuários inativos:** descartar usuários que aparecem como retweetadores menos de N vezes no evento. Valor inicial sugerido: N=3. Ajustar empiricamente.
-- **Filtragem de tweets virais espúrios:** descartar tweets que foram retuitados por uma fração muito grande dos usuários do evento (sob a hipótese de que carregam pouca informação ideológica). Valor inicial sugerido: tweets retuitados por mais de 30% dos usuários do evento. Ajustar empiricamente.
 
-Estes dois parâmetros são os mais frágeis da pipeline. Antes de aplicar a pipeline aos quatro eventos, fazer **uma rodada de validação preliminar em um arquivo do 8 de janeiro** (sugestão: `0801_invasao-18hr-21hr` por ser o de maior volume) para calibrar os parâmetros.
+Tweets virais **não** são filtrados: os tweets de maior alcance são o material central da análise narrativa (o que cada comunidade amplificou sobre o evento), não ruído (ver D5 em `decisoes-metodologicas.md`). A explosão combinatória de arestas que tweets muito retuitados causam é tratada na projeção (etapa [4]), não por descarte de dados.
+
+O parâmetro N é o mais frágil da pipeline. Antes de aplicar a pipeline aos quatro eventos, fazer **uma rodada de validação preliminar em um arquivo do 8 de janeiro** (sugestão: `0801_invasao-18hr-21hr` por ser o de maior volume) para calibrá-lo.
 
 **[3] Construção da matriz bipartida usuário × tweet**
 

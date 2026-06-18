@@ -60,7 +60,7 @@ J(u, v) = |T_u ∩ T_v| / |T_u ∪ T_v|
 **Alternativas rejeitadas:**
 - Contagem absoluta de tweets em comum — inflada por usuários hiperativos, distorce a estrutura.
 - Cosseno binário — equivalente em interpretação ao Jaccard para vetores binários, sem ganho prático.
-- TF-IDF antes da projeção — mais sofisticado, mas adiciona complexidade que pode não ser necessária. Pode ser revisitado se a validação preliminar mostrar problema com tweets virais.
+- TF-IDF antes da projeção — mais sofisticado, mas adiciona complexidade que pode não ser necessária. Pode ser revisitado se a projeção mostrar que tweets de altíssimo alcance dominam indevidamente a estrutura (note que o peso Jaccard já normaliza pela atividade total de cada usuário).
 
 ---
 
@@ -82,21 +82,26 @@ J(u, v) = |T_u ∩ T_v| / |T_u ∪ T_v|
 
 ## D5. Filtragem de ruído antes da projeção
 
-**Decisão:** aplicar dois filtros antes da projeção bipartida:
-
-1. Descartar usuários que retuitaram menos de N vezes (N inicial = 3).
-2. Descartar tweets retuitados por mais de X% dos usuários do evento (X inicial = 30%).
+**Decisão:** aplicar um único filtro antes da projeção bipartida — descartar usuários que retuitaram menos de N vezes no evento (N inicial = 3).
 
 **Por quê:**
 - Usuários com 1-2 retweets não têm sinal suficiente para serem classificados em uma bolha.
-- Tweets virais consumidos por todos os lados (notícias de mídia neutra, manifestações ecumênicas) criam pontes espúrias entre comunidades e atrapalham a detecção.
-- Ambos os parâmetros são ajustáveis empiricamente durante a validação preliminar.
+- O parâmetro N é ajustável empiricamente durante a validação preliminar.
+
+**Reversão (2026-06-17): remoção do filtro de tweets virais.**
+
+A versão inicial desta decisão previa um segundo filtro, que descartava tweets retuitados por mais de X% dos usuários do evento (X inicial = 30%), sob a hipótese de que tweets "consumidos por todos os lados" eram ruído. Esse filtro foi **removido** por duas razões:
+
+1. **Metodológica (decisiva).** Os tweets de maior alcance são justamente o material central da análise narrativa — o que cada comunidade amplificou sobre o evento. Tratá-los como ruído contradiz a pergunta de pesquisa. Passam a ser preservados.
+2. **Empírica.** Na validação preliminar (evento 8 de janeiro), o limiar de 30% não removeu nenhum tweet: o mais retuitado alcançou ~11% dos usuários remanescentes. O filtro era, na prática, inócuo no regime de parâmetros considerado.
+
+A explosão combinatória de arestas causada por tweets muito retuitados — que motivava o filtro do ponto de vista computacional — é tratada **na projeção** (corte do peso Jaccard durante a geração das arestas, ver D4), não por descarte de dados.
 
 **Alternativas rejeitadas:**
-- Não filtrar nada — gera grafo com bilhões de arestas espúrias.
-- Filtros fixos sem possibilidade de ajuste — não conhecemos os valores certos até olhar os dados.
+- Não filtrar nada — usuários sem sinal (1-2 retweets) inflam o grafo sem contribuir para a estrutura de comunidades.
+- Filtro de usuários fixo sem possibilidade de ajuste — não conhecemos o valor certo de N até olhar os dados.
 
-**Risco assumido:** o valor de X% é o parâmetro mais frágil da pipeline. A validação preliminar é especificamente desenhada para calibrá-lo.
+**Risco assumido:** N passa a ser o único parâmetro de filtragem e, portanto, o mais frágil dessa etapa. A validação preliminar é desenhada para calibrá-lo.
 
 ---
 
