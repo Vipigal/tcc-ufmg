@@ -16,6 +16,15 @@ Os três arquivos têm propósitos distintos. Leia na ordem se você está chega
 3. **`docs/decisoes-metodologicas.md`** — *Por que decidimos cada coisa.*
    Registro de cada decisão importante, com alternativas rejeitadas. Consultar antes de propor mudanças metodológicas.
 
+## Postura analítica (vale para humanos e agentes)
+
+Trabalhamos como cientistas de dados: **descrever, não prescrever**, e enviesar ao mínimo. A pergunta é o que a estrutura dos dados revela — não confirmar uma tese. Em concreto:
+
+- **Não force estrutura.** Não assuma que os clusters são "esquerda × direita", que devem ser exatamente N, nem que comunidades pequenas são ruído descartável. O que o algoritmo encontra significa algo até prova em contrário — **caracterize antes de descartar**.
+- **Separe correção de escolha analítica.** Corrigir um cálculo errado (ex.: uma matriz que deveria ser simétrica num grafo não-direcionado) é obrigatório. Já decidir "remover/agregar X para o resultado ficar limpo" é uma escolha que embute viés — evite, ou explicite o trade-off em vez de apresentá-la como recomendação/verdade.
+- **Interprete pela ótica certa.** O objetivo é mapear o *comportamento* dos clusters e lê-lo sob computação social e ciência política — não rotular nem ranquear.
+- **Nos docs de análise/sensibilidade** (`docs/analises-sensibilidade.md`, `docs/relatorio-diagnostico-*.md`): registre **observações brutas** (números, tabelas, como foram medidas) e, separadamente, uma **interpretação como apontamento** — datada e amarrada ao contexto daquele momento do projeto, **não como verdade absoluta**. Prefira "o que se observa" + "o que isso sugere, por ora" a recomendações prescritivas.
+
 ## Para agentes de codificação
 
 Se você é um agente de IA encarregado de implementar partes do pipeline:
