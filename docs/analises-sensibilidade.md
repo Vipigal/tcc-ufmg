@@ -58,7 +58,7 @@ ruído do algoritmo.
 
 | Parâmetro | O que é | Default atual | Status |
 |---|---|---|---|
-| **N** | mín. de retweets para um usuário virar nó (filtro M2) | 10 | **em aberto** (representatividade) |
+| **N** | mín. de retweets para um usuário virar nó (filtro M2) | 10 | **estrutural resolvido** (E9–E11): macro invariante a N; pende só a metade ideológica |
 | **τ** | peso Jaccard mínimo da aresta (backbone, embutido em M4) | 0,10 | provisório; sensibilidade 0,05/0,15 pendente |
 | **resolution** | resolução do Leiden (M5) | 1,0 | controla a granularidade dos macroblocos (E6); não gera as comunidades pequenas |
 | **block_size** | usuários por bloco na projeção | 2000 | técnico (memória), não metodológico |
@@ -246,13 +246,93 @@ absoluto; reforça a necessidade da sensibilidade a τ (ver Pendências).
 *(Ponto de trabalho atual migrou para N=7: 33.305 nós, 12,0M arestas, Q = 0,498, mesma estrutura de
 3 blocos — a correção e a leitura valem igual.)*
 
+### E9 — Trajetória estrutural ao variar N · 2026-06-19
+**Método:** grid N ∈ {5,7,10,15,20}, τ=0,10 e resolution=1,0 fixos, rodando os **módulos de
+produção** (M2→M5). A projeção usa uma variante *memory-lean* (int32/float32) validada
+aresta-a-aresta como idêntica ao `JaccardProjector` em N=10 (erro relativo de peso máx.
+5,9·10⁻⁸; N=7 reproduz os artefatos em disco). Script: `scripts/sensitivity_N.py`.
+"Super-polos" = componentes conexos dos blocos dominantes (≥1% dos nós) sob a relação
+"fluxo mútuo ≥ 0,10·min(peso interno)" — colapso pós-hoc na partição nativa (γ=1,0),
+**não** re-tunagem de resolução (ver decisão metodológica ao final de E11). Robusto a θ∈{0,05;0,20}.
+
+| N | nós | arestas | Q | nº com. | blocos dom. | **super-polos** | intra-peso | tamanhos dom. |
+|---|---|---|---|---|---|---|---|---|
+| 5 | 48.206 | 27.052.420 | 0,478 | 6 | 4 | **2** | 0,729 | [41, 31, 14, 14] |
+| 7 | 33.305 | 12.023.243 | 0,498 | 12 | 3 | **2** | 0,835 | [44, 34, 21] |
+| 10 | 22.097 | 5.661.890 | 0,503 | 14 | 3 | **2** | 0,856 | [47, 34, 19] |
+| 15 | 13.171 | 2.605.419 | 0,497 | 16 | 2 | **2** | 1,000 | [50, 49] |
+| 20 | 8.811 | 1.545.276 | 0,484 | 13 | 3* | **2** | 0,997 | [49, 49, 1] |
+
+\* o "3º bloco" de N=20 tem 1,1% (no limiar); efetivamente são 2.
+
+**Leitura:** Q estável (~0,48–0,50) em toda a faixa — estrutura forte sempre. Ao **baixar** N
+(adicionar periferia), duas coisas mudam de modo ordenado: (1) a nitidez cai (intra-peso
+1,0→0,73); (2) a **mesoestrutura fragmenta** — um dos polos se subdivide: 2 blocos (N≥15) → 3
+(N=7,10) → 4 (N=5). **Mas o nº de super-polos é sempre 2.** Plots:
+`assets/sensibilidade_N_trajetoria.png`, `..._fluxo.png`.
+
+### E10 — Estabilidade macro: super-polos (L2) vs blocos nativos (L3) · 2026-06-19
+**Método:** para cada par (N maior `hi`, N menor `lo`), comparar as partições no **núcleo
+comum = interseção dos nós dos dois backbones** (não "todos os usuários de hi": um usuário
+pode sobreviver em N=10 e ficar isolado em N=15). Dois rótulos macro: **L2** (super-polos) e
+**L3** (blocos dominantes nativos + resíduo à parte). ARI/NMI/VI via
+`igraph.compare_communities` (invariantes a permutação) + concordância após alinhamento guloso.
+
+| hi | lo | comuns | **L2 ARI** | L2 conc. | **L3 ARI** | L3 conc. | piso ARI hi/lo |
+|---|---|---|---|---|---|---|---|
+| 7 | 5 | 33.305 | **0,997** | 0,999 | 0,764 | 0,799 | 0,995/0,999 |
+| 10 | 5 | 22.097 | **0,996** | 0,998 | **0,759** | 0,769 | 0,999/0,999 |
+| 10 | 7 | 22.097 | **0,998** | 0,999 | 0,944 | 0,974 | 0,999/0,995 |
+| 15 | 5 | 13.171 | **0,993** | 0,997 | 0,699 | 0,739 | 1,000/0,999 |
+| 15 | 7 | 13.171 | **0,995** | 0,997 | 0,795 | 0,861 | 1,000/0,995 |
+| 15 | 10 | 13.171 | **0,996** | 0,998 | 0,785 | 0,848 | 1,000/0,999 |
+| 20 | 5 | 8.811 | **0,994** | 0,997 | 0,716 | 0,787 | 1,000/0,999 |
+| 20 | 7 | 8.811 | **0,995** | 0,998 | 0,801 | 0,873 | 1,000/0,995 |
+| 20 | 10 | 8.811 | **0,996** | 0,998 | 0,787 | 0,858 | 1,000/0,999 |
+| 20 | 15 | 8.811 | **0,999** | 0,999 | 0,977 | 0,989 | 1,000/1,000 |
+
+**Leitura (decisiva):** (1) **L2 é invariante a N** — ARI 0,993–0,999, concordância ≥0,997 em
+*todos* os pares, **no piso de ruído** do Leiden. Os usuários **não migram de polo** ao mudar
+N. **H0 confirmada no nível macro.** (2) **L3 reproduz o sinal da partição cheia**: N=10 vs
+N=5 dá L3 ARI = **0,759**, idêntico ao ARI da partição completa de E4 — provando que aquela
+"instabilidade" é **meso** (subdivisão de um polo), com o macro intacto (L2=0,996 no mesmo
+par). Isto **fecha o teste macro e a ressalva de E4** (E4, ponto 3). Plot:
+`assets/sensibilidade_N_confusao.png`.
+
+### E11 — Faixa incremental: para onde vão os usuários de baixa atividade · 2026-06-19
+**Método:** por degrau adjacente, a "faixa incremental" = usuários no backbone de N menor e
+ausentes no de N maior (os que entram ao afrouxar o filtro). Medir, dentro do grafo de N
+menor, sua distribuição entre super-polos e seu *participation coefficient* (fração do peso
+que sai da própria comunidade nativa) vs o núcleo.
+
+| degrau | entram | super-polo (incr.) | super-polo (núcleo) | resíduo (incr.) | participation incr./núcleo |
+|---|---|---|---|---|---|
+| 5←7 | +14.901 | 35/65 | 44/56 | 0,04% | **0,32 / 0,25** |
+| 7←10 | +11.208 | 39/61 | 47/53 | 0,07% | **0,20 / 0,17** |
+| 10←15 | +8.926 | 44/56 | 49/50 | 0,18% | **0,18 / 0,15** |
+| 15←20 | +4.360 | 52/47 | 49/50 | 0,41% | 0,002 / 0,001 |
+
+**Leitura:** os menos ativos que entram **se distribuem pelos 2 super-polos existentes**
+(resíduo <0,5%, **nenhuma comunidade nova**), só com **fronteira maior** (participation acima
+do núcleo, crescente quando N cai) — são mais "ponte". É essa ponticidade que **borra a
+fronteira meso** (gera os sub-blocos extras de N baixo) sem nunca criar um 3º polo. Confirma a
+**leitura B** (N é nitidez, não substância macro). Plot: `assets/sensibilidade_N_faixa.png`.
+Relatório consolidado: `docs/relatorio-sensibilidade-N.md`.
+
+**Decisão metodológica registrada (super-polos por fluxo vs `resolution=0,5`):** o rótulo
+macro L2 é obtido por **colapso pós-hoc por fluxo** na partição nativa (γ=1,0), e **não**
+rodando o Leiden em `resolution=0,5`. Motivo: E6 mostra que baixar a resolução funde os
+macroblocos — testar a estabilidade de uma bipartição imposta pelo knob seria circular e
+viciaria o readout "cada N rende 2 polos?". O γ=0,5 serve só de verificação cruzada do
+colapso por fluxo (ambos dão {com1}|{com0,com2} em N=10).
+
 ---
 
 ## 4. Decisões de parâmetro (síntese viva)
 
 | Parâmetro | Valor (provisório) | Justificativa | Evidência | Status |
 |---|---|---|---|---|
-| **N** | 10 (candidato) | tratável ponta a ponta e estrutura forte; mas descarta ~metade do volume e altera a partição vs. N menores | E2, E3, E4, E5 | **em aberto** — pende teste macro + representatividade |
+| **N** | 10 (recomendado) | **macro (2 super-polos) invariante a N de 5 a 20** (E10, no piso de ruído) → representatividade resolvida; a variação vs N menores é **meso** (subdivisão de um polo, não migração). Escolha por tratabilidade/volume/render: N=10 = joelho da curva, renderável, preserva o 3º bloco meso; N=7 (atual) é equivalente | E2, E3, E9, E10, E11 | **estrutural resolvido** — pende só a metade ideológica |
 | **τ** | 0,10 | corta ligações fracas; análise de sensibilidade exigida | E1 | provisório — falta rodar 0,05/0,15 com métricas estruturais |
 | **resolution** | 1,0 | default do Leiden; E6 indica que controla a granularidade dos macroblocos, não o nº de comunidades pequenas | E6 | mantido no default; sem evidência que peça mudança |
 | **block_size** | 2000 | pico de memória ~1 GB em N=10 | E5 (~13s, ~1 GB) | técnico, ok |
@@ -261,9 +341,10 @@ absoluto; reforça a necessidade da sensibilidade a τ (ver Pendências).
 
 ## 5. Pendências
 
-- [ ] **Teste de estabilidade macro** (N=5 vs N=10): colapsar cada partição em {maior, 2ª maior,
-      resto} e comparar nos nós comuns — verifica se as grandes bolhas são estáveis mesmo quando a
-      partição fina muda.
+- [x] **Teste de estabilidade macro** — feito (E9–E11, grid N∈{5,7,10,15,20}). Em vez de
+      {maior, 2ª maior, resto} (que jogaria o 3º bloco de 19% no resíduo), o colapso macro é em
+      **super-polos por fluxo (L2)**. Resultado: **L2 invariante a N no piso de ruído**
+      (ARI 0,993–0,999); a variação é meso (L3). H0 confirmada no nível macro.
 - [ ] **Sensibilidade completa a τ** (0,05 / 0,10 / 0,15) no N escolhido, reportando Q, tamanho
       relativo dos 2 maiores clusters e fluxo inter-cluster.
 - [x] **Sensibilidade à `resolution`** do Leiden — feito (E6): controla a granularidade dos

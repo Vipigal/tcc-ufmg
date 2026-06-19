@@ -1,0 +1,50 @@
+{
+  "N": 15,
+  "tau": 0.1,
+  "resolution": 1.0,
+  "n_nodes": 13171,
+  "n_edges": 2605419,
+  "modularity": 0.49675219481626615,
+  "n_communities": 16,
+  "intra_weight_fraction": 0.9999482035636902,
+  "noise_floor": {
+    "ari": 0.9996974374662072,
+    "nmi": 0.9989032767567047
+  },
+  "macro": {
+    "dominant_communities": [
+      0,
+      1
+    ],
+    "dominant_sizes": [
+      6622,
+      6499
+    ],
+    "dominant_frac": [
+      0.5027712398451143,
+      0.4934325411889758
+    ],
+    "flow_matrix_weight": [
+      [
+        150043.4080382064,
+        8.81724088639021
+      ],
+      [
+        8.81724088639021,
+        176320.62584530562
+      ]
+    ],
+    "n_super_poles": 2,
+    "super_pole_of_rank": {
+      "0": 0,
+      "1": 1
+    },
+    "n_super_poles_sens": {
+      "0.05": 2,
+      "0.2": 2
+    }
+  },
+  "weight_min": 0.10000000149011612,
+  "weight_max": 0.8799999952316284,
+  "weight_mean": 0.12527400255203247
+}
