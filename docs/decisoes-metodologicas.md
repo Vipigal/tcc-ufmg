@@ -239,6 +239,32 @@ score(u) = (R_right(u) - R_left(u)) / (R_right(u) + R_left(u))
 
 ---
 
+## D14. Projeção em blocos com backbone embutido + formato final em Parquet
+
+**Decisão:** o módulo de projeção (M4) passa a (a) calcular o Jaccard **em blocos** de usuários, (b) cortar o peso em τ **durante** a geração das arestas, e (c) remover nós isolados — produzindo o grafo de backbone diretamente. O módulo separado de backbone (`backbone.py`) foi **removido** e fundido na projeção. O resultado final da pipeline é serializado em dois Parquet autocontidos (`graph_edges.parquet`, `graph_nodes.parquet`); o GraphML foi descontinuado.
+
+**Por quê (projeção em blocos + corte embutido):**
+- A projeção ingênua (`C = B·Bᵀ` inteiro) materializava centenas de milhões de arestas antes de qualquer corte, estourando a memória. Processar em blocos de `block_size` usuários limita o pico de memória ao bloco, não ao grafo inteiro.
+- O corte por τ é feito na projeção porque `J(u,v)` depende **só** dos conjuntos `T_u` e `T_v` daquele par — não do limiar nem das outras arestas. Logo, cortar em τ durante a projeção dá um grafo **idêntico** a projetar tudo e filtrar depois (não há renormalização do Jaccard). Validado em dados reais: N=10 reproduz exatamente 22.097 nós / 5.661.890 arestas e modularidade Q=0,5034, em ~13s e ~1 GB de pico (vs. 80,5M de arestas materializadas antes).
+- **Sem `τ_floor`:** uma versão intermediária cortava num piso (0,05) para permitir a análise de sensibilidade re-filtrando. Como a projeção em blocos ficou rápida, optou-se por cortar direto em τ e **reprojetar** para cada valor da sensibilidade (τ=0,05/0,10/0,15) — mais simples, sem o passo de backbone separado, resultado idêntico.
+
+**Por quê (construção do igraph com numpy):** a versão anterior do M5 montava o grafo via `list(zip(W.row.tolist(), W.col.tolist()))`, criando dezenas de milhões de objetos Python (gargalo de memória/tempo). Passou a usar `np.column_stack` direto.
+
+**Por quê (formato final em 2 Parquet):**
+- O `community_graph.graphml` (XML) chegou a **560 MB** para 5,66M de arestas, sendo 100% redundante com os dados já presentes em outros artefatos.
+- `graph_edges.parquet` (src, dst, peso) + `graph_nodes.parquet` (user_id, community) somam ~16,8 MB (zstd), são autocontidos e em formato universal.
+- `graph_nodes.parquet` é o **acumulador natural** para os atributos por usuário das etapas seguintes (score ideológico — §3.4; coordenadas de layout e grau — §3.6 da proposta). `graph_edges.parquet` alimenta centralidade, fluxo inter-cluster e o render no Sigma.js.
+
+**Limpeza:** `modules/cleanup.py` apaga os artefatos intermediários (M1–M4) e órfãos de versões anteriores (`projection_*`, `community_graph.graphml`), mantendo só o resultado final. Re-rodar a pipeline recomputa do zero (cache por existência de arquivo, ver D13).
+
+**Alternativas rejeitadas:**
+- Manter projeção e backbone como módulos separados — gerava e persistia ~80M arestas (236 MB) para descartar >90% no passo seguinte.
+- `τ_floor` + re-filtragem — ganho marginal após a projeção ficar rápida; adiciona um limiar a mais para raciocinar.
+- Trio `npz` + parquets como formato final — ligeiramente maior (19,3 MB) e menos ergonômico que os 2 Parquet para as etapas seguintes.
+- Jaccard aproximado (MinHash/LSH) — complexidade desproporcional; a projeção exata em blocos resolve.
+
+---
+
 ## Histórico de decisões revisadas
 
 Este espaço é para registrar mudanças futuras de decisão. Toda vez que uma decisão acima for revisada, registrar aqui:
@@ -246,3 +272,4 @@ Este espaço é para registrar mudanças futuras de decisão. Toda vez que uma d
 | Data | Decisão revisada | O que mudou | Por quê |
 |---|---|---|---|
 | 2026-06-17 | D5 — filtragem de ruído | Removido o filtro de tweets virais; mantido apenas o filtro de usuários inativos | Tweets de alto alcance são o material central da análise narrativa, não ruído; e o limiar de 30% não removia nenhum tweet na validação preliminar |
+| 2026-06-18 | D4 / implementação | Backbone (corte τ) fundido na projeção (M4), em blocos; módulo `backbone.py` removido | Cortar τ na projeção evita materializar o grafo inteiro e dá resultado idêntico (Jaccard é por par). Ver D14. |

@@ -29,10 +29,23 @@ def test_partition_modularity_positive():
     assert cr.g.vcount() == 6
 
 
-def test_community_save(tmp_path):
+def test_community_save_two_parquets(tmp_path):
     cr = CommunityDetector(resolution=1.0).detect(_two_cliques())
     cr.save(tmp_path)
-    assert (tmp_path / "community_graph.graphml").exists()
-    m = pd.read_parquet(tmp_path / "membership.parquet")
-    assert set(m.columns) == {"user_id", "community"}
-    assert len(m) == 6
+    assert not (tmp_path / "community_graph.graphml").exists()   # graphml descontinuado
+    nodes = pd.read_parquet(tmp_path / "graph_nodes.parquet")
+    edges = pd.read_parquet(tmp_path / "graph_edges.parquet")
+    assert set(nodes.columns) == {"user_id", "community"}
+    assert set(edges.columns) == {"src", "dst", "weight"}
+    assert len(nodes) == 6
+    assert len(edges) == 6
+
+
+def test_community_roundtrip(tmp_path):
+    det = CommunityDetector(resolution=1.0)
+    cr1 = det.run(_two_cliques(), out_dir=tmp_path)        # compute + save
+    cr2 = det.run(_two_cliques(), out_dir=tmp_path)        # cache hit -> _load
+    assert cr2.W.nnz == cr1.W.nnz
+    assert list(map(str, cr2.user_index)) == list(map(str, cr1.user_index))
+    assert len(set(cr2.membership)) == 2
+    assert cr2.partition.modularity > 0

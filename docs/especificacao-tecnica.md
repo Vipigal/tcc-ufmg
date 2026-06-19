@@ -110,6 +110,7 @@ O parâmetro N é o mais frágil da pipeline. Antes de aplicar a pipeline aos qu
 - Reter apenas arestas com peso Jaccard `≥ τ`.
 - Valor inicial: τ = 0,1.
 - **Análise de sensibilidade obrigatória:** rodar a pipeline também com τ = 0,05 e τ = 0,15 e documentar como os resultados variam. Os resultados desta análise vão no apêndice do TCC.
+- **Implementação:** este corte é feito **dentro** da projeção (etapa [4]), durante a geração das arestas em blocos — não há módulo de backbone separado (ver D14). Para a sensibilidade, reprojetar com outro τ.
 
 **[6] Detecção de comunidades (Leiden)**
 
@@ -138,7 +139,7 @@ Para cada evento, salvar os seguintes artefatos:
 - **`metrics_<evento>.json`**: métricas estruturais.
 - **`top_tweets_<evento>.json`**: lista dos tweets mais retuitados, com texto hidratado, autor, classificação ideológica do autor, cluster ao qual está associado.
 
-Salvar também o estado intermediário do grafo (após Leiden) em formato igraph nativo (`pickle` ou `graphml`) para permitir re-análise sem reprocessar do zero.
+O grafo final (após Leiden) é salvo em dois Parquet autocontidos — `graph_edges.parquet` (src, dst, peso) e `graph_nodes.parquet` (user_id, community) — dos quais o grafo é integralmente reconstruível para re-análise (ver D14). O `graph_nodes.parquet` é o acumulador dos atributos por usuário das etapas seguintes (score ideológico, layout). Os artefatos das etapas anteriores são intermediários e podem ser apagados (`modules/cleanup.py`).
 
 ## 3. Hidratação e rotulagem ideológica
 
