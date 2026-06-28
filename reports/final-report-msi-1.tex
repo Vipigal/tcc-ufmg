@@ -8,6 +8,7 @@
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
 \usepackage{graphicx}
+\usepackage{booktabs}
 \usepackage{textcomp}
 \usepackage{xcolor}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
@@ -60,225 +61,181 @@ O estudo de Recuero, Soares e Zago \cite{b_recuero2021} sobre a circulação de 
 
 O trabalho mais próximo do que se desenvolve aqui é o de Interian e Rodrigues \cite{b_interian2023}, que analisaram a polarização no Twitter durante a eleição brasileira de 2022 a partir de um conjunto de mais de quinze milhões de tweets. Os autores construíram uma rede de retweets e detectaram três grandes comunidades, a maior de usuários de esquerda, uma segunda de veículos de imprensa e seus seguidores, e uma terceira de usuários de direita, que juntas reuniam a maior parte dos usuários da rede. O principal resultado do estudo é uma medida de quanto cada grupo contribui para a polarização geral da rede. Apesar de a comunidade de direita ser menor que a de esquerda, ela respondia, em média, por 44,1\% da modularidade da rede, contra 13,4\% da comunidade de esquerda. A comunidade de direita era, portanto, marcadamente mais isolada e mais coesa, e os autores levantam a hipótese de que esse isolamento, somado à facilidade de comunicação coordenada dentro do grupo, possa ter contribuído para os atos de 8 de janeiro de 2023.
 
-Há, porém, uma diferença metodológica decisiva entre aquele trabalho e este. Interian e Rodrigues modelam uma rede de retweets dirigida, em que cada aresta liga o autor original de um tweet ao usuário que o retuitou e indica o sentido da propagação da informação. Construir essa rede exige conhecer o autor original de cada tweet retuitado. O dataset utilizado neste trabalho preserva apenas o identificador do tweet referenciado, e não o seu autor, de modo que reconstruir a rede dirigida exigiria hidratar a maior parte dos tweets a um custo proibitivo, conforme se justifica no Capítulo X. A alternativa adotada aqui é a rede de co-retweet, que dispensa o autor original e será descrita na próxima seção. O ponto a registrar é que, apesar de partir de um dado mais restrito e de um método de construção diferente, a estrutura que este trabalho encontra para o 8 de janeiro converge com a descrita por Interian e Rodrigues para o período eleitoral, em especial quanto ao isolamento acentuado de uma das comunidades. Uma convergência obtida por caminhos independentes reforça a validade dos achados de ambos.
+Há, porém, uma diferença metodológica decisiva entre aquele trabalho e este. Interian e Rodrigues modelam uma rede de retweets dirigida, em que cada aresta liga o autor original de um tweet ao usuário que o retuitou e indica o sentido da propagação da informação. Construir essa rede exige conhecer o autor original de cada tweet retuitado. O dataset utilizado neste trabalho preserva apenas o identificador do tweet referenciado, e não o seu autor, de modo que reconstruir a rede dirigida exigiria hidratar a maior parte dos tweets a um custo proibitivo, conforme se justifica na Seção~\ref{sub:dataset}. A alternativa adotada aqui é a rede de co-retweet, que dispensa o autor original e será descrita na próxima seção. O ponto a registrar é que, apesar de partir de um dado mais restrito e de um método de construção diferente, a estrutura que este trabalho encontra para o 8 de janeiro converge com a descrita por Interian e Rodrigues para o período eleitoral, em especial quanto ao isolamento acentuado de uma das comunidades. Uma convergência obtida por caminhos independentes reforça a validade dos achados de ambos.
 
 Vale registrar ainda que análises do mesmo período por abordagens bastante distintas chegam a um quadro semelhante. Um estudo baseado em homologia persistente, aplicado à mesma base de dados das eleições de 2022, identifica de forma recorrente uma topologia bipolar, com dois grupos de opinião internamente homogêneos e opostos \cite{b_rocha2024}.
 
 \subsection{Da rede de retweet à rede de co-retweet}
+\label{sub:coretweet}
 A construção da rede deste trabalho apoia-se em uma premissa consolidada na literatura, a de que o retweet funciona como uma forma de endosso. Ao retuitar uma mensagem, o usuário sinaliza concordância ou ao menos disposição a amplificar aquele conteúdo dentro da própria rede. Conover et al. \cite{b_conover2011}, em um dos trabalhos seminais sobre o tema, mostraram que a estrutura de comunidades de uma rede de retweets é suficiente para prever o alinhamento político dos usuários com alta acurácia. É essa premissa que autoriza usar o comportamento de retweet como base para identificar comunidades políticas.
 
 A forma mais direta de explorar essa premissa é a rede de retweets dirigida, descrita na seção anterior, em que se liga quem retuita a quem é retuitado. Como essa construção depende de conhecer o autor original de cada tweet, e o dataset não fornece essa informação, este trabalho adota uma rede de co-retweet. Nela, os usuários são ligados não pela relação de quem retuita quem, mas pela coincidência daquilo que retuitam: dois usuários são conectados quando amplificaram pelo menos um mesmo tweet. A unidade de análise deixa de ser o fluxo de informação entre usuários e passa a ser a sobreposição entre os conjuntos de conteúdo que cada um amplificou.
 
 Essa operação tem um precedente formal bem estabelecido, ainda que em outro domínio. O acoplamento bibliográfico, proposto por Kessler \cite{b_kessler1963}, define que dois documentos são tanto mais semelhantes quanto maior o número de referências que citam em comum, partindo da ideia de que citar as mesmas fontes indica proximidade temática. A rede de acoplamento é obtida multiplicando a matriz de citações pela sua transposta. A rede de co-retweet é a mesma operação aplicada a outro objeto: no lugar de documentos que citam referências, os objetos são os usuários que retuitam tweets, e no lugar da contagem de referências em comum, as ligações representam a contagem de tweets em comum. A tradução de um caso para o outro substitui a noção de base intelectual compartilhada pela de dieta informativa compartilhada. Dois usuários ligados na rede são dois usuários que, no recorte de um evento, amplificaram um conjunto sobreposto de mensagens.
 
-A própria literatura de acoplamento bibliográfico já aponta a necessidade de normalizar essa contagem, para que documentos com muitas citações não apareçam como artificialmente próximos de todos os demais. No caso deste trabalho, o mesmo problema surge com tweets de altíssimo alcance e com usuários muito ativos, e é tratado pelo uso do coeficiente de Jaccard como peso das arestas, que normaliza a sobreposição pela atividade total de cada par de usuários, conforme definido no Capítulo X. Há, contudo, uma diferença qualitativa entre os dois domínios que convém explicitar. A citação em um artigo é um ato deliberado e relativamente raro, feito dentro de um texto formal. O retweet é um ato rápido, frequente e informal. O sinal que liga dois usuários por co-retweet é, portanto, mais ruidoso do que o que liga dois artigos por citação comum. Essa diferença justifica não só a normalização pelo Jaccard, mas também o descarte de usuários com pouquíssima atividade, que não fornecem sinal suficiente para serem associados de forma confiável a qualquer comunidade.
+A própria literatura de acoplamento bibliográfico já aponta a necessidade de normalizar essa contagem, para que documentos com muitas citações não apareçam como artificialmente próximos de todos os demais. No caso deste trabalho, o mesmo problema surge com tweets de altíssimo alcance e com usuários muito ativos, e é tratado pelo uso do coeficiente de Jaccard como peso das arestas, que normaliza a sobreposição pela atividade total de cada par de usuários, conforme definido na Seção~\ref{sub:construcao}. Há, contudo, uma diferença qualitativa entre os dois domínios que convém explicitar. A citação em um artigo é um ato deliberado e relativamente raro, feito dentro de um texto formal. O retweet é um ato rápido, frequente e informal. O sinal que liga dois usuários por co-retweet é, portanto, mais ruidoso do que o que liga dois artigos por citação comum. Essa diferença justifica não só a normalização pelo Jaccard, mas também o descarte de usuários com pouquíssima atividade, que não fornecem sinal suficiente para serem associados de forma confiável a qualquer comunidade.
 
 Interpretada à luz da premissa de que o retweet é endosso, a aresta da rede de co-retweet representa um co-endosso: dois usuários ligados endossaram o mesmo conteúdo. A projeção de uma rede bipartida usuário-conteúdo sobre o lado dos usuários, com essa leitura, tem precedente na análise de compartilhamento de notícias, em que usuários são conectados pelo conteúdo que ambos compartilham e a aresta é lida como co-consumo de informação \cite{b_cicchini2022}.
 
 O objeto que emerge dessa construção, uma vez detectadas as comunidades, é o que parte da literatura chama de comunidade discursiva \cite{b_becatti2019}: um grupo de usuários que amplifica de forma consistente o mesmo discurso. Esse termo tem a vantagem de nomear as comunidades pela sua função na circulação de conteúdo, sem lhes atribuir de antemão um rótulo ideológico. Neste trabalho, a caracterização ideológica das comunidades não é realizada na etapa aqui relatada, e por isso os grupos detectados são tratados de forma estrutural. A atribuição de orientação política a cada comunidade depende de uma etapa posterior de rotulagem, descrita entre os trabalhos futuros.
 
 
-\section{Ease of Use}
+\section{Construção e Análise Estrutural da Rede de Co-retweet}
+\label{sec:contribuicao}
 
-\subsection{Maintaining the Integrity of the Specifications}
+Este capítulo descreve a contribuição central da etapa relatada: a construção de uma rede de co-retweet a partir do dataset desidratado de Silva et al. \cite{b_silva2024} e a caracterização estrutural das comunidades que dela emergem, para cada um dos quatro eventos do arco. A exposição segue o percurso do dado. Parte da estrutura bruta dos arquivos, descreve a transformação em um grafo unipartido de usuários, define as métricas empregadas e, por fim, apresenta os resultados organizados em torno das três perguntas levantadas na introdução: se existem dois campos, qual o grau de fechamento de cada um, e se os dois lados têm o mesmo formato. Mantém-se ao longo de todo o capítulo a postura já anunciada, em que as comunidades são tratadas de forma estrutural, sem a rotulagem ideológica que fica reservada a uma etapa posterior.
 
-The IEEEtran class file is used to format your paper and style the text. All margins, 
-column widths, line spaces, and text fonts are prescribed; please do not 
-alter them. You may note peculiarities. For example, the head margin
-measures proportionately more than is customary. This measurement 
-and others are deliberate, using specifications that anticipate your paper 
-as one part of the entire proceedings, and not as an independent document. 
-Please do not revise any of the current designations.
+\subsection{Visão geral da pipeline}
+\label{sub:visao}
 
-\section{Prepare Your Paper Before Styling}
-Before you begin to format your paper, first write and save the content as a 
-separate text file. Complete all content and organizational editing before 
-formatting. Please note sections \ref{AA}--\ref{SCM} below for more information on 
-proofreading, spelling and grammar.
+A pipeline transforma os arquivos CSV de um evento em um grafo de co-retweet com comunidades detectadas e métricas associadas, conforme a sequência de sete etapas da Figura~\ref{fig:pipeline}. Cada módulo persiste seus artefatos em disco e os recarrega quando já existem, de modo que iterações sobre etapas tardias, tipicamente a projeção, que é a mais cara, não exijam reprocessar a carga e a filtragem dos milhões de linhas de entrada. Essa idempotência por estágio é o que torna viável a exploração de parâmetros descrita na Seção~\ref{sub:sensibilidade}, e foi implementada centralizando a política de cache em uma classe base comum a todos os módulos.
 
-Keep your text and graphic files separate until after the text has been 
-formatted and styled. Do not number text heads---{\LaTeX} will do that 
-for you.
+\begin{figure*}[tbp]
+  \centering
+  \includegraphics[width=0.96\textwidth]{fig_pipeline.pdf}
+  \caption{Sequência de etapas da pipeline de construção e análise do grafo de co-retweet. A explosão combinatória de arestas causada por tweets de altíssimo alcance é tratada na etapa de projeção, com o corte de $\tau$ aplicado em blocos, e não por descarte de dados.}
+  \label{fig:pipeline}
+\end{figure*}
 
-\subsection{Abbreviations and Acronyms}\label{AA}
-Define abbreviations and acronyms the first time they are used in the text, 
-even after they have been defined in the abstract. Abbreviations such as 
-IEEE, SI, MKS, CGS, ac, dc, and rms do not have to be defined. Do not use 
-abbreviations in the title or heads unless they are unavoidable.
+\subsection{Do dataset à estrutura de dados}
+\label{sub:dataset}
 
-\subsection{Units}
-\begin{itemize}
-\item Use either SI (MKS) or CGS as primary units. (SI units are encouraged.) English units may be used as secondary units (in parentheses). An exception would be the use of English units as identifiers in trade, such as ``3.5-inch disk drive''.
-\item Avoid combining SI and CGS units, such as current in amperes and magnetic field in oersteds. This often leads to confusion because equations do not balance dimensionally. If you must use mixed units, clearly state the units for each quantity that you use in an equation.
-\item Do not mix complete spellings and abbreviations of units: ``Wb/m\textsuperscript{2}'' or ``webers per square meter'', not ``webers/m\textsuperscript{2}''. Spell out units when they appear in text: ``. . . a few henries'', not ``. . . a few H''.
-\item Use a zero before decimal points: ``0.25'', not ``.25''. Use ``cm\textsuperscript{3}'', not ``cc''.)
-\end{itemize}
+Cada arquivo do dataset corresponde a um evento e contém, por registro, a data de criação, o identificador do autor da ação, o identificador da conversa e o campo \texttt{referenced\_tweets}. Esse último campo é o que organiza toda a construção. Quando vazio, indica um tweet original; quando preenchido, traz o tipo da referência (\texttt{retweeted}, \texttt{replied\_to} ou \texttt{quoted}) e o identificador do tweet referenciado. O primeiro passo da pipeline retém apenas os registros do tipo \texttt{retweeted}, descartando respostas, citações e originais, e produz um conjunto de pares (usuário, tweet retuitado).
 
-\subsection{Equations}
-Number equations consecutively. To make your 
-equations more compact, you may use the solidus (~/~), the exp function, or 
-appropriate exponents. Italicize Roman symbols for quantities and variables, 
-but not Greek symbols. Use a long dash rather than a hyphen for a minus 
-sign. Punctuate equations with commas or periods when they are part of a 
-sentence, as in:
+É neste ponto que se materializa a restrição metodológica antecipada na revisão da literatura. O dataset preserva o identificador do tweet referenciado, mas não o seu autor. Reconstruir a rede de retweets dirigida no estilo de Conover et al. \cite{b_conover2011} e Interian e Rodrigues \cite{b_interian2023}, em que cada aresta liga o autor original ao usuário que o retuitou, exigiria recuperar o autor de cada tweet retuitado. Duas vias foram consideradas e descartadas. A recuperação por junção interna ao próprio dataset, cruzando tweets retuitados com tweets que aparecem como originais em algum arquivo, alcança apenas cerca de 19\% dos casos, taxa insuficiente para uma análise representativa. A recuperação por hidratação massiva via API, por sua vez, teria custo da ordem de centenas de dólares, incompatível com o orçamento do trabalho. A rede de co-retweet, descrita a seguir, dispensa o autor original e é a alternativa adotada. Sua justificativa conceitual, o acoplamento bibliográfico de Kessler \cite{b_kessler1963} aplicado a retweets, foi desenvolvida na Seção~\ref{sub:coretweet} do referencial.
+
+A única filtragem de ruído aplicada antes da projeção descarta usuários que aparecem como retuitadores menos de $N$ vezes no evento. A justificativa é direta. Usuários com um ou dois retweets não fornecem sinal suficiente para serem associados de forma confiável a qualquer comunidade, e sua presença infla o grafo sem contribuir para a estrutura. Tweets de alto alcance não são filtrados, pois são o material central da análise narrativa prevista para a etapa posterior, e, do ponto de vista computacional, a explosão de arestas que provocam é tratada na projeção, não por descarte. O parâmetro $N$ é o mais sensível desta etapa e foi calibrado por evento, conforme discutido na Seção~\ref{sub:sensibilidade}.
+
+\subsection{Construção do grafo de co-retweet}
+\label{sub:construcao}
+
+A partir dos pares (usuário, tweet), constrói-se uma matriz bipartida esparsa $B \in \{0,1\}^{|U| \times |T|}$, em que $U$ é o conjunto de usuários remanescentes e $T$ o conjunto de tweets retuitados ao menos uma vez no evento, com
 \begin{equation}
-a+b=\gamma\label{eq}
+B_{u,t} =
+\begin{cases}
+1, & \text{se o usuário } u \text{ retuitou o tweet } t,\\
+0, & \text{caso contrário.}
+\end{cases}
 \end{equation}
 
-Be sure that the 
-symbols in your equation have been defined before or immediately following 
-the equation. Use ``\eqref{eq}'', not ``Eq.~\eqref{eq}'' or ``equation \eqref{eq}'', except at 
-the beginning of a sentence: ``Equation \eqref{eq} is . . .''
+A projeção sobre o lado dos usuários liga dois usuários que tenham retuitado ao menos um tweet em comum. O peso da aresta é o coeficiente de Jaccard sobre os conjuntos de tweets retuitados por cada um,
+\begin{equation}
+J(u,v) = \frac{|T_u \cap T_v|}{|T_u \cup T_v|},
+\label{eq:jaccard}
+\end{equation}
+em que $T_u$ denota o conjunto de tweets retuitados pelo usuário $u$. O coeficiente varia de $0$, quando não há nenhum tweet em comum, a $1$, quando os dois usuários retuitaram exatamente o mesmo conjunto. A escolha do Jaccard em lugar da contagem absoluta de tweets em comum normaliza a similaridade pela atividade total de cada usuário, evitando que usuários hiperativos apareçam como artificialmente próximos de muitos outros apenas pelo volume de sua atividade.
 
-\subsection{\LaTeX-Specific Advice}
+O cálculo das interseções é feito por operações matriciais. O produto $B B^{\mathsf{T}}$ fornece, em cada posição $(u,v)$, a cardinalidade $|T_u \cap T_v|$, e a diagonal $|T_u|$ permite recuperar a união por inclusão-exclusão, $|T_u \cup T_v| = |T_u| + |T_v| - |T_u \cap T_v|$, de modo que a Equação~\eqref{eq:jaccard} é avaliada sem laço explícito sobre pares. O gargalo da operação não é o tempo de cálculo, mas o \emph{tamanho da saída}: um único tweet retuitado por dezenas de milhares de usuários gera, sozinho, um número quadrático de pares candidatos a aresta. Esse efeito é contido processando a projeção em blocos de usuários e aplicando o corte de limiar $\tau$ ainda dentro de cada bloco, antes de materializar a lista de arestas, o que mantém o uso de memória limitado independentemente do alcance dos tweets mais virais.
 
-Please use ``soft'' (e.g., \verb|\eqref{Eq}|) cross references instead
-of ``hard'' references (e.g., \verb|(1)|). That will make it possible
-to combine sections, add equations, or change the order of figures or
-citations without having to go through the file line by line.
+Convém registrar uma limitação do peso Jaccard sobre este objeto, que decorre da natureza do retweet. Como discutido no referencial, o retweet é um ato rápido e frequente, e o sinal que ele carrega é mais ruidoso que o de uma citação acadêmica. Em particular, um par de usuários de baixa atividade que compartilhe um único tweet viral recebe um Jaccard relativamente alto (no limite, dois usuários que retuitaram apenas aquele mesmo tweet têm $J=1$), ainda que a coincidência seja pouco informativa. Esse \emph{efeito de piso} é parte do motivo pelo qual se descartam usuários de pouquíssima atividade antes da projeção, e é também o que o limiar $\tau$ ajuda a atenuar ao remover as ligações mais fracas.
 
-Please don't use the \verb|{eqnarray}| equation environment. Use
-\verb|{align}| or \verb|{IEEEeqnarray}| instead. The \verb|{eqnarray}|
-environment leaves unsightly spaces around relation symbols.
+Após a projeção, aplica-se a extração de \emph{backbone} por limiar universal, retendo apenas as arestas com $J \ge \tau$. Adotou-se $\tau = 0{,}1$ de forma uniforme nos quatro eventos. O corte elimina ligações que conectam usuários com pouquíssima sobreposição entre dezenas de retweets cada, ligações que carregam pouca informação sobre proximidade real entre ambientes informacionais e que, se mantidas, produziriam um \emph{hairball} ilegível. A robustez dos achados a essa escolha é examinada na Seção~\ref{sub:sensibilidade}.
 
-Please note that the \verb|{subequations}| environment in {\LaTeX}
-will increment the main equation counter even when there are no
-equation numbers displayed. If you forget that, you might write an
-article in which the equation numbers skip from (17) to (20), causing
-the copy editors to wonder if you've discovered a new method of
-counting.
+\subsection{Detecção de comunidades e métricas estruturais}
+\label{sub:metricas}
 
-{\BibTeX} does not work by magic. It doesn't get the bibliographic
-data from thin air but from .bib files. If you use {\BibTeX} to produce a
-bibliography you must send the .bib files. 
+Sobre o grafo resultante aplica-se o algoritmo de Leiden \cite{b_traag2019}, que busca uma partição dos nós maximizando a modularidade. A modularidade $Q$ mede o quanto a densidade de arestas dentro das comunidades supera a esperada em um grafo aleatório com a mesma distribuição de grau:
+\begin{equation}
+Q = \frac{1}{2m}\sum_{i,j}\left(A_{ij} - \frac{k_i k_j}{2m}\right)\delta(c_i,c_j),
+\label{eq:modularidade}
+\end{equation}
+em que $A_{ij}$ é o peso da aresta entre $i$ e $j$, $k_i$ o grau ponderado de $i$, $m$ a soma dos pesos das arestas, $c_i$ a comunidade de $i$ e $\delta$ a função que vale $1$ quando $c_i = c_j$ e $0$ caso contrário.
 
-{\LaTeX} can't read your mind. If you assign the same label to a
-subsubsection and a table, you might find that Table I has been cross
-referenced as Table IV-B3. 
+A modularidade, contudo, não é diretamente comparável entre grafos de tamanhos e densidades distintos, pois é sensível ao número de nós e sofre de um limite de resolução conhecido. Como os quatro eventos diferem em escala e foram filtrados com $N$ distintos, a comparação entre eles não se apoia em $Q$, mas em duas quantidades normalizadas e interpretáveis. A primeira é a \emph{assortatividade nominal} por comunidade \cite{b_newman2003},
+\begin{equation}
+r = \frac{\sum_i e_{ii} - \sum_i a_i b_i}{1 - \sum_i a_i b_i},
+\label{eq:assort}
+\end{equation}
+em que $e_{ij}$ é a fração de arestas entre as comunidades $i$ e $j$ e $a_i$, $b_i$ as somas marginais correspondentes. O coeficiente $r$ varia de $-1$ a $1$ e mede o quanto as arestas tendem a permanecer dentro das comunidades. A segunda é a \emph{hermeticidade} de cada comunidade, definida como a fração do peso de arestas que toca a comunidade $c$ e permanece interna a ela,
+\begin{equation}
+h_c = \frac{I_c}{I_c + E_c},
+\label{eq:herm}
+\end{equation}
+em que $I_c$ é o peso das arestas internas a $c$ e $E_c$ o peso das arestas que ligam $c$ ao resto do grafo. A hermeticidade varia de $0$ a $1$ e é normalizada pelo volume de cada comunidade, o que a torna comparável entre comunidades de tamanhos diferentes e entre eventos, e responde diretamente à segunda pergunta da introdução, sobre o \emph{grau} de fechamento de cada lado.
 
-{\LaTeX} does not have precognitive abilities. If you put a
-\verb|\label| command before the command that updates the counter it's
-supposed to be using, the label will pick up the last counter to be
-cross referenced instead. In particular, a \verb|\label| command
-should not go before the caption of a figure or a table.
+Complementarmente, computa-se a \emph{matriz de fluxo} entre as comunidades dominantes, definidas como aquelas que reúnem ao menos $1\%$ dos nós. Cada célula registra a fração do peso total das arestas que cai dentro de uma comunidade (na diagonal) ou entre um par delas (fora da diagonal). Por construção sobre um grafo não dirigido, a matriz é simétrica, e a soma da diagonal com o triângulo superior recupera a totalidade do peso. A leitura dessa matriz permite verificar se as comunidades dominantes se agregam em blocos maiores. Definindo como \emph{super-polos} os componentes conexos do grafo de comunidades em que se mantêm apenas os pares com fluxo mútuo acima de $1\%$ do peso total, obtém-se uma descrição da macroestrutura que é robusta à fragmentação fina das comunidades.
 
-Do not use \verb|\nonumber| inside the \verb|{array}| environment. It
-will not stop equation numbers inside \verb|{array}| (there won't be
-any anyway) and it might stop a wanted equation number in the
-surrounding equation.
+\subsection{Resultados estruturais}
+\label{sub:resultados}
 
-\subsection{Some Common Mistakes}\label{SCM}
-\begin{itemize}
-\item The word ``data'' is plural, not singular.
-\item The subscript for the permeability of vacuum $\mu_{0}$, and other common scientific constants, is zero with subscript formatting, not a lowercase letter ``o''.
-\item In American English, commas, semicolons, periods, question and exclamation marks are located within quotation marks only when a complete thought or name is cited, such as a title or full quotation. When quotation marks are used, instead of a bold or italic typeface, to highlight a word or phrase, punctuation should appear outside of the quotation marks. A parenthetical phrase or statement at the end of a sentence is punctuated outside of the closing parenthesis (like this). (A parenthetical sentence is punctuated within the parentheses.)
-\item A graph within a graph is an ``inset'', not an ``insert''. The word alternatively is preferred to the word ``alternately'' (unless you really mean something that alternates).
-\item Do not use the word ``essentially'' to mean ``approximately'' or ``effectively''.
-\item In your paper title, if the words ``that uses'' can accurately replace the word ``using'', capitalize the ``u''; if not, keep using lower-cased.
-\item Be aware of the different meanings of the homophones ``affect'' and ``effect'', ``complement'' and ``compliment'', ``discreet'' and ``discrete'', ``principal'' and ``principle''.
-\item Do not confuse ``imply'' and ``infer''.
-\item The prefix ``non'' is not a word; it should be joined to the word it modifies, usually without a hyphen.
-\item There is no period after the ``et'' in the Latin abbreviation ``et al.''.
-\item The abbreviation ``i.e.'' means ``that is'', and the abbreviation ``e.g.'' means ``for example''.
-\end{itemize}
-An excellent style manual for science writers is \cite{b7}.
+A pipeline foi aplicada aos quatro eventos com $\tau = 0{,}1$ e com o filtro $N$ calibrado por evento. A Tabela~\ref{tab:mestre} resume as métricas obtidas, e a Figura~\ref{fig:grafos} apresenta os grafos renderizados, coloridos por comunidade. Os parâmetros de filtragem são declarados na tabela, com $N$ menor nos eventos de menor volume, para não dizimar o grafo, e o mesmo $\tau$ em todos, de modo a não introduzir, pela seleção de arestas, diferenças nas próprias métricas que se deseja comparar.
 
-\subsection{Authors and Affiliations}
-\textbf{The class file is designed for, but not limited to, six authors.} A 
-minimum of one author is required for all conference articles. Author names 
-should be listed starting from left to right and then moving down to the 
-next line. This is the author sequence that will be used in future citations 
-and by indexing services. Names should not be listed in columns nor group by 
-affiliation. Please keep your affiliations as succinct as possible (for 
-example, do not differentiate among departments of the same organization).
+\begin{table*}[tbp]
+  \centering
+  \caption{Métricas estruturais por evento. $h^\star$ é a hermeticidade do polo mais fechado e ``\% polo'' o seu tamanho relativo. ``Pol.'' é o número de super-polos (componentes do grafo de comunidades com fluxo mútuo $>1\%$).}
+  \label{tab:mestre}
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{lccrcccccc}
+    \toprule
+    Evento & $N$ & $\tau$ & N\'os & Ar. & $Q$ & $r$ & $h^\star$ & \% polo & Pol. \\
+    \midrule
+    Mobiliza\c{c}\~ao & 3 & 0{,}10 & 16\,495 & 9{,}3M & 0{,}471 & 0{,}686 & 0{,}969 & 45{,}6 & 2 \\
+    R. Jefferson      & 8 & 0{,}10 & 27\,042 & 32{,}5M & 0{,}308 & 0{,}507 & 0{,}999 & 59{,}1 & 2 \\
+    Elei\c{c}\~oes    & 5 & 0{,}10 & 9\,742  & 14{,}3M & 0{,}149 & 0{,}168 & 0{,}979 & 3{,}4  & 2 \\
+    Invas\~ao         & 7 & 0{,}10 & 33\,305 & 12{,}0M & 0{,}498 & 0{,}745 & 0{,}999 & 44{,}2 & 2 \\
+    \bottomrule
+  \end{tabular}
+\end{table*}
 
-\subsection{Identify the Headings}
-Headings, or heads, are organizational devices that guide the reader through 
-your paper. There are two types: component heads and text heads.
+\begin{figure*}[tbp]
+  \centering
+  \includegraphics[width=\textwidth]{fig_grafos_drl.png}
+  \caption{Grafos de co-retweet dos quatro eventos, em layout dirigido por força (DRL). Cada ponto é um usuário, a proximidade entre pontos reflete a quantidade de retweets em comum e a cor indica a comunidade. A porcentagem ao lado de cada rótulo é a parcela de usuários do evento naquele grupo. Nos três flashpoints (mobilização, Roberto Jefferson e invasão), um polo aparece nitidamente destacado do restante. No dia do segundo turno, a separação se desfaz em uma massa única.}
+  \label{fig:grafos}
+\end{figure*}
 
-Component heads identify the different components of your paper and are not 
-topically subordinate to each other. Examples include Acknowledgments and 
-References and, for these, the correct style to use is ``Heading 5''. Use 
-``figure caption'' for your Figure captions, and ``table head'' for your 
-table title. Run-in heads, such as ``Abstract'', will require you to apply a 
-style (in this case, italic) in addition to the style provided by the drop 
-down menu to differentiate the head from the text.
+\subsubsection{Existem dois campos, e um deles é hermético}
 
-Text heads organize the topics on a relational, hierarchical basis. For 
-example, the paper title is the primary text head because all subsequent 
-material relates and elaborates on this one topic. If there are two or more 
-sub-topics, the next level head (uppercase Roman numerals) should be used 
-and, conversely, if there are not at least two sub-topics, then no subheads 
-should be introduced.
+Em três dos quatro eventos, a mobilização do 7 de setembro, o caso Roberto Jefferson e a invasão de 8 de janeiro, a estrutura é a mesma, e responde às duas primeiras perguntas da introdução de uma só vez. Existe sempre uma comunidade dominante praticamente lacrada, com hermeticidade entre $0{,}97$ e $0{,}999$, ao lado de um conjunto de comunidades porosas que trocam peso entre si de forma intensa. A matriz de fluxo da invasão de 8 de janeiro ilustra o padrão de modo nítido: o polo lacrado (Grupo~1) troca com cada um dos outros dois grupos apenas $0{,}024\%$ e $0{,}015\%$ do peso total da rede, ao passo que os dois grupos porosos (Grupos~2 e 3) trocam entre si $16{,}5\%$. Em termos de hermeticidade, o polo lacrado atinge $0{,}999$, contra $0{,}55$ e $0{,}62$ dos demais. O mesmo desenho aparece na mobilização e em Roberto Jefferson, como mostra a Figura~\ref{fig:hermeticidade}. Em cada um desses eventos, uma comunidade ampla, de $45$ a $59\%$ dos usuários, se fecha quase por completo, enquanto o restante se distribui em comunidades que se interpenetram.
 
-\subsection{Figures and Tables}
-\paragraph{Positioning Figures and Tables} Place figures and tables at the top and 
-bottom of columns. Avoid placing them in the middle of columns. Large 
-figures and tables may span across both columns. Figure captions should be 
-below the figures; table heads should appear above the tables. Insert 
-figures and tables after they are cited in the text. Use the abbreviation 
-``Fig.~\ref{fig}'', even at the beginning of a sentence.
+A detecção de super-polos confirma que, abaixo da fragmentação fina, a macroestrutura desses três eventos é bipolar: as comunidades dominantes se agregam em exatamente dois blocos, sempre na forma \{polo lacrado\} \emph{versus} \{restante poroso\}. É esse achado que converge, por um caminho metodológico independente, com o de Interian e Rodrigues \cite{b_interian2023}. Enquanto aqueles autores, sobre uma rede de retweets dirigida do período eleitoral, encontram uma comunidade marcadamente mais isolada e coesa que as demais, a rede de co-retweet aqui construída encontra, em torno de cada flashpoint, um polo cujo fechamento é praticamente total. A convergência é estrutural, não ideológica: a presente etapa identifica \emph{uma} comunidade hermética, sem ainda afirmar a que orientação política ela corresponde.
 
-\begin{table}[htbp]
-\caption{Table Type Styles}
-\begin{center}
-\begin{tabular}{|c|c|c|c|}
-\hline
-\textbf{Table}&\multicolumn{3}{|c|}{\textbf{Table Column Head}} \\
-\cline{2-4} 
-\textbf{Head} & \textbf{\textit{Table column subhead}}& \textbf{\textit{Subhead}}& \textbf{\textit{Subhead}} \\
-\hline
-copy& More table copy$^{\mathrm{a}}$& &  \\
-\hline
-\multicolumn{4}{l}{$^{\mathrm{a}}$Sample of a Table footnote.}
-\end{tabular}
-\label{tab1}
-\end{center}
-\end{table}
+\begin{figure*}[tbp]
+  \centering
+  \includegraphics[width=0.92\textwidth]{fig_hermeticidade.pdf}
+  \caption{Hermeticidade das comunidades dominantes em cada evento. A altura da barra é a hermeticidade $h_c$, a largura é proporcional ao tamanho da comunidade e o número sobre a barra é a parcela de usuários do evento naquele grupo. Nos três flashpoints, o polo mais fechado (em vermelho) é amplo e quase totalmente selado. No evento das eleições, ele se reduz a um enclave de $3{,}4\%$, e as demais comunidades têm fechamento baixo e semelhante entre si.}
+  \label{fig:hermeticidade}
+\end{figure*}
 
-\begin{figure}[htbp]
-\centerline{\includegraphics{fig1.png}}
-\caption{Example of a figure caption.}
-\label{fig}
+\subsubsection{O dia da eleição é a exceção reveladora}
+
+O quarto evento, o dia do segundo turno, não reproduz o padrão dos demais, e é justamente por isso que ele importa para a terceira pergunta da introdução, sobre a forma da divisão. Sua modularidade é $0{,}149$, contra $0{,}471$ a $0{,}498$ dos flashpoints, e sua assortatividade é de apenas $0{,}168$. Não há um polo lacrado dominante. O único enclave fortemente fechado reúne $3{,}4\%$ dos usuários, e a maior parte da rede forma uma massa porosa em que quatro comunidades trocam peso umas com as outras sem fronteiras nítidas (Figura~\ref{fig:hermeticidade}, terceiro grupo). O grafo correspondente, na Figura~\ref{fig:grafos}, é visivelmente menos segregado que os demais.
+
+Para verificar se essa ausência de estrutura é real ou artefato do limiar adotado, variou-se $\tau$ no evento das eleições (Figura~\ref{fig:tau}). A modularidade só alcança valores comparáveis aos dos flashpoints quando o limiar é elevado a $0{,}3$ ou $0{,}4$, ou seja, quando se exige uma sobreposição de retweets muito alta para que dois usuários permaneçam ligados. No limiar de comparação $\tau = 0{,}1$, comum a todos os eventos, a rede do segundo turno é um \emph{hairball}: a estrutura existe, mas está soterrada sob uma profusão de ligações fracas e transversais. A leitura proposta é que o dia da eleição inunda a rede de conteúdo amplamente compartilhado (o ato de votar, os resultados e as reações imediatas), material que atravessa as fronteiras políticas e que, no co-retweet, aproxima usuários de lados opostos. O momento de maior participação comum é, em termos de co-retweet, o de menor segregação.
+
+Esse contraste tem um valor metodológico que convém explicitar. Se a pipeline produzisse comunidades herméticas em qualquer entrada, o achado dos três flashpoints seria suspeito de ser um artefato do método. O fato de o mesmo procedimento, aplicado ao dia da eleição com os mesmos parâmetros, não produzir um polo lacrado dominante indica que o fechamento observado nos demais eventos é uma propriedade dos dados, e não uma imposição da metodologia.
+
+\begin{figure}[tbp]
+  \centering
+  \includegraphics[width=0.96\columnwidth]{fig_tau_eleicoes.pdf}
+  \caption{Eleições (30/10): modularidade em função do limiar $\tau$. A estrutura só emerge sob cortes agressivos. No limiar de comparação ($\tau = 0{,}1$), o evento permanece muito abaixo dos flashpoints (linhas tracejadas).}
+  \label{fig:tau}
 \end{figure}
 
-Figure Labels: Use 8 point Times New Roman for Figure labels. Use words 
-rather than symbols or abbreviations when writing Figure axis labels to 
-avoid confusing the reader. As an example, write the quantity 
-``Magnetization'', or ``Magnetization, M'', not just ``M''. If including 
-units in the label, present them within parentheses. Do not label axes only 
-with units. In the example, write ``Magnetization (A/m)'' or ``Magnetization 
-\{A[m(1)]\}'', not just ``A/m''. Do not label axes with a ratio of 
-quantities and units. For example, write ``Temperature (K)'', not 
-``Temperature/K''.
+\subsubsection{Os dois lados não têm o mesmo formato}
 
-\section*{Acknowledgment}
+A terceira pergunta da introdução, sobre se os dois lados da divisão têm o mesmo formato, recebe dos quatro eventos uma resposta negativa consistente. Em nenhum deles a estrutura é a de dois blocos espelhados. Nos flashpoints, um polo se fecha quase por completo enquanto o lado oposto permanece poroso e, com frequência, subdividido em mais de uma comunidade que troca peso livremente. Essa assimetria de fechamento, e não o valor absoluto da modularidade, é a constante estrutural do arco, e ela ecoa a polarização assimétrica já documentada para o Twitter político brasileiro por Soares, Recuero e Zago \cite{b_soares2019} e por Recuero, Soares e Zago \cite{b_recuero2021}. Vale notar ainda que o tamanho do polo lacrado varia entre os eventos, de $45$ a $59\%$ nos flashpoints e apenas $3{,}4\%$ nas eleições, o que mostra que ``estar fechado'' e ``ser maioria'' são propriedades independentes: o fechamento de uma comunidade não é função do seu tamanho.
 
-The preferred spelling of the word ``acknowledgment'' in America is without 
-an ``e'' after the ``g''. Avoid the stilted expression ``one of us (R. B. 
-G.) thanks $\ldots$''. Instead, try ``R. B. G. thanks$\ldots$''. Put sponsor 
-acknowledgments in the unnumbered footnote on the first page.
+\subsection{Análise de sensibilidade}
+\label{sub:sensibilidade}
 
-\section*{References}
+Como o filtro $N$ varia entre eventos, é necessário verificar que os achados não dependem dessa escolha. Para o evento de 8 de janeiro, variou-se $N$ de $5$ a $20$ com $\tau$ fixo (Figura~\ref{fig:sensN}). A modularidade permanece em torno de $0{,}49$ ao longo de toda a faixa, oscilando menos de $0{,}03$ enquanto o número de nós varia de $48$ mil a $9$ mil. Mais importante, o número de super-polos permanece igual a $2$ em todos os valores de $N$, o que indica que a macroestrutura bipolar é invariante ao filtro, ainda que o número de comunidades em que o lado poroso se fragmenta dependa dele. Disso decorre a postura adotada na comparação entre eventos. O achado qualitativo, a bipolaridade assimétrica nos flashpoints e sua ausência no dia da eleição, é robusto ao parâmetro e pode ser comparado entre eventos filtrados com $N$ distintos. Os valores numéricos específicos de $Q$ e de hermeticidade, por outro lado, são tratados como descritores internos de cada evento, e não como uma série temporal a ser lida como tendência.
 
-Please number citations consecutively within brackets \cite{b1}. The 
-sentence punctuation follows the bracket \cite{b2}. Refer simply to the reference 
-number, as in \cite{b3}---do not use ``Ref. \cite{b3}'' or ``reference \cite{b3}'' except at 
-the beginning of a sentence: ``Reference \cite{b3} was the first $\ldots$''
+Quanto ao limiar de \emph{backbone}, a opção por um $\tau$ comum a todos os eventos foi deliberada. Em uma versão anterior, o evento Roberto Jefferson havia sido processado com $\tau = 0{,}15$ por restrição de memória. A reexecução com $\tau = 0{,}1$, embora tenha mais que dobrado o número de arestas, manteve a hermeticidade do polo lacrado em $0{,}999$, praticamente idêntica à da versão anterior. O fechamento, portanto, não era um efeito do limiar.
 
-Number footnotes separately in superscripts. Place the actual footnote at 
-the bottom of the column in which it was cited. Do not put footnotes in the 
-abstract or reference list. Use letters for table footnotes.
+\begin{figure}[tbp]
+  \centering
+  \includegraphics[width=0.96\columnwidth]{fig_sensibilidade_N.pdf}
+  \caption{Invasão (8/jan): sensibilidade ao filtro $N$, com $\tau = 0{,}1$ fixo. A modularidade é estável e o número de super-polos permanece igual a $2$ de $N=5$ a $N=20$, o que indica que a macroestrutura bipolar não depende do filtro.}
+  \label{fig:sensN}
+\end{figure}
 
-Unless there are six authors or more give all authors' names; do not use 
-``et al.''. Papers that have not been published, even if they have been 
-submitted for publication, should be cited as ``unpublished'' \cite{b4}. Papers 
-that have been accepted for publication should be cited as ``in press'' \cite{b5}. 
-Capitalize only the first word in a paper title, except for proper nouns and 
-element symbols.
+\subsection{Síntese: o que a estrutura mostra e o que ela não mostra}
+\label{sub:sintese}
 
-For papers published in translation journals, please give the English 
-citation first, followed by the original foreign-language citation \cite{b6}.
+A etapa relatada estabelece, com base nos dados, três fatos estruturais. Primeiro, em torno dos eventos contenciosos analisados, a rede de co-retweet se organiza de forma bipolar, com um polo praticamente lacrado oposto a um lado poroso. Segundo, esse fechamento é fortemente assimétrico, de modo que os dois lados da divisão não têm o mesmo formato. Terceiro, a segregação não é constante ao longo do arco. O dia da eleição, momento de participação compartilhada, é o de menor polarização de co-retweet, o que serve simultaneamente de contraste substantivo e de controle metodológico contra a suspeita de que o método produza fechamento artificialmente.
+
+É igualmente importante delimitar o que esta etapa não demonstra. A rede de co-retweet mede similaridade de consumo informacional, não fluxo de influência, e as comunidades aqui detectadas são, por ora, objetos estritamente estruturais: comunidades discursivas, no sentido de Becatti et al. \cite{b_becatti2019}, e não campos ideológicos identificados. A pergunta central do trabalho, sobre como dois grupos constroem leituras divergentes de um mesmo fato, exige caracterizar o \emph{conteúdo} amplificado por cada comunidade, o que está fora do alcance de uma análise puramente estrutural e constitui o objeto da etapa seguinte. O que esta contribuição entrega é a pré-condição dessa investigação: a demonstração de que as comunidades existem, de que uma delas se fecha de modo quase total e de que essa configuração se repete, com forma reconhecível, ao longo do arco que conduz ao 8 de janeiro.
 
 \begin{thebibliography}{00}
 \bibitem{b_recuero2021} R. Recuero, F. B. Soares, and G. Zago, ``Polarização, hiperpartidarismo e câmaras de eco: como circula a desinformação sobre Covid-19 no Twitter,'' Contracampo, vol. 40, no. 1, 2021.
@@ -291,13 +248,12 @@ citation first, followed by the original foreign-language citation \cite{b6}.
 \bibitem{b_conover2011} M. D. Conover, B. Gonçalves, J. Ratkiewicz, A. Flammini, and F. Menczer, ``Predicting the political alignment of Twitter users,'' in Proc. 2011 IEEE 3rd Int. Conf. Privacy, Security, Risk and Trust and 2011 IEEE 3rd Int. Conf. Social Computing, 2011, pp. 192--199.
 \bibitem{b_soares2019} F. B. Soares, R. Recuero, and G. Zago, ``Asymmetric polarization on Twitter and the 2018 Brazilian presidential elections,'' in Proc. 10th Int. Conf. Social Media and Society (SMSociety), 2019, pp. 67--76.
 \bibitem{b_kessler1963} M. M. Kessler, ``Bibliographic coupling between scientific papers,'' American Documentation, vol. 14, no. 1, pp. 10--25, 1963.
-\bibitem{b_flamino2023} J. Flamino et al., ``Political polarization of news media and influencers on Twitter in the 2016 and 2020 US presidential elections,'' Nature Human Behaviour, vol. 7, no. 6, pp. 904--916, 2023.
 \bibitem{b_becatti2019} A. Becatti, G. Caldarelli, R. Lambiotte, and F. Saracco, ``Extracting significant signal of news consumption from social networks: the case of Twitter in Italian political elections,'' Applied Network Science, vol. 4, art. 62, 2019.
 \bibitem{b_rocha2024} I. Rocha, ``Persistent Homology generalizations for Social Media Network Analysis,'' arXiv preprint arXiv:2404.19257, 2024.
 \bibitem{b_cicchini2022} T. Cicchini, S. M. del Pozo, E. Tagliazucchi, and P. Balenzuela, ``News sharing on Twitter reveals emergent fragmentation of media agenda and persistent polarization,'' EPJ Data Science, vol. 11, no. 1, art. 48, 2022.
+\bibitem{b_silva2024} L. J. Silva et al., ``Tweet\_Eleições\_2022: um dataset de tweets durante as eleições presidenciais brasileiras de 2022,'' Zenodo, 2024, doi: 10.5281/zenodo.11206577.
+\bibitem{b_traag2019} V. A. Traag, L. Waltman, and N. J. van Eck, ``From Louvain to Leiden: guaranteeing well-connected communities,'' Scientific Reports, vol. 9, no. 1, art. 5233, 2019.
+\bibitem{b_newman2003} M. E. J. Newman, ``Mixing patterns in networks,'' Physical Review E, vol. 67, no. 2, art. 026126, 2003.
 \end{thebibliography}
-\vspace{12pt}
-\color{red}
-IEEE conference templates contain guidance text for composing and formatting conference papers. Please ensure that all template text is removed from your conference paper prior to submission to the conference. Failure to remove the template text from your paper may result in your paper not being published.
 
 \end{document}
