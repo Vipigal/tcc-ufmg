@@ -9,8 +9,7 @@ from modules.project import JaccardProjector
 
 
 INTERMEDIATE_FILES = (
-    RetweetLoader.FILES
-    + NoiseFilter.FILES
+    NoiseFilter.FILES
     + BipartiteBuilder.FILES
     + JaccardProjector.FILES
 )
