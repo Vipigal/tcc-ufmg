@@ -1,0 +1,12 @@
+{
+  "evento": "eleicoes",
+  "min_user_retweets": 5,
+  "tau": 0.1,
+  "block_size": 2000,
+  "resolution": 1.0,
+  "force_from": 1,
+  "layout_top_k": 12,
+  "layout_seed": 42,
+  "min_frac": 0.01,
+  "generated_at": "2026-06-28T04:36:11"
+}

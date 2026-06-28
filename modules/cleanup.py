@@ -6,12 +6,16 @@ from modules.load import RetweetLoader
 from modules.filter import NoiseFilter
 from modules.bipartite import BipartiteBuilder
 from modules.project import JaccardProjector
+from modules.results import GraphResults
+from modules.layout import CommunityMap
 
 
 INTERMEDIATE_FILES = (
     NoiseFilter.FILES
     + BipartiteBuilder.FILES
     + JaccardProjector.FILES
+    + GraphResults.FILES        # graph_metrics.json (dados; as PNGs ficam)
+    + CommunityMap.FILES        # drl_layout.parquet + .json (coords; o PNG fica)
 )
 
 
