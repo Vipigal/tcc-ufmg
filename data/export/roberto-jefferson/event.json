@@ -1,0 +1,83 @@
+{
+ "slug": "roberto-jefferson",
+ "name": "Caso Roberto Jefferson",
+ "event_date": "2022-10-23",
+ "n_nodes": 27042,
+ "n_edges": 32517597,
+ "n_communities": 4,
+ "run_config": {
+  "evento": "roberto-jefferson",
+  "min_user_retweets": 8,
+  "tau": 0.1,
+  "block_size": 2000,
+  "resolution": 1.0,
+  "force_from": 1,
+  "layout_top_k": 12,
+  "layout_seed": 42,
+  "min_frac": 0.01,
+  "generated_at": "2026-06-28T17:49:17"
+ },
+ "selection": {
+  "k": 100,
+  "k_small": 20,
+  "min_frac": 0.01,
+  "small_weight_frac": 0.05
+ },
+ "clusters": [
+  {
+   "community": 1,
+   "group": 1,
+   "label": "Grupo 1",
+   "color": "#5E4FA2",
+   "n_nodes": 15972,
+   "frac_nodes": 0.5906367872198802,
+   "intra_weight_frac": 0.17502582102694392,
+   "k": 100,
+   "n_selected": 100,
+   "n_hydrated": 79,
+   "n_not_found": 17,
+   "n_not_authorized": 4,
+   "n_other_errors": 0,
+   "n_pending": 0,
+   "attrition": 0.21
+  },
+  {
+   "community": 0,
+   "group": 2,
+   "label": "Grupo 2",
+   "color": "#26A69A",
+   "n_nodes": 6386,
+   "frac_nodes": 0.2361511722505732,
+   "intra_weight_frac": 0.34556598701491437,
+   "k": 100,
+   "n_selected": 100,
+   "n_hydrated": 66,
+   "n_not_found": 33,
+   "n_not_authorized": 1,
+   "n_other_errors": 0,
+   "n_pending": 0,
+   "attrition": 0.34
+  },
+  {
+   "community": 2,
+   "group": 3,
+   "label": "Grupo 3",
+   "color": "#E8852B",
+   "n_nodes": 4646,
+   "frac_nodes": 0.17180681902226166,
+   "intra_weight_frac": 0.17315767268345927,
+   "k": 100,
+   "n_selected": 100,
+   "n_hydrated": 68,
+   "n_not_found": 31,
+   "n_not_authorized": 1,
+   "n_other_errors": 0,
+   "n_pending": 0,
+   "attrition": 0.32
+  }
+ ],
+ "files": {
+  "tweets": "roberto-jefferson/tweets.json",
+  "layout": "roberto-jefferson/layout.json"
+ }
+}

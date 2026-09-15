@@ -12,11 +12,14 @@ id estável do recurso (tweet/usuário), então um tweet ou autor buscado para u
 - **Arquivo do banco:** `data/database/hydrated.sqlite`
 - **Esta documentação:** `data/database/README.md` — evolui junto com o schema; ver o [Changelog](#changelog).
 
-> Status (2026-09-15): schema completo; `events` semeada; hidratação de maio/2026 (83 tweets,
-> 72 autores da invasão) **migrada** para `tweets`/`users`; `event_top_tweets` populada pela
-> seleção por cluster (M8). Tudo isso é feito, de forma idempotente, por
-> `notebooks/pipeline_tcc2.ipynb`. **Pendente:** reescrever `fetch_x_data.py` para usar o
-> banco como cache. `community_membership` continua vazia (análise comparativa).
+> Status (2026-09-15): schema completo e em uso pela fase 2 (`notebooks/pipeline_tcc2.ipynb`):
+> `event_top_tweets` recebe a seleção por cluster (M8) e o M9 (`modules/hydrate.py`) hidrata
+> pela API usando `tweets`/`users` como cache e registrando em `lookup_errors` o que a API não
+> devolve. Autores hidratados em 2026-09-15 (`UserHydrator`: 313 devolvidos, 0 negados; `users`
+> cobre os 379 autores dos tweets em cache). A hidratação de maio/2026 (83 tweets, 72 autores da
+> invasão) foi migrada uma única vez por `scripts/migrate_legacy_hydration.py`. O M10
+> (`modules/export.py`) exporta tudo para `data/export/` (JSON para o app web, D15).
+> `community_membership` continua vazia.
 
 ---
 
@@ -24,10 +27,10 @@ id estável do recurso (tweet/usuário), então um tweet ou autor buscado para u
 
 Cada um desses pontos foi uma decisão consciente; estão aqui para não serem reabertos sem motivo.
 
-1. **O banco é a fonte de verdade do cache de hidratação.** O `fetch_x_data.py` passará a
-   consultar o banco antes de chamar a API e a fazer *upsert* do retorno. As linhas no banco
-   **são** o checkpoint — o mecanismo de checkpoint em arquivo (`checkpoint_*.json`) deixa de
-   ser necessário. *(A reescrita em si é trabalho do próximo spec.)*
+1. **O banco é a fonte de verdade do cache de hidratação.** O M9 (`modules/hydrate.py`)
+   consulta o banco antes de chamar a API — pede só `event_top_tweets ∖ tweets ∖ lookup_errors`
+   — e faz *upsert* do retorno lote a lote. As linhas no banco **são** o checkpoint; não há
+   checkpoint em arquivo. `modules/fetch_x_data.py` é apenas o cliente HTTP (`XClient`).
 
 2. **Lossless por `raw_json`.** Toda linha hidratada guarda o payload **completo** da API em
    `raw_json`. As colunas "achatadas" existem por ergonomia de consulta; o `raw_json` garante
@@ -132,6 +135,24 @@ Os tweets originais mais retuitados, hidratados via `/2/tweets`.
 > **Entidades (hashtags/mentions/urls/annotations)** ficam dentro de `raw_json` por enquanto.
 > Se a análise de hashtags virar protagonista, normalizamos em tabelas próprias — YAGNI até lá.
 
+### `lookup_errors` — IDs que a API não devolveu
+O array `errors` de `/2/tweets` e `/2/users`, uma linha por recurso pedido e não devolvido,
+com o **motivo dado pela API**. É dado faltante com causa registrada — e é a base da atrição
+por cluster que o D6 se compromete a reportar (`modules.hydrate.hydration_status`). Última
+tentativa vale (*upsert*); se o recurso voltar num retry, a linha é apagada. Recursos não
+devolvidos não são cobrados.
+
+| coluna | tipo | descrição |
+|---|---|---|
+| `resource_type` | TEXT | `tweet` / `user` (CHECK) |
+| `resource_id` | TEXT | id pedido (`resource_id` ou `value` do erro) |
+| `title` | TEXT | `Not Found Error` (removido) / `Authorization Error` (conta suspensa ou protegida) / outros |
+| `detail` | TEXT | mensagem da API |
+| `type` | TEXT | URI do tipo de problema |
+| `attempted_at` | TEXT | quando foi a tentativa (ISO-8601) |
+| `raw_json` | TEXT | objeto de erro completo (lossless) |
+| — | PK | `(resource_type, resource_id)` |
+
 ### `author_classification` — rótulo ideológico do autor
 1:1 com `users`, **reusada entre eventos** (classificou num evento, vale nos demais).
 Saída do LLM + revisão manual (`docs/especificacao-tecnica.md` §3.3, D8).
@@ -199,6 +220,7 @@ users.user_id ─┬─< tweets.author_id
                └─1:1─ author_classification.author_id
 
 tweets.tweet_id ─< event_top_tweets.tweet_id
+lookup_errors.(resource_type, resource_id)  →  tweets.tweet_id | users.user_id que a API não devolveu
 
 community_membership.user_id  →  (nó do grafo / retweetador; população distinta de users)
 retweets (bipartida usuário×tweet)  →  fora do banco, em data/processed/<slug>/retweets.parquet
@@ -239,6 +261,9 @@ Toda mudança de schema é registrada aqui (mais recente no topo).
 - Migrados para `tweets`/`users` os 83 tweets e 72 autores da hidratação de 2026-05-09
   (invasão, top-100 global — critério anterior), com `hydrated_at` = data do snapshot.
 - `events`: slug `democracia-3010` renomeado para `eleicoes` (= pasta em `data/processed/`).
+- Nova tabela `lookup_errors` (array `errors` da API, por recurso) e consultas de pendência
+  (`pending_tweet_ids`, `pending_author_ids`, `errored_ids`, `clear_lookup_errors`) para o M9
+  (`modules/hydrate.py`); `fetch_x_data.py` reescrito como cliente HTTP puro (`XClient`).
 
 ### 2026-06-19 — criação inicial
 - Criado `data/database/hydrated.sqlite`.

@@ -143,43 +143,35 @@ O grafo final (após Leiden) é salvo em dois Parquet autocontidos — `graph_ed
 
 ## 3. Hidratação e rotulagem ideológica
 
-### 3.1. Ranking sem hidratação
+### 3.1. Seleção dos tweets a hidratar (M8 — `modules/select_tweets.py`)
 
-Para cada evento, antes de qualquer chamada à API:
+Feita **depois** da detecção de comunidades (D6, revisão de 2026-09-10), por (evento, cluster):
 
-- Agregar os `referenced_tweets` por ID e contar quantas vezes cada tweet foi retuitado.
-- Selecionar os **top-200** tweets do evento por contagem de retweets.
+- Entram os clusters com ≥ 1% dos nós do evento (`min_frac`, o mesmo da fase 1).
+- Ranking pelo nº de retweets feitos por **membros do cluster** (nós do grafo), contados em
+  `retweets.parquet`; usuário×tweet distinto conta 1 (mesma binarização de M3).
+- **K = 100** por cluster; **K = 20** para clusters com ≤ 5% do peso total de arestas do grafo em
+  arestas internas. Desempate determinístico (`rt_graph` desc, `tweet_id` asc).
+- Saída: `data/processed/<evento>/top_tweets.parquet` (+ `top_tweets_stats.json`) e a tabela
+  `event_top_tweets` do banco (`data/database/README.md`), gravada por *replace* por evento.
+- Plano em vigor (2026-09-15): 1.340 slots → 873 IDs únicos nos quatro eventos.
 
-### 3.2. Hidratação via API do X
+### 3.2. Hidratação via API do X (M9 — `modules/hydrate.py` + `modules/fetch_x_data.py`)
 
-- Endpoint: `/2/tweets` (lookup de IDs em lote, até 100 por chamada).
-- Para cada tweet hidratado, salvar em cache: `tweet_id`, `text`, `author_id_original`, `author_username`, `created_at`, `lang`.
-- **Cache obrigatório em SQLite.** Schema sugerido:
-
-  ```sql
-  CREATE TABLE hydrated_tweets (
-    tweet_id TEXT PRIMARY KEY,
-    text TEXT,
-    author_id TEXT,
-    author_username TEXT,
-    created_at TEXT,
-    lang TEXT,
-    hydrated_at TEXT
-  );
-
-  CREATE TABLE author_classification (
-    author_id TEXT PRIMARY KEY,
-    author_username TEXT,
-    classification TEXT CHECK (classification IN ('left', 'right', 'media', 'neutral', 'unknown')),
-    confidence TEXT CHECK (confidence IN ('high', 'medium', 'low')),
-    classified_at TEXT,
-    classified_by TEXT,  -- 'llm', 'manual', 'llm+manual'
-    notes TEXT
-  );
-  ```
-
-- **Nunca hidratar o mesmo tweet duas vezes.** Antes de qualquer chamada à API, verificar o cache.
-- **Custo estimado:** ~US$ 0,03 por tweet × 200 tweets × 4 eventos = ~US$ 24. Esse é o teto. Reaproveitamento entre eventos pode reduzir esse valor.
+- Endpoint: `/2/tweets` (lookup de IDs em lote, até 100 por chamada), **sem expansions**.
+  Autores via `/2/users`, em passo separado (`UserHydrator`), quando D7/D8 exigirem.
+- **Cache obrigatório em SQLite:** `data/database/hydrated.sqlite`, schema documentado em
+  `data/database/README.md` (`tweets`, `users`, `lookup_errors`, `event_top_tweets`,
+  `author_classification`). Cada linha hidratada guarda o payload completo em `raw_json`.
+- **Nunca hidratar o mesmo tweet duas vezes.** O M9 pede só `event_top_tweets ∖ tweets ∖
+  lookup_errors`; cada lote é gravado antes do próximo, então o banco é o checkpoint (não há
+  checkpoint em arquivo). Re-executar sem novidade não faz chamada alguma.
+- **IDs não devolvidos** ficam em `lookup_errors` com o motivo dado pela API (`Not Found Error`
+  = tweet removido; `Authorization Error` = conta suspensa ou protegida). Não são re-pedidos
+  por padrão (`retry_errors=True` re-pede; não custa, só recursos devolvidos são cobrados).
+  A atrição é reportada **por cluster** (`hydration_status`), junto do material lido.
+- **Custo (pay-per-use, 2026):** US$ 0,005 por tweet **devolvido**, US$ 0,010 por usuário.
+  Plano em vigor: ~800 tweets ≈ US$ 4; autores ≈ US$ 6–8.
 
 ### 3.3. Classificação dos autores
 
@@ -213,8 +205,8 @@ onde `R_right(u)` é o número de retweets de u a tweets cujos autores foram cla
 
 Para cada par (evento, cluster), produzir uma síntese curta do conteúdo amplificado:
 
-1. **Filtrar os top-50 tweets internos ao cluster.** Pegar os top-N tweets já hidratados (Seção 3.1) e reordenar por contagem de retweets feitos apenas por usuários do cluster.
-2. **Sumarização via LLM.** Enviar os 50 textos ao modelo, pedir 3-5 categorias narrativas predominantes e exemplos representativos.
+1. **Tomar os tweets hidratados do cluster.** A seleção da Seção 3.1 já é por cluster e já vem ranqueada por retweets de membros do cluster (`rt_cluster`); usar os top-K hidratados de cada (evento, cluster) e reportar junto a atrição (IDs não devolvidos pela API).
+2. **Sumarização via LLM.** Enviar os textos (até K por cluster) ao modelo, pedir 3-5 categorias narrativas predominantes e exemplos representativos.
 3. **Revisão manual.** Verificar coerência, ajustar categorias, escrever versão final em ~150-200 palavras por par (evento, cluster).
 4. **Salvar.** No formato:
 
@@ -266,7 +258,11 @@ Para cada par (evento, cluster), produzir uma síntese curta do conteúdo amplif
 
 ### 5.3. Dados que a visualização consome
 
-Os arquivos JSON gerados pela pipeline (Seção 2.3) são consumidos diretamente. Não há backend dinâmico — todos os dados são pré-computados e servidos como assets estáticos.
+Os arquivos JSON gerados pela pipeline são consumidos diretamente. Não há backend dinâmico — todos os dados são pré-computados e servidos como assets estáticos. Na fase 2, eles são produzidos pelo M10 (`modules/export.py`) em `data/export/` — `index.json` + `<evento>/{event,tweets,layout}.json` — a partir do banco e das coordenadas DRL (M7); o contrato está em `docs/superpowers/specs/2026-09-15-leitor-de-clusters-design.md` §5.
+
+### 5.4. Leitor de clusters — modo analista (fase 2, D15)
+
+Antes dos componentes A–C, a fase 2 constrói o **leitor de clusters**: escolhe-se evento e cluster (mini-mapa DRL com o cluster em destaque) e leem-se os top-K do cluster em cards estilo X com as métricas públicas e a faixa de metadados da pesquisa (posição, retweets de membros, pureza, presença em outros clusters, atrição). Só leitura, sem backend, dentro do mesmo app (`web/`). É o embrião do componente B e a ferramenta de leitura para D8 e §4. Spec: `docs/superpowers/specs/2026-09-15-leitor-de-clusters-design.md`.
 
 ## 6. Estrutura sugerida do repositório
 

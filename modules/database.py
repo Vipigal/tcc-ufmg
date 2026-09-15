@@ -68,6 +68,17 @@ CREATE TABLE IF NOT EXISTS event_top_tweets (
   PRIMARY KEY (event_slug, community, tweet_id)
 );
 
+-- IDs que a API NÃO devolveu num lookup, com o motivo dado por ela (array `errors`
+-- de /2/tweets e /2/users). Dado faltante com causa registrada — não é erro nosso.
+-- Última tentativa vale (upsert); se o recurso voltar num retry, a linha é apagada.
+CREATE TABLE IF NOT EXISTS lookup_errors (
+  resource_type TEXT CHECK (resource_type IN ('tweet','user')),
+  resource_id   TEXT,
+  title TEXT, detail TEXT, type TEXT,
+  attempted_at TEXT, raw_json TEXT,
+  PRIMARY KEY (resource_type, resource_id)
+);
+
 CREATE TABLE IF NOT EXISTS community_membership (
   event_slug TEXT, user_id TEXT,
   community INTEGER, ideological_score REAL, weighted_degree REAL,
@@ -240,12 +251,66 @@ class Database:
                 "VALUES (?,?,?,?,?,?,?,?,?)", rows)
         return len(rows)
 
-    # ── checagens de cache / inspeção ─────────────────────────────────────
+    # ── erros de lookup (IDs que a API não devolveu) ─────────────────────
+    @staticmethod
+    def _error_row(resource_type: str, o: dict, attempted_at: str) -> dict:
+        return {
+            "resource_type": resource_type,
+            "resource_id": str(o.get("resource_id") or o.get("value")),
+            "title": o.get("title"),
+            "detail": o.get("detail"),
+            "type": o.get("type"),
+            "attempted_at": attempted_at,
+            "raw_json": json.dumps(o, ensure_ascii=False),
+        }
+
+    def upsert_lookup_errors(self, resource_type: str, error_objs: list[dict],
+                             attempted_at: str | None = None) -> int:
+        when = attempted_at or self._now()
+        rows = [self._error_row(resource_type, o, when) for o in error_objs
+                if o.get("resource_id") or o.get("value")]
+        return self._upsert("lookup_errors", ["resource_type", "resource_id"], rows)
+
+    def clear_lookup_errors(self, resource_type: str, ids) -> int:
+        ids = [str(i) for i in ids]
+        if not ids:
+            return 0
+        with self.conn:
+            cur = self.conn.executemany(
+                "DELETE FROM lookup_errors WHERE resource_type = ? AND resource_id = ?",
+                [(resource_type, i) for i in ids])
+        return cur.rowcount
+
+    def errored_ids(self, resource_type: str) -> set[str]:
+        return {r[0] for r in self.conn.execute(
+            "SELECT resource_id FROM lookup_errors WHERE resource_type = ?", (resource_type,))}
+
+    # ── checagens de cache / pendências ──────────────────────────────────
     def cached_user_ids(self) -> set[str]:
         return {r[0] for r in self.conn.execute("SELECT user_id FROM users")}
 
     def cached_tweet_ids(self) -> set[str]:
         return {r[0] for r in self.conn.execute("SELECT tweet_id FROM tweets")}
+
+    def selected_tweet_ids(self) -> set[str]:
+        return {r[0] for r in self.conn.execute("SELECT DISTINCT tweet_id FROM event_top_tweets")}
+
+    def pending_tweet_ids(self, retry_errors: bool = False) -> list[str]:
+        """Selecionados (M8) ainda não hidratados. Sem `retry_errors`, exclui também os
+        IDs que a API já disse não devolver. Ordenado, para lotes reprodutíveis."""
+        pending = self.selected_tweet_ids() - self.cached_tweet_ids()
+        if not retry_errors:
+            pending -= self.errored_ids("tweet")
+        return sorted(pending)
+
+    def pending_author_ids(self, retry_errors: bool = False) -> list[str]:
+        """Autores dos tweets em cache ainda não hidratados em `users`."""
+        authors = {r[0] for r in self.conn.execute(
+            "SELECT DISTINCT author_id FROM tweets WHERE author_id IS NOT NULL")}
+        pending = authors - self.cached_user_ids()
+        if not retry_errors:
+            pending -= self.errored_ids("user")
+        return sorted(pending)
 
     def table_counts(self) -> dict[str, int]:
         names = [r[0] for r in self.conn.execute(

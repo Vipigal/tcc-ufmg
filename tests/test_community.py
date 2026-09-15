@@ -49,3 +49,22 @@ def test_community_roundtrip(tmp_path):
     assert list(map(str, cr2.user_index)) == list(map(str, cr1.user_index))
     assert len(set(cr2.membership)) == 2
     assert cr2.partition.modularity > 0
+
+
+def test_community_result_load_without_graph(tmp_path):
+    """Fase 2 precisa de W + membership sem pagar a construção do igraph (M7 usa só isso)."""
+    import numpy as np
+    import pandas as pd
+    from modules.community import CommunityResult
+    pd.DataFrame({"user_id": ["u0", "u1", "u2"], "community": np.array([0, 0, 1], dtype=np.int32)}
+                 ).to_parquet(tmp_path / "graph_nodes.parquet", index=False)
+    pd.DataFrame({"src": np.array([0, 1], dtype=np.int32), "dst": np.array([1, 2], dtype=np.int32),
+                  "weight": np.array([0.5, 0.2], dtype=np.float32)}
+                 ).to_parquet(tmp_path / "graph_edges.parquet", index=False)
+    cr = CommunityResult.load(tmp_path, build_graph=False)
+    assert cr.g is None and cr.partition is None
+    assert cr.membership == [0, 0, 1]
+    assert list(cr.user_index) == ["u0", "u1", "u2"]
+    assert cr.W.shape == (3, 3) and cr.W.nnz == 2
+    full = CommunityResult.load(tmp_path)                     # padrão: com igraph
+    assert full.g.vcount() == 3 and full.g.ecount() == 2

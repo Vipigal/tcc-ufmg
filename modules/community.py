@@ -33,13 +33,47 @@ def _build_igraph(W: sp.spmatrix) -> ig.Graph:
 
 @dataclass
 class CommunityResult:
-    """Grafo igraph com comunidades + partição + mapeamento de usuário + matriz."""
+    """Grafo igraph com comunidades + partição + mapeamento de usuário + matriz.
 
-    g: ig.Graph
-    partition: ig.VertexClustering
+    `g` e `partition` podem ser None quando carregado com `build_graph=False`.
+    """
+
+    g: ig.Graph | None
+    partition: ig.VertexClustering | None
     membership: list
     user_index: np.ndarray
     W: sp.csr_matrix
+
+    @classmethod
+    def load(cls, out_dir, build_graph: bool = True) -> "CommunityResult":
+        """Recarrega o resultado final dos dois parquets.
+
+        `build_graph=False` pula a construção do igraph — cara em grafos com dezenas
+        de milhões de arestas — e basta para estágios que só usam `W` e `membership`
+        (M6, M7 e a fase 2).
+        """
+        out = Path(out_dir)
+        edges = pd.read_parquet(out / "graph_edges.parquet")
+        nodes = pd.read_parquet(out / "graph_nodes.parquet")
+        n = len(nodes)
+        W = sp.coo_matrix(
+            (edges["weight"].to_numpy(),
+             (edges["src"].to_numpy(), edges["dst"].to_numpy())),
+            shape=(n, n),
+        ).tocsr()
+        membership = nodes["community"].astype(int).tolist()
+        user_index = nodes["user_id"].to_numpy()
+        if not build_graph:
+            return cls(g=None, partition=None, membership=membership,
+                       user_index=user_index, W=W)
+        g = _build_igraph(W)
+        g.vs["community"] = membership
+        g.vs["user_id"] = [str(u) for u in user_index]
+        partition = ig.VertexClustering(
+            g, membership, modularity_params={"weights": "weight"}
+        )
+        return cls(g=g, partition=partition, membership=membership,
+                   user_index=user_index, W=W)
 
     def save(self, out_dir) -> Path:
         out = Path(out_dir)
@@ -97,23 +131,4 @@ class CommunityDetector(Stage):
         cr.save(out_dir)
 
     def _load(self, out_dir) -> CommunityResult:
-        out = Path(out_dir)
-        edges = pd.read_parquet(out / "graph_edges.parquet")
-        nodes = pd.read_parquet(out / "graph_nodes.parquet")
-        n = len(nodes)
-        W = sp.coo_matrix(
-            (edges["weight"].to_numpy(),
-             (edges["src"].to_numpy(), edges["dst"].to_numpy())),
-            shape=(n, n),
-        ).tocsr()
-        membership = nodes["community"].astype(int).tolist()
-        g = _build_igraph(W)
-        g.vs["community"] = membership
-        g.vs["user_id"] = [str(u) for u in nodes["user_id"].to_numpy()]
-        partition = ig.VertexClustering(
-            g, membership, modularity_params={"weights": "weight"}
-        )
-        return CommunityResult(
-            g=g, partition=partition, membership=membership,
-            user_index=nodes["user_id"].to_numpy(), W=W,
-        )
+        return CommunityResult.load(out_dir)

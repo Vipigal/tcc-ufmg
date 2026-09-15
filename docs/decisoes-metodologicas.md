@@ -143,7 +143,7 @@ A versão inicial selecionava os top-200 tweets **por evento**, medidos sobre o 
 - Perfil por tweet (contagens por cluster, pureza, bloco dominante) como artefato Parquet + módulo novo da pipeline — **adiado** até se verificar que a hidratação precisa dele.
 - Todos os clusters, sem corte de 1% — acrescentaria ~575 IDs de clusters com 2–38 nós, que não são caracterizáveis por leitura de top-K.
 
-**Implementação (2026-09-15):** `modules/select_tweets.py` (M8, `TopTweetSelector`) grava `top_tweets.parquet` por evento e a tabela `event_top_tweets` por (evento, cluster) em `hydrated.sqlite`; orquestração em `notebooks/pipeline_tcc2.ipynb`. Retweet repetido do mesmo usuário conta 1 (mesma binarização de M3); desempate por `rt_graph` e depois `tweet_id`. **Recontagem com o código versionado (2026-09-15):** 1.340 slots → **873** IDs únicos (sobreposição entre clusters do mesmo evento: 83 em roberto-jefferson, 239 em eleicoes, 96 em mobilizacao-0709, 49 em invasao-3-poderes; nenhuma entre eventos), 76 já em cache → **797 a hidratar ≈ US$ 3,98**. Os valores de 2026-09-10 acima (874/798; sobreposições 240 e 124) vieram de código de rascunho perdido — o de mobilizacao corresponde ao plano com K=100 em todos os clusters, antes da regra dos 5%. Sem a regra dos 5%, o código versionado dá 999 IDs únicos (registrado como 1.005 acima).
+**Implementação (2026-09-15):** `modules/select_tweets.py` (M8, `TopTweetSelector`) grava `top_tweets.parquet` por evento e a tabela `event_top_tweets` por (evento, cluster) em `hydrated.sqlite`; orquestração em `notebooks/pipeline_tcc2.ipynb`. A hidratação é o M9 (`modules/hydrate.py`; cliente HTTP em `modules/fetch_x_data.py`): pede só o que falta no banco, sem expansions, e registra em `lookup_errors` os IDs que a API não devolve, com o motivo — base da atrição por cluster. Retweet repetido do mesmo usuário conta 1 (mesma binarização de M3); desempate por `rt_graph` e depois `tweet_id`. **Recontagem com o código versionado (2026-09-15):** 1.340 slots → **873** IDs únicos (sobreposição entre clusters do mesmo evento: 83 em roberto-jefferson, 239 em eleicoes, 96 em mobilizacao-0709, 49 em invasao-3-poderes; nenhuma entre eventos), 76 já em cache → **797 a hidratar ≈ US$ 3,98**. Os valores de 2026-09-10 acima (874/798; sobreposições 240 e 124) vieram de código de rascunho perdido — o de mobilizacao corresponde ao plano com K=100 em todos os clusters, antes da regra dos 5%. Sem a regra dos 5%, o código versionado dá 999 IDs únicos (registrado como 1.005 acima).
 
 **Risco assumido:** na hidratação anterior (invasao-3-poderes, 100 IDs), 17% não retornaram (tweets removidos, contas suspensas ou protegidas). A atrição não é aleatória — tende a atingir mais o conteúdo de quem foi suspenso após o 8 de janeiro — e deve ser reportada por cluster junto do material lido.
 
@@ -151,7 +151,7 @@ A versão inicial selecionava os top-200 tweets **por evento**, medidos sobre o 
 
 ## D7. Score ideológico contínuo em vez de classificação binária por usuário
 
-**Decisão:** atribuir a cada usuário um score contínuo em [-1, +1] baseado na proporção de retweets a fontes-direita vs. fontes-esquerda dentro dos top-200 hidratados:
+**Decisão:** atribuir a cada usuário um score contínuo em [-1, +1] baseado na proporção de retweets a fontes-direita vs. fontes-esquerda dentro dos tweets hidratados (seleção por cluster, D6):
 
 ```
 score(u) = (R_right(u) - R_left(u)) / (R_right(u) + R_left(u))
@@ -290,6 +290,26 @@ score(u) = (R_right(u) - R_left(u)) / (R_right(u) + R_left(u))
 - `τ_floor` + re-filtragem — ganho marginal após a projeção ficar rápida; adiciona um limiar a mais para raciocinar.
 - Trio `npz` + parquets como formato final — ligeiramente maior (19,3 MB) e menos ergonômico que os 2 Parquet para as etapas seguintes.
 - Jaccard aproximado (MinHash/LSH) — complexidade desproporcional; a projeção exata em blocos resolve.
+
+---
+
+## D15. Leitor de clusters: modo analista do app final, só leitura, dados exportados pela pipeline
+
+**Decisão (2026-09-15):** a ferramenta de leitura dos tweets por cluster — necessária para a rotulagem (D8) e a análise narrativa (§4) — é construída **dentro do app web final** (React + Sigma.js + Tailwind, stack fixada em `docs/visao-projeto.md`), como "modo analista", e é **só leitura**. Ela consome **JSON estático** gerado por um estágio da pipeline (M10, `modules/export.py`) a partir do banco, sem backend (spec §5.3). As coordenadas DRL (M7) passam a ser **entregáveis** da fase 2 (não são mais apagadas pela limpeza), porque alimentam o mini-mapa. Autores são hidratados (D6 previa passo separado; o card do X exige nome, @handle e avatar). Spec completa: `docs/superpowers/specs/2026-09-15-leitor-de-clusters-design.md`.
+
+**Objetivo declarado, nesta ordem:** (1) ser o embrião da navegação interativa do produto final (D9; componente B da spec §5.2); (2) ser ferramenta analítica do pesquisador para avaliar a narrativa de cada cluster e a disposição dos tweets — em contexto estrutural (mini-mapa), com pureza, sobreposição entre clusters e atrição visíveis por slot.
+
+**Por quê:**
+- Evita trabalho descartável: cada hora no leitor é hora no entregável central.
+- A leitura qualitativa precisa do contexto que só a pipeline tem (pureza, `rt_cluster` vs. API, IDs não devolvidos por cluster); um leitor genérico do X não mostra isso.
+- Sem backend, a ferramenta é publicável como está e reprodutível a partir do repositório.
+- Só leitura porque anotar por tweet exigiria um caminho de escrita no banco; a classificação (D7/D8) é por **autor** e será feita pela pipeline (LLM + revisão), não pela interface.
+
+**Alternativas rejeitadas:**
+- Streamlit/Panel — rápido, mas fora da stack fixada, fraco para a fidelidade do card e para 33 mil pontos, e seria descartado.
+- SQLite no navegador (sql.js) — liga ao banco literalmente, mas os joins ficariam em JavaScript sem testes; o app público precisa de JSON curado de qualquer forma.
+- Datasette sobre o banco — navegação instantânea, sem card nem mini-mapa.
+- Ferramenta separada e descartável — duplicaria o esforço do componente B.
 
 ---
 

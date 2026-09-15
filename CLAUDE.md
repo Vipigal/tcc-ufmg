@@ -16,6 +16,15 @@ Os três arquivos têm propósitos distintos. Leia na ordem se você está chega
 3. **`docs/decisoes-metodologicas.md`** — *Por que decidimos cada coisa.*
    Registro de cada decisão importante, com alternativas rejeitadas. Consultar antes de propor mudanças metodológicas.
 
+## Relatório do TCC 1 — artefato congelado
+
+`reports/final-report-msi-1.tex` (e as figuras em `reports/`) é o relatório **entregue** do TCC 1.
+**Não é um artefato que muda:** não corrija, não alinhe, não atualize seu texto quando as decisões
+evoluírem. Ele registra onde o TCC 1 parou; tudo que se desenvolve neste repositório a partir da
+fase 2 (`notebooks/pipeline_tcc2.ipynb` em diante) vem **depois** dele e será relatado em documento
+próprio. Divergências entre o relatório e os docs vivos (`docs/`) são esperadas — os docs vivos
+prevalecem para o trabalho corrente; o relatório prevalece como registro histórico.
+
 ## Postura analítica (vale para humanos e agentes)
 
 Trabalhamos como cientistas de dados: **descrever, não prescrever**, e enviesar ao mínimo. A pergunta é o que a estrutura dos dados revela — não confirmar uma tese. Em concreto:

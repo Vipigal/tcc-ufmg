@@ -1,0 +1,100 @@
+{
+ "slug": "mobilizacao-0709",
+ "name": "Mobilização do 7 de setembro de 2022",
+ "event_date": "2022-09-07",
+ "n_nodes": 16495,
+ "n_edges": 9254643,
+ "n_communities": 10,
+ "run_config": {
+  "evento": "mobilizacao-0709",
+  "min_user_retweets": 3,
+  "tau": 0.1,
+  "block_size": 2000,
+  "resolution": 1.0,
+  "force_from": 1,
+  "layout_top_k": 12,
+  "layout_seed": 42,
+  "min_frac": 0.01,
+  "generated_at": "2026-06-28T04:17:37"
+ },
+ "selection": {
+  "k": 100,
+  "k_small": 20,
+  "min_frac": 0.01,
+  "small_weight_frac": 0.05
+ },
+ "clusters": [
+  {
+   "community": 0,
+   "group": 1,
+   "label": "Grupo 1",
+   "color": "#5E4FA2",
+   "n_nodes": 7525,
+   "frac_nodes": 0.45619884813579875,
+   "intra_weight_frac": 0.2648830158966032,
+   "k": 100,
+   "n_selected": 100,
+   "n_hydrated": 88,
+   "n_not_found": 11,
+   "n_not_authorized": 1,
+   "n_other_errors": 0,
+   "n_pending": 0,
+   "attrition": 0.12
+  },
+  {
+   "community": 1,
+   "group": 2,
+   "label": "Grupo 2",
+   "color": "#26A69A",
+   "n_nodes": 5251,
+   "frac_nodes": 0.3183388905729009,
+   "intra_weight_frac": 0.19963466436321764,
+   "k": 100,
+   "n_selected": 100,
+   "n_hydrated": 62,
+   "n_not_found": 31,
+   "n_not_authorized": 7,
+   "n_other_errors": 0,
+   "n_pending": 0,
+   "attrition": 0.38
+  },
+  {
+   "community": 2,
+   "group": 3,
+   "label": "Grupo 3",
+   "color": "#E8852B",
+   "n_nodes": 3154,
+   "frac_nodes": 0.19120945741133677,
+   "intra_weight_frac": 0.3300918288500208,
+   "k": 100,
+   "n_selected": 100,
+   "n_hydrated": 61,
+   "n_not_found": 32,
+   "n_not_authorized": 7,
+   "n_other_errors": 0,
+   "n_pending": 0,
+   "attrition": 0.39
+  },
+  {
+   "community": 3,
+   "group": 4,
+   "label": "Grupo 4",
+   "color": "#D7263D",
+   "n_nodes": 439,
+   "frac_nodes": 0.02661412549257351,
+   "intra_weight_frac": 0.012902464826263296,
+   "k": 20,
+   "n_selected": 20,
+   "n_hydrated": 18,
+   "n_not_found": 2,
+   "n_not_authorized": 0,
+   "n_other_errors": 0,
+   "n_pending": 0,
+   "attrition": 0.1
+  }
+ ],
+ "files": {
+  "tweets": "mobilizacao-0709/tweets.json",
+  "layout": "mobilizacao-0709/layout.json"
+ }
+}

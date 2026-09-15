@@ -133,3 +133,62 @@ def test_old_event_top_tweets_with_data_is_not_touched(tmp_path):
     con.commit(); con.close()
     with pytest.raises(RuntimeError):
         Database(path)
+
+
+def _err(rid, title="Not Found Error"):
+    return {"resource_id": rid, "value": rid, "title": title, "detail": f"{title}: {rid}",
+            "type": "https://api.twitter.com/2/problems/resource-not-found"}
+
+
+def test_lookup_errors_upsert_and_clear(tmp_path):
+    db = Database(tmp_path / "db.sqlite")
+    n = db.upsert_lookup_errors("tweet", [_err("t1"), _err("t2", "Authorization Error")],
+                                attempted_at="2026-09-15T12:00:00+00:00")
+    assert n == 2
+    assert db.errored_ids("tweet") == {"t1", "t2"}
+    assert db.errored_ids("user") == set()
+    row = db.conn.execute("SELECT title, detail, type, attempted_at, raw_json FROM lookup_errors "
+                          "WHERE resource_type='tweet' AND resource_id='t2'").fetchone()
+    assert row[0] == "Authorization Error" and row[3] == "2026-09-15T12:00:00+00:00"
+    assert '"resource_id": "t2"' in row[4]
+    # nova tentativa do mesmo id sobrescreve (última tentativa vale)
+    db.upsert_lookup_errors("tweet", [_err("t1", "Authorization Error")])
+    assert db.conn.execute("SELECT COUNT(*) FROM lookup_errors").fetchone()[0] == 2
+    assert db.clear_lookup_errors("tweet", ["t1", "nao-existe"]) == 1
+    assert db.errored_ids("tweet") == {"t2"}
+    db.close()
+
+
+def test_lookup_errors_resource_type_is_checked(tmp_path):
+    import pytest
+    db = Database(tmp_path / "db.sqlite")
+    with pytest.raises(sqlite3.IntegrityError):
+        db.upsert_lookup_errors("post", [_err("x")])
+    db.close()
+
+
+def test_pending_tweet_ids_excludes_cached_and_errored(tmp_path):
+    db = Database(tmp_path / "db.sqlite")
+    db.replace_event_top_tweets("ev", _selection([(0, 1, "t3", 1, 1, 1, 100),
+                                                  (0, 2, "t1", 1, 1, 1, 100),
+                                                  (1, 1, "t2", 1, 1, 1, 20),
+                                                  (1, 2, "t1", 1, 1, 1, 20)]))
+    db.upsert_tweets([_tweet("t1")])
+    db.upsert_lookup_errors("tweet", [_err("t2")])
+    assert db.selected_tweet_ids() == {"t1", "t2", "t3"}
+    assert db.pending_tweet_ids() == ["t3"]
+    assert db.pending_tweet_ids(retry_errors=True) == ["t2", "t3"]   # ordenado, sem repetição
+    db.close()
+
+
+def test_pending_author_ids_come_from_cached_tweets(tmp_path):
+    db = Database(tmp_path / "db.sqlite")
+    db.upsert_tweets([_tweet("1", "a2"), _tweet("2", "a2"), _tweet("3", "a1"),
+                      {"id": "4", "author_id": None}])
+    db.upsert_users([_user("a1")])
+    db.upsert_lookup_errors("user", [_err("a3")])      # erro de outro id não interfere
+    assert db.pending_author_ids() == ["a2"]
+    db.upsert_lookup_errors("user", [_err("a2")])
+    assert db.pending_author_ids() == []
+    assert db.pending_author_ids(retry_errors=True) == ["a2"]
+    db.close()

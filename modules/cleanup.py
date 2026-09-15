@@ -7,15 +7,15 @@ from modules.filter import NoiseFilter
 from modules.bipartite import BipartiteBuilder
 from modules.project import JaccardProjector
 from modules.results import GraphResults
-from modules.layout import CommunityMap
 
 
+# As coordenadas DRL (M7: drl_layout.parquet + .json) NÃO entram aqui: desde a fase 2
+# (2026-09-15) são insumo da exportação para a visualização (M10), logo entregáveis.
 INTERMEDIATE_FILES = (
     NoiseFilter.FILES
     + BipartiteBuilder.FILES
     + JaccardProjector.FILES
     + GraphResults.FILES        # graph_metrics.json (dados; as PNGs ficam)
-    + CommunityMap.FILES        # drl_layout.parquet + .json (coords; o PNG fica)
 )
 
 
