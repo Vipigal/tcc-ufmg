@@ -107,17 +107,45 @@ A explosão combinatória de arestas causada por tweets muito retuitados — que
 
 ## D6. Estratégia de hidratação seletiva — hidratar antes de rotular, não depois
 
-**Decisão:** hidratar os top-200 tweets mais retuitados de cada evento (medido sobre o dataset bruto, antes de qualquer detecção de comunidade). Usar essa hidratação para tanto rotular clusters quanto analisar narrativas.
+**Decisão:** hidratar os top-100 tweets mais retuitados **por cluster** (clusters com ≥1% dos nós do evento), ranqueados pelo número de retweets feitos por membros do cluster; K = 20 para clusters com ≤5% do peso interno de arestas. Usar essa hidratação para tanto rotular clusters quanto analisar narrativas.
 
 **Por quê:**
 - Resolve um problema circular: para rotular clusters precisamos saber quem é esquerda/direita, mas para usar seed accounts as próprias contas-âncora (Lula, Bolsonaro) provavelmente não estão no grafo como nós (são autores retuitados, não retweetadores).
 - Hidratar uma vez por evento gera o material para ambas as etapas (rotulagem e análise narrativa), evitando hidratação duplicada.
-- Custo controlado: ~US$ 24 no total para os quatro eventos. Cache evita pagar duas vezes pelo mesmo tweet.
+- Custo controlado: ~US$ 4 em tweets para os quatro eventos (pay-per-use, US$ 0,005/post; ver revisão abaixo). Cache evita pagar duas vezes pelo mesmo tweet.
 
-**Alternativas rejeitadas:**
+**Revisão (2026-09-10): seleção por cluster, não por evento.**
+
+A versão inicial selecionava os top-200 tweets **por evento**, medidos sobre o dataset bruto antes de qualquer detecção de comunidade, e rejeitava "top-50 por cluster" porque os clusters ainda não eram conhecidos. Essa premissa caiu: a pipeline (M1–M6) produz partições estáveis para os quatro eventos (`docs/relatorio-sensibilidade-N.md`). A seleção passa a ser feita por **(evento, cluster)**:
+
+- **Unidade de seleção:** cada cluster Leiden com ≥1% dos nós do evento (o mesmo `min_frac` do `run_config.json`).
+- **Critério de ranking:** número de retweets ao tweet feitos por **membros do cluster** (nós do grafo), contados em `retweets.parquet`. Não é a contagem global do evento nem a métrica pública da API.
+- **K = 100** por cluster. Para clusters com **≤5% do peso interno de arestas** do grafo, **K = 20** — o suficiente para caracterizar do que se tratam, sem investir profundidade de leitura neles. "Peso interno" = soma das arestas internas ao cluster dividida pelo peso **total** de arestas do grafo (intra + inter), o mesmo denominador da matriz de fluxo (M6). Hoje são dois: c3 de mobilizacao-0709 (1,3% do peso; 2,7% dos nós) e c3 de eleicoes (0,35%; 3,4%). O critério por fração de nós dá o mesmo conjunto. Atenção: em eleicoes, c0 e c4 ficam em 5,6% e 5,5% do peso interno (29% e 16% dos nós), logo acima do corte; o corte é por peso, e essa proximidade deve ser lembrada se o critério for reaplicado com outros N/τ.
+- **Deduplicação e cache:** IDs repetidos entre clusters do mesmo evento (e entre eventos) são hidratados uma vez; `data/database/hydrated.sqlite` é o cache (ver `data/database/README.md`).
+- **Hidratação:** `/2/tweets` sem expansions (US$ 0,005/post retornado). Autores (US$ 0,010/user) em passo separado, quando D7/D8 exigirem.
+
+**Por quê a revisão:**
+- A razão para rejeitar seleção por cluster deixou de existir.
+- O top-200 global mistura os clusters e sub-representa os menores: no plano K=100, por evento, 165–193 dos 217–276 IDs selecionados por cluster coincidem com o top-200 global; o restante é justamente o material dos clusters menores, que o critério global não alcança.
+- O custo caiu uma ordem de grandeza: a API do X passou a pay-per-use em 2026 (US$ 0,005/post, em vez dos ~US$ 0,03 estimados originalmente; sem assinatura). Medido em 2026-09-10: 1.340 slots brutos → 874 IDs únicos (sobreposição entre clusters do mesmo evento: 83 em roberto-jefferson, 240 em eleicoes, 124 em mobilizacao-0709, 49 em invasao-3-poderes; nenhuma entre eventos), 76 já em cache → **798 a hidratar ≈ US$ 4,00** em tweets; autores ≈ US$ 6–8 (razão observada de 0,80 autor/tweet na hidratação anterior).
+
+**Observações que fundamentaram a revisão** (2026-09-10; medidas sobre `retweets.parquet` × `graph_nodes.parquet`, apenas nós do grafo; interpretação como apontamento, não como verdade):
+- No nível de conteúdo, os clusters de cada evento se organizam em **dois blocos** que quase não compartilham tweets: cosseno entre vetores de contagem de clusters de blocos distintos 0,00–0,02; dentro do mesmo bloco 0,53–0,80. A fração dos retweets de cada bloco que vai a tweets com ≥90% dos retweets vindos dele é de 93% a 99% em todos os eventos (nulo por permutação de rótulos: 2–4%). Dos 1.005 IDs do plano K=100 sem a regra dos 5%, 95% são exclusivos de um bloco.
+- A assimetria observada é de **fragmentação**, não de fechamento: um bloco é um único cluster Leiden; o outro se subdivide em 2–4 clusters que compartilham conteúdo entre si. Qual bloco corresponde a qual campo político só a hidratação dirá — não assumir.
+- Eleicoes é regime distinto: os quatro clusters grandes compartilham amplamente (73% dos tweets com ≥5 retweets têm ≤60% de pureza); só o c3 é fechado. Ali, a cobertura dos tweets exclusivos por nós do grafo é baixa (mediana 12%): o conteúdo exclusivo é amplificado sobretudo pela periferia não classificada.
+- A camada de conteúdo *próprio* dentro do bloco subdividido existe com volume em um único cluster: c0 de invasao-3-poderes (28% do seu volume; 1.390 tweets exclusivos com ≥5 retweets; o top-100 por contagem lê 21 deles). Nos demais clusters abertos ela é ≤5% do volume, com 0–86 tweets, quase todos no piso de 5 retweets.
+
+**Alternativas rejeitadas ou adiadas:**
 - Usar lista de seed accounts (estratégia inicial discutida) — falha porque as seed accounts mais óbvias (políticos com perfis ideológicos claros) tendem a aparecer como autores retuitados, não como retweetadores nos clusters.
-- Hidratar top-50 *por cluster* — exigiria conhecer os clusters antes, o que é o que queríamos descobrir.
-- Hidratação massiva — custo proibitivo.
+- Hidratação massiva — custo proibitivo mesmo a US$ 0,005/post (~29 mil tweets distintos só no 8 de janeiro).
+- Manter top-200 por evento (a decisão original) — mistura clusters e perde os menores (acima).
+- Amostra estratificada 50 por contagem + 50 exclusivos (pureza ≥0,9, ≥5 retweets) por cluster — **adiada**. Nos clusters fechados o estrato exclusivo coincide com o top-50 por contagem e só reduz a cobertura (ex.: 44% → 29% do volume em roberto-jefferson c1); em 9 dos 15 clusters não há 50 tweets exclusivos com ≥5 retweets. Só faz diferença no c0 de invasao-3-poderes (cobertura da camada própria 23% → 37%). A caracterização do bloco meso do 8 de janeiro será tratada à parte.
+- Perfil por tweet (contagens por cluster, pureza, bloco dominante) como artefato Parquet + módulo novo da pipeline — **adiado** até se verificar que a hidratação precisa dele.
+- Todos os clusters, sem corte de 1% — acrescentaria ~575 IDs de clusters com 2–38 nós, que não são caracterizáveis por leitura de top-K.
+
+**Implementação (2026-09-15):** `modules/select_tweets.py` (M8, `TopTweetSelector`) grava `top_tweets.parquet` por evento e a tabela `event_top_tweets` por (evento, cluster) em `hydrated.sqlite`; orquestração em `notebooks/pipeline_tcc2.ipynb`. Retweet repetido do mesmo usuário conta 1 (mesma binarização de M3); desempate por `rt_graph` e depois `tweet_id`. **Recontagem com o código versionado (2026-09-15):** 1.340 slots → **873** IDs únicos (sobreposição entre clusters do mesmo evento: 83 em roberto-jefferson, 239 em eleicoes, 96 em mobilizacao-0709, 49 em invasao-3-poderes; nenhuma entre eventos), 76 já em cache → **797 a hidratar ≈ US$ 3,98**. Os valores de 2026-09-10 acima (874/798; sobreposições 240 e 124) vieram de código de rascunho perdido — o de mobilizacao corresponde ao plano com K=100 em todos os clusters, antes da regra dos 5%. Sem a regra dos 5%, o código versionado dá 999 IDs únicos (registrado como 1.005 acima).
+
+**Risco assumido:** na hidratação anterior (invasao-3-poderes, 100 IDs), 17% não retornaram (tweets removidos, contas suspensas ou protegidas). A atrição não é aleatória — tende a atingir mais o conteúdo de quem foi suspenso após o 8 de janeiro — e deve ser reportada por cluster junto do material lido.
 
 ---
 
@@ -273,3 +301,4 @@ Este espaço é para registrar mudanças futuras de decisão. Toda vez que uma d
 |---|---|---|---|
 | 2026-06-17 | D5 — filtragem de ruído | Removido o filtro de tweets virais; mantido apenas o filtro de usuários inativos | Tweets de alto alcance são o material central da análise narrativa, não ruído; e o limiar de 30% não removia nenhum tweet na validação preliminar |
 | 2026-06-18 | D4 / implementação | Backbone (corte τ) fundido na projeção (M4), em blocos; módulo `backbone.py` removido | Cortar τ na projeção evita materializar o grafo inteiro e dá resultado idêntico (Jaccard é por par). Ver D14. |
+| 2026-09-10 | D6 — hidratação seletiva | Seleção passa de top-200 por evento para top-100 por cluster (≥1% dos nós), ranqueada por retweets internos ao cluster; K=20 para clusters com ≤5% do peso interno de arestas | Clusters agora são conhecidos (premissa da rejeição original caiu); top-200 global sub-representa clusters menores; custo caiu para ~US$ 4 com o pay-per-use da API |

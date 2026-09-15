@@ -1,0 +1,50 @@
+{
+  "params": {
+    "k": 100,
+    "k_small": 20,
+    "min_frac": 0.01,
+    "small_weight_frac": 0.05
+  },
+  "n_nodes": 16495,
+  "n_communities": 10,
+  "total_weight": 1437876.7765725479,
+  "clusters": {
+    "0": {
+      "n_nodes": 7525,
+      "frac_nodes": 0.45619884813579875,
+      "intra_weight_frac": 0.2648830158966032,
+      "k": 100,
+      "n_candidates": 3393,
+      "n_selected": 100
+    },
+    "1": {
+      "n_nodes": 5251,
+      "frac_nodes": 0.3183388905729009,
+      "intra_weight_frac": 0.19963466436321764,
+      "k": 100,
+      "n_candidates": 2436,
+      "n_selected": 100
+    },
+    "2": {
+      "n_nodes": 3154,
+      "frac_nodes": 0.19120945741133677,
+      "intra_weight_frac": 0.3300918288500208,
+      "k": 100,
+      "n_candidates": 1854,
+      "n_selected": 100
+    },
+    "3": {
+      "n_nodes": 439,
+      "frac_nodes": 0.02661412549257351,
+      "intra_weight_frac": 0.012902464826263296,
+      "k": 20,
+      "n_candidates": 402,
+      "n_selected": 20
+    }
+  },
+  "n_excluded_clusters": 6,
+  "excluded_nodes_frac": 0.0076386783873901186,
+  "n_slots": 320,
+  "n_unique_ids": 224,
+  "n_overlap": 96
+}

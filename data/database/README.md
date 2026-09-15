@@ -12,10 +12,11 @@ id estável do recurso (tweet/usuário), então um tweet ou autor buscado para u
 - **Arquivo do banco:** `data/database/hydrated.sqlite`
 - **Esta documentação:** `data/database/README.md` — evolui junto com o schema; ver o [Changelog](#changelog).
 
-> Status (2026-06-19): schema criado e tabela `events` semeada. As tabelas de hidratação
-> ainda estão **vazias** — a migração dos dados atuais (`hydrated_users.json`,
-> `hydrated_tweets.jsonl`) e a reescrita do `fetch_x_data.py` para gravar direto no banco
-> serão tratadas num spec dedicado. `community_membership` é da **fase 2** (análise comparativa).
+> Status (2026-09-15): schema completo; `events` semeada; hidratação de maio/2026 (83 tweets,
+> 72 autores da invasão) **migrada** para `tweets`/`users`; `event_top_tweets` populada pela
+> seleção por cluster (M8). Tudo isso é feito, de forma idempotente, por
+> `notebooks/pipeline_tcc2.ipynb`. **Pendente:** reescrever `fetch_x_data.py` para usar o
+> banco como cache. `community_membership` continua vazia (análise comparativa).
 
 ---
 
@@ -146,18 +147,29 @@ Saída do LLM + revisão manual (`docs/especificacao-tecnica.md` §3.3, D8).
 | `classified_at` | TEXT | quando foi classificado |
 | `notes` | TEXT | anotações da revisão manual |
 
-### `event_top_tweets` — seleção top-N por evento
-Liga `events` × `tweets`: quais tweets foram top-N **em cada evento** e seu rank/contagem
-**local**. Separa o fato por-evento do fato global (que vive em `tweets`).
+### `event_top_tweets` — seleção top-K por (evento, cluster)
+Saída do M8 (`modules/select_tweets.py`, D6 revisado em 2026-09-10) gravada por evento:
+quais tweets são top-K **em cada cluster** de cada evento, ranqueados pelo nº de retweets
+feitos por **membros do cluster**. É um fato derivado do grafo + parâmetros, por isso a
+gravação é *replace por evento* (`Database.replace_event_top_tweets`), não upsert: o que
+saiu do top-K numa re-seleção some. A cópia em Parquet fica em
+`data/processed/<slug>/top_tweets.parquet` (+ `top_tweets_stats.json`).
 
 | coluna | tipo | descrição |
 |---|---|---|
 | `event_slug` | TEXT | referência lógica a `events.slug` |
-| `tweet_id` | TEXT | referência lógica a `tweets.tweet_id` |
-| `retweet_count_dataset` | INTEGER | nº de retweets **dentro do evento** (do dataset, não da API) |
-| `rank` | INTEGER | posição no ranking do evento |
-| `selection_group` | TEXT | `originais` / `gerais` (critério do notebook exploratório) (CHECK) |
-| — | PK | `(event_slug, tweet_id)` — o mesmo tweet pode rankear em vários eventos |
+| `community` | INTEGER | id da comunidade Leiden (como em `graph_nodes.parquet`) |
+| `tweet_id` | TEXT | referência lógica a `tweets.tweet_id` (pode ainda não estar hidratado) |
+| `rank` | INTEGER | posição no ranking do cluster (1 = mais retuitado pelos membros) |
+| `rt_cluster` | INTEGER | nº de membros do cluster que retuitaram (critério do ranking) |
+| `rt_graph` | INTEGER | nº de nós do grafo (qualquer cluster) que retuitaram — pureza = rt_cluster/rt_graph |
+| `rt_event` | INTEGER | nº de usuários do evento que retuitaram, inclusive periferia filtrada em M2 |
+| `k` | INTEGER | K aplicado ao cluster (100, ou 20 para clusters com ≤5% do peso total) |
+| `selected_at` | TEXT | quando a seleção foi gravada |
+| — | PK | `(event_slug, community, tweet_id)` — o mesmo tweet pode rankear em vários clusters e eventos |
+
+> Contagens são do **dataset** (usuário×tweet distinto conta 1), não a métrica pública da API,
+> que vive em `tweets.retweet_count`.
 
 ### `community_membership` — *(fase 2)* projeção analítica por usuário
 Cópia de conveniência do resultado do pipeline por `(evento, usuário, τ)`. **Vazia até a
@@ -215,6 +227,18 @@ sqlite3 data/database/hydrated.sqlite ".schema users"
 ## Changelog
 
 Toda mudança de schema é registrada aqui (mais recente no topo).
+
+### 2026-09-15 — seleção por cluster + migração do legado
+- `event_top_tweets` refeita para a seleção por **(evento, cluster)** do D6 revisado: PK
+  `(event_slug, community, tweet_id)`; colunas `rank`, `rt_cluster`, `rt_graph`, `rt_event`,
+  `k`, `selected_at`. Saem `retweet_count_dataset` e `selection_group` (critério do notebook
+  exploratório, nunca gravado). `Database.ensure_schema` descarta a forma antiga se estiver
+  vazia; se tiver dados, para e avisa.
+- `Database.upsert_tweets/upsert_users` aceitam `hydrated_at` explícito (snapshot real na
+  migração de dados antigos); `replace_event_top_tweets` e `table_counts` novos.
+- Migrados para `tweets`/`users` os 83 tweets e 72 autores da hidratação de 2026-05-09
+  (invasão, top-100 global — critério anterior), com `hydrated_at` = data do snapshot.
+- `events`: slug `democracia-3010` renomeado para `eleicoes` (= pasta em `data/processed/`).
 
 ### 2026-06-19 — criação inicial
 - Criado `data/database/hydrated.sqlite`.

@@ -15,6 +15,8 @@ import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
 
+import pandas as pd
+
 DEFAULT_DB_PATH = "data/database/hydrated.sqlite"
 
 # DDL idempotente — espelha data/database/README.md. Sem FKs (referências
@@ -54,11 +56,16 @@ CREATE TABLE IF NOT EXISTS author_classification (
   classified_at  TEXT, notes TEXT
 );
 
+-- Seleção por (evento, cluster) — D6 revisado em 2026-09-10 (top-K por cluster,
+-- ranqueado por retweets dos membros). O mesmo tweet pode rankear em vários
+-- clusters do mesmo evento; a hidratação deduplica pelo tweet_id em `tweets`.
 CREATE TABLE IF NOT EXISTS event_top_tweets (
-  event_slug TEXT, tweet_id TEXT,
-  retweet_count_dataset INTEGER, rank INTEGER,
-  selection_group TEXT CHECK (selection_group IN ('originais','gerais')),
-  PRIMARY KEY (event_slug, tweet_id)
+  event_slug TEXT, community INTEGER, tweet_id TEXT,
+  rank INTEGER,
+  rt_cluster INTEGER, rt_graph INTEGER, rt_event INTEGER,
+  k INTEGER,
+  selected_at TEXT,
+  PRIMARY KEY (event_slug, community, tweet_id)
 );
 
 CREATE TABLE IF NOT EXISTS community_membership (
@@ -68,6 +75,8 @@ CREATE TABLE IF NOT EXISTS community_membership (
   PRIMARY KEY (event_slug, user_id, tau)
 );
 """
+
+TOP_TWEETS_COLUMNS = ["community", "rank", "tweet_id", "rt_cluster", "rt_graph", "rt_event", "k"]
 
 
 def _as_int_bool(v):
@@ -90,8 +99,24 @@ class Database:
         self.ensure_schema()
 
     def ensure_schema(self) -> None:
+        self._migrate_event_top_tweets_2026_06()
         self.conn.executescript(SCHEMA_SQL)
         self.conn.commit()
+
+    def _migrate_event_top_tweets_2026_06(self) -> None:
+        """Descarta a forma antiga de `event_top_tweets` (2026-06-19: seleção por
+        evento, PK (event_slug, tweet_id), `selection_group`) se ela existir e
+        estiver vazia — a forma atual é por (evento, cluster). Nunca houve dado
+        gravado na forma antiga; se houver, não toca e avisa."""
+        cols = {r[1] for r in self.conn.execute("PRAGMA table_info(event_top_tweets)")}
+        if cols and "community" not in cols:
+            n = self.conn.execute("SELECT COUNT(*) FROM event_top_tweets").fetchone()[0]
+            if n:
+                raise RuntimeError(
+                    "event_top_tweets está na forma antiga (por evento) e tem "
+                    f"{n} linhas; migre manualmente antes de continuar.")
+            self.conn.execute("DROP TABLE event_top_tweets")
+            self.conn.commit()
 
     def close(self) -> None:
         self.conn.close()
@@ -108,7 +133,7 @@ class Database:
         return datetime.now(timezone.utc).isoformat()
 
     @staticmethod
-    def _user_row(o: dict) -> dict:
+    def _user_row(o: dict, hydrated_at: str | None = None) -> dict:
         m = o.get("public_metrics") or {}
         return {
             "user_id": str(o["id"]),
@@ -129,11 +154,11 @@ class Database:
             "like_count": m.get("like_count"),
             "media_count": m.get("media_count"),
             "raw_json": json.dumps(o, ensure_ascii=False),
-            "hydrated_at": Database._now(),
+            "hydrated_at": hydrated_at or Database._now(),
         }
 
     @staticmethod
-    def _tweet_row(o: dict) -> dict:
+    def _tweet_row(o: dict, hydrated_at: str | None = None) -> dict:
         m = o.get("public_metrics") or {}
         geo = o.get("geo") or {}
         return {
@@ -155,7 +180,7 @@ class Database:
             "bookmark_count": m.get("bookmark_count"),
             "impression_count": m.get("impression_count"),
             "raw_json": json.dumps(o, ensure_ascii=False),
-            "hydrated_at": Database._now(),
+            "hydrated_at": hydrated_at or Database._now(),
         }
 
     # ── upsert genérico ──────────────────────────────────────────────────
@@ -174,17 +199,18 @@ class Database:
         self.conn.commit()
         return len(rows)
 
-    def upsert_users(self, user_objs: list[dict]) -> int:
-        return self._upsert("users", ["user_id"], [self._user_row(o) for o in user_objs])
+    def upsert_users(self, user_objs: list[dict], hydrated_at: str | None = None) -> int:
+        """`hydrated_at` explícito serve à migração de dados antigos (snapshot
+        real); omitido, carimba agora."""
+        return self._upsert("users", ["user_id"],
+                            [self._user_row(o, hydrated_at) for o in user_objs])
 
-    def upsert_tweets(self, tweet_objs: list[dict]) -> int:
-        return self._upsert("tweets", ["tweet_id"], [self._tweet_row(o) for o in tweet_objs])
+    def upsert_tweets(self, tweet_objs: list[dict], hydrated_at: str | None = None) -> int:
+        return self._upsert("tweets", ["tweet_id"],
+                            [self._tweet_row(o, hydrated_at) for o in tweet_objs])
 
     def upsert_events(self, rows: list[dict]) -> int:
         return self._upsert("events", ["slug"], rows)
-
-    def upsert_event_top_tweets(self, rows: list[dict]) -> int:
-        return self._upsert("event_top_tweets", ["event_slug", "tweet_id"], rows)
 
     def upsert_author_classifications(self, rows: list[dict]) -> int:
         return self._upsert("author_classification", ["author_id"], rows)
@@ -192,9 +218,36 @@ class Database:
     def upsert_community_membership(self, rows: list[dict]) -> int:
         return self._upsert("community_membership", ["event_slug", "user_id", "tau"], rows)
 
-    # ── checagens de cache ────────────────────────────────────────────────
+    # ── seleção por (evento, cluster) ─────────────────────────────────────
+    def replace_event_top_tweets(self, event_slug: str, selection: pd.DataFrame,
+                                 selected_at: str | None = None) -> int:
+        """Substitui a seleção do evento pela saída do M8 (`top_tweets.parquet`).
+
+        A seleção é um fato derivado do grafo + parâmetros; re-selecionar deve
+        apagar o que saiu do top-K, por isso é *replace* por evento, não upsert.
+        Idempotente: rodar duas vezes com a mesma seleção dá o mesmo estado.
+        """
+        when = selected_at or self._now()
+        df = selection[TOP_TWEETS_COLUMNS]
+        rows = [(event_slug, int(r.community), str(r.tweet_id), int(r.rank),
+                 int(r.rt_cluster), int(r.rt_graph), int(r.rt_event), int(r.k), when)
+                for r in df.itertuples(index=False)]
+        with self.conn:
+            self.conn.execute("DELETE FROM event_top_tweets WHERE event_slug = ?", (event_slug,))
+            self.conn.executemany(
+                "INSERT INTO event_top_tweets (event_slug, community, tweet_id, rank, "
+                "rt_cluster, rt_graph, rt_event, k, selected_at) "
+                "VALUES (?,?,?,?,?,?,?,?,?)", rows)
+        return len(rows)
+
+    # ── checagens de cache / inspeção ─────────────────────────────────────
     def cached_user_ids(self) -> set[str]:
         return {r[0] for r in self.conn.execute("SELECT user_id FROM users")}
 
     def cached_tweet_ids(self) -> set[str]:
         return {r[0] for r in self.conn.execute("SELECT tweet_id FROM tweets")}
+
+    def table_counts(self) -> dict[str, int]:
+        names = [r[0] for r in self.conn.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name")]
+        return {t: self.conn.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0] for t in names}
