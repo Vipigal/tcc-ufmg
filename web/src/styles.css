@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@theme {
+  /* paleta neutra do card (referência: X), sem assets de marca */
+  --color-ink: #0f1419;
+  --color-muted: #536471;
+  --color-line: #eff3f4;
+  --color-x-blue: #1d9bf0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #fff;
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer components {
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full border border-line bg-gray-50 px-2.5 py-1 text-[13px] text-ink hover:bg-gray-100;
+  }
+  .badge {
+    @apply inline-flex items-center gap-1 rounded border border-line px-1.5 py-0.5 text-[11px] uppercase tracking-wide text-muted;
+  }
+  .select {
+    @apply rounded-md border border-gray-300 bg-white px-2 py-1 text-[13px] text-ink;
+  }
+  /* rótulo do mini-mapa: halo branco como na figura da fase 1 */
+  .label-halo {
+    text-shadow:
+      0 0 3px #fff,
+      0 0 3px #fff,
+      0 0 4px #fff,
+      0 0 4px #fff;
+  }
+}
