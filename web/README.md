@@ -3,21 +3,23 @@
 Primeiro módulo da aplicação web do TCC (D9, D15): lê `data/export/` e mostra, por evento e
 cluster, o mini-mapa DRL e os top-K tweets em cards estilo X com a faixa de metadados da pesquisa.
 Spec: `docs/superpowers/specs/2026-09-15-leitor-de-clusters-design.md` · plano de implementação:
-`docs/superpowers/plans/2026-09-15-leitor-de-clusters.md`.
+`docs/superpowers/plans/2026-09-15-leitor-de-clusters.md`. A v2 (visão geral, comparação, sínteses por
+LLM, mídias, tema escuro) está em `docs/superpowers/specs/2026-10-14-visao-geral-comparacao-design.md`.
 
 ## Rodar
 
 ```bash
 cd web
 npm install
-npm run dev        # http://localhost:5173 → redireciona para o primeiro evento, Grupo 1
-npm test           # vitest: lib/format, lib/entities, lib/filter
+npm run dev        # http://localhost:5173 → visão geral do primeiro evento
+npm test           # vitest: lib/format, entities, filter, paths, shared, theme
 npm run build      # tsc -b + vite build → dist/ (inclui uma cópia de data/export/)
 ```
 
-Rotas: `/` → `/<primeiro evento>/<community do Grupo 1>`; `/:evento/:community`
-(ex.: `/eleicoes/3` abre o cluster c3 de eleicoes). Slug ou community inválidos redirecionam
-para o padrão do evento (ou do índice). Ordenação, filtros e busca ficam fora da URL.
+Rotas: `/` → `/<primeiro evento>`; `/:evento` (visão geral); `/:evento/:community` (leitor do grupo,
+ex.: `/eleicoes/3`; aceita `?origem=amplified|characteristic`); `/:evento/comparar/:a/:b` (comparação).
+Slug ou community inválidos redirecionam para o padrão do evento (ou do índice). `?tags=0` oculta as
+tags de inclinação (D8, adendo de 2026-10-14). Tema escuro por padrão, lembrado em `localStorage`.
 
 ## De onde vêm os dados
 
@@ -43,9 +45,12 @@ Se `data/export/` não existir, a tela mostra o erro e pede a célula M10 — n�
   code points), `filter` (ordenar/filtrar/buscar), `glossary` (todos os textos fixos: tooltips,
   status, nomes curtos), `paths`, `color`, `useDebounce`.
 - `src/components/` — `EventTabs`, `ClusterPanel`, `MiniMap` (Sigma v3, nós apenas), `CardList`,
-  `Toolbar`, `TweetCard`, `GhostCard`, `ResearchStrip`, `Avatar`, `TweetText`, `States`.
-- `src/App.tsx` — `App` resolve `/:evento/:community?` e redireciona; `Reader` carrega o evento e
-  monta o layout; `RootRedirect` trata `/`.
+  `Toolbar`, `TweetCard`, `GhostCard`, `ResearchStrip`, `Avatar`, `TweetText`, `States`; v2:
+  `SummaryPanel`, `InclinationTag`, `SharedBar`, `MediaGrid`, `TweetPreview`, `MethodExplainer`,
+  `HeaderControls`.
+- `src/pages/` — `Overview` (visão geral) e `Compare` (comparação lado a lado).
+- `src/App.tsx` — `Routed` valida evento/grupos e redireciona; `Shell` monta o cabeçalho (abas, seletor
+  de tela, tema); `Reader` é o leitor do grupo; `RootRedirect` trata `/`.
 
 ## Notas
 
@@ -55,7 +60,10 @@ Se `data/export/` não existir, a tela mostra o erro e pede a célula M10 — n�
 - Avatares vêm de `pbs.twimg.com` e podem falhar (conta suspensa, imagem removida); o fallback
   são as iniciais sobre a cor do grupo.
 - Tooltips são o atributo `title` nativo (passar o mouse e esperar).
-- `vercel.json` só faz o rewrite da SPA; deploy está fora do escopo da v1.
+- Deploy (projeto Vercel `leitor-de-clusters`, já vinculado em `web/.vercel/`): o `publicDir` aponta
+  para fora de `web/`, então a build é local e o upload é do resultado pronto:
+  `vercel build --prod && vercel deploy --prebuilt --prod` (dentro de `web/`). `vercel.json` só faz o
+  rewrite da SPA.
 
 ## Desempenho
 

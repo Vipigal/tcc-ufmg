@@ -18,6 +18,7 @@ import { hasMedia, segmentText } from "../lib/entities";
 import { formatCompact, formatDate, formatInt } from "../lib/format";
 import { AUTHOR_STATUS_TEXT, REFERENCE_TEXT, VERIFIED_TYPE_TEXT } from "../lib/glossary";
 import { Avatar } from "./Avatar";
+import { MediaGrid } from "./MediaGrid";
 import { ResearchStrip } from "./ResearchStrip";
 import { TweetText } from "./TweetText";
 
@@ -32,11 +33,12 @@ const MISSING_AUTHOR_COLOR = "#9ca3af";
 export const TweetCard = memo(function TweetCard({ slot, color }: Props) {
   const { tweet, author } = slot;
   const segments = useMemo(() => segmentText(tweet.text, tweet.entities, tweet.url), [tweet]);
-  const media = hasMedia(tweet.entities);
+  // chip "Mídia ↗" só quando há mídia nas entities mas ela não veio na re-hidratação (M9c)
+  const media = hasMedia(tweet.entities) && (tweet.media ?? []).length === 0;
   const m = tweet.metrics;
 
   return (
-    <article className="overflow-hidden rounded-2xl border border-line bg-white">
+    <article className="overflow-hidden rounded-2xl border border-line bg-surface">
       <div className="px-4 pt-3">
         <header className="flex items-start gap-3">
           <Avatar
@@ -56,7 +58,7 @@ export const TweetCard = memo(function TweetCard({ slot, color }: Props) {
             target="_blank"
             rel="noopener noreferrer"
             title="abrir no X"
-            className="shrink-0 rounded-full p-1 text-muted hover:bg-gray-100 hover:text-x-blue"
+            className="shrink-0 rounded-full p-1 text-muted hover:bg-hover hover:text-x-blue"
           >
             <ExternalLink size={16} />
           </a>
@@ -65,6 +67,7 @@ export const TweetCard = memo(function TweetCard({ slot, color }: Props) {
         <div className="mt-2">
           <TweetText segments={segments} />
         </div>
+        <MediaGrid media={tweet.media ?? []} tweetUrl={tweet.url} />
 
         {(media || tweet.referenced_tweets.length > 0) && (
           <div className="mt-2 flex flex-wrap gap-2">
@@ -108,7 +111,7 @@ export const TweetCard = memo(function TweetCard({ slot, color }: Props) {
             )}
             {tweet.possibly_sensitive && (
               <span
-                className="badge border-amber-300 text-amber-800"
+                className="badge border-amber-300 text-amber-800 dark:border-amber-700 dark:text-amber-300"
                 title="marcado pela API como possivelmente sensível"
               >
                 <TriangleAlert size={11} /> sensível

@@ -96,3 +96,17 @@ def test_missing_token_raises(monkeypatch):
     monkeypatch.setattr(fx, "load_dotenv", lambda *a, **k: False)
     with pytest.raises(RuntimeError):
         XClient()
+
+
+def test_lookup_tweets_media_asks_media_expansion_and_returns_includes():
+    payload = {"data": [{"id": "1", "attachments": {"media_keys": ["3_9"]}}],
+               "includes": {"media": [{"media_key": "3_9", "type": "photo", "url": "https://pbs/x.jpg"}]},
+               "errors": [{"resource_id": "2", "title": "Not Found Error"}]}
+    client, sess = _client([_Resp(200, payload)])
+    data, errors, media = client.lookup_tweets_media(["1", "2"])
+    p = sess.calls[0]["params"]
+    assert sess.calls[0]["url"].endswith("/tweets")
+    assert p["expansions"] == "attachments.media_keys"
+    assert "preview_image_url" in p["media.fields"] and "url" in p["media.fields"]
+    assert data[0]["id"] == "1" and errors[0]["resource_id"] == "2"
+    assert media == [{"media_key": "3_9", "type": "photo", "url": "https://pbs/x.jpg"}]

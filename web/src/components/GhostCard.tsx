@@ -18,7 +18,7 @@ export const GhostCard = memo(function GhostCard({ slot, color }: Props) {
         ? "Tweet sem conteúdo no export"
         : SLOT_STATUS_TEXT[slot.status];
   return (
-    <article className="overflow-hidden rounded-2xl border-2 border-dashed border-gray-300 bg-gray-50/60">
+    <article className="overflow-hidden rounded-2xl border-2 border-dashed border-line-strong bg-subtle">
       <div className="flex items-center gap-3 px-4 py-3 text-muted">
         <TriangleAlert size={20} className="shrink-0" />
         <div className="min-w-0 flex-1 text-[14px]">

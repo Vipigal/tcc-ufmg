@@ -137,3 +137,45 @@ def test_report_summary_is_a_readable_line(db, tmp_path):
     rep = TweetHydrator(db, client, sleep=lambda s: None).run(out_dir=tmp_path)
     s = rep.summary()
     assert "3" in s and "2" in s and "1" in s and "US$" in s
+
+
+class FakeMediaClient:
+    def __init__(self, tweets, media, errors=None):
+        self.tweets, self.media, self.errors = tweets, media, errors or {}
+        self.calls = []
+
+    def lookup_tweets_media(self, ids):
+        self.calls.append(list(ids))
+        data = [self.tweets[i] for i in ids if i in self.tweets]
+        keys = {k for d in data for k in d.get("attachments", {}).get("media_keys", [])}
+        return (data, [self.errors[i] for i in ids if i in self.errors],
+                [self.media[k] for k in sorted(keys) if k in self.media])
+
+
+def _media_tweet(tid, keys):
+    return {"id": tid, "author_id": "a1", "text": "x", "public_metrics": {},
+            "entities": {"urls": [{"url": "u", "media_key": k} for k in keys]}}
+
+
+def test_media_hydrator_stores_media_and_mapping_without_touching_tweets(tmp_path):
+    from modules.hydrate import MediaHydrator
+    db = Database(tmp_path / "db.sqlite")
+    db.upsert_tweets([_media_tweet("t1", ["3_1", "3_2"]), _media_tweet("t2", ["7_9"]),
+                      _media_tweet("t3", ["3_5"])], hydrated_at="2026-09-15T00:00:00+00:00")
+    client = FakeMediaClient(
+        tweets={"t1": {"id": "t1", "attachments": {"media_keys": ["3_1", "3_2"]}},
+                "t2": {"id": "t2"}},                                  # voltou sem attachments
+        media={"3_1": {"media_key": "3_1", "type": "photo", "url": "a"},
+               "3_2": {"media_key": "3_2", "type": "photo", "url": "b"}},
+        errors={"t3": _err("t3")})
+    rep = MediaHydrator(db, client, pause_s=0).run(out_dir=tmp_path)
+    assert rep.n_pending == 3 and rep.n_returned == 2 and rep.n_errors == 1 and rep.n_media == 2
+    maps = db.conn.execute("SELECT tweet_id, media_key FROM tweet_media ORDER BY 1, 2").fetchall()
+    # t2 sem attachments: o mapeamento vem dos media_key das entities (mídia em si falta)
+    assert [tuple(r) for r in maps] == [("t1", "3_1"), ("t1", "3_2"), ("t2", "7_9")]
+    assert db.conn.execute("SELECT COUNT(*) FROM media").fetchone()[0] == 2
+    assert db.conn.execute("SELECT hydrated_at FROM tweets WHERE tweet_id='t1'").fetchone()[0] \
+        == "2026-09-15T00:00:00+00:00"                                # snapshot intocado
+    assert "t3" in db.errored_ids("tweet")
+    assert MediaHydrator(db, client, pause_s=0).run(out_dir=tmp_path).n_pending == 0
+    db.close()

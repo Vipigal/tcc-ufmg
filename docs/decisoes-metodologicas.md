@@ -188,6 +188,12 @@ score(u) = (R_right(u) - R_left(u)) / (R_right(u) + R_left(u))
 
 **Revisão (2026-10-06): o LLM deixa de classificar autores e passa a sintetizar conteúdo com ancoragem.** Com a revisão de D7, a primeira tarefa (classificação ideológica dos autores) deixa de existir. O LLM fica com uma função: gerar, por evento e comunidade, sínteses narrativas (temas, protagonistas, antagonistas, tese central) a partir do top-K e dos tweets-assinatura hidratados, sem rótulo ideológico prévio e com cada afirmação citando os identificadores dos tweets que a sustentam. A revisão manual obrigatória se mantém e ganha duas camadas antes dela: checagem automática de que os tweets citados existem e pertencem à comunidade, e comparação item a item com a leitura manual preliminar (o que o modelo capturou, omitiu ou inventou). Modelo, versão e prompt ficam registrados. A rotulagem manual dos polos migra para o grupo focal (proposta do TCC2, etapas E3 e E5).
 
+**Revisão (2026-10-13): síntese em texto livre, como ajuda de leitura, com inclinação política provável.** Em conversa com a orientadora, o papel do LLM foi estreitado: ele **condensa** o material de cada (evento, cluster) para os rotuladores humanos, que categorizam depois. Por isso a síntese deixa de ter campos estruturados (temas, protagonistas, antagonistas, tese central), que pressupunham uma estrutura que não queremos afirmar de antemão. A saída passa a ser: `sintese` (texto livre, 250–400 palavras), `contas_prevalentes` (comentário sobre o tipo de conta que domina), `inclinacao_politica` (texto livre + confiança alta/média/baixa; o eixo esquerda/direita não é obrigatório e "indeterminada" é válida) e `limites`. Mantêm-se: citação `[tweet_id]` inline em toda afirmação, checagem automática das citações contra o corpus do cluster, revisão humana, registro de modelo, prompt e resposta bruta. O que é contável (contas mais retuitadas, tamanho, atrição) é **calculado pela pipeline** e entregue ao modelo, nunca estimado por ele. O corpus de cada cluster passa a ter dois blocos: top-K (mais amplificados) e cauda característica (D16). Modelo: Claude Sonnet 5.5 (`claude-sonnet-5-5`), via Claude Code headless (`claude -p`) na assinatura; um único modelo (comparação Sonnet × Haiku considerada e não adotada). Prompt: `prompts/sintese_cluster_v1.md`. Spec: `docs/superpowers/specs/2026-10-13-sintese-clusters-llm-design.md`.
+
+*Adendo (2026-10-14), visão geral do leitor:* a inclinação aparece também como **tag binária colorida** (direita azul, esquerda vermelho, "outro" amarelo), atribuída pelo autor lendo o `inclinacao_politica` do LLM e guardada na curadoria (`data/curation/clusters.json`), junto com um trecho **literal** da síntese (validado no export). É decisão do autor e contraria a revisão de D7 e a proposta ("esquerda e direita descrevem mal os polos"); "outro" existe para o que não cabe no binário (7/9 Grupo 4, Ciro/PDT). Mitigação disponível: `?tags=0` oculta as tags (ex.: nas sessões do grupo focal). Spec: `docs/superpowers/specs/2026-10-14-visao-geral-comparacao-design.md`.
+
+*Trade-offs assumidos:* (a) a **inclinação política reintroduz um rótulo ideológico**, que a revisão de 2026-10-06 tinha tirado ("sem rótulo ideológico prévio"); ele entra como palpite descrito e com confiança, não como categoria; (b) a síntese **e a inclinação ficam visíveis aos rotuladores desde o início** (alternativa considerada: esconder a inclinação atrás de um "revelar"). Isso acelera a rotulagem, mas a ancora no palpite do modelo: a rotulagem humana não é independente da do LLM, e a comparação LLM × humano prevista acima deve ser lida com essa ressalva; (c) `temperature` não é controlável pelo `claude -p`, então reprodutibilidade = prompt + modelo + resposta bruta guardados, não reexecução.
+
 ---
 
 ## D9. Visualização como produto central, não como complemento
@@ -319,6 +325,41 @@ score(u) = (R_right(u) - R_left(u)) / (R_right(u) + R_left(u))
 
 ---
 
+## D16. Cauda característica por cluster, por sobrerrepresentação (lift)
+
+**Decisão (2026-10-13):** além do top-K (D6), cada (evento, cluster) ganha uma cauda de até `m` tweets (M8b, `TailSelector` em `modules/select_tweets.py`) para a síntese por LLM (D8). Para cada tweet *t* e cluster *c*: `lift(t, c) = (rt_c(t) / rt_graph(t)) / (RT_c / RT_graph)` — a fração dos retweets de *t* vinda de *c*, sobre a fração de *c* em todos os retweets do grafo. Candidatos: `rt_c ≥ min_rt`, `lift > 1` e fora do top-K de *c*; seleção por lift desc → rt_cluster desc → tweet_id asc. Valores iniciais, a ajustar: `m = 50`, `min_rt = 10`. Gravada em `event_tail_tweets`, separada do top-K; hidratada pelo mesmo M9.
+
+**Por quê:**
+- O top-K mostra o que o cluster mais amplifica, inclusive o que circula no evento todo; a pergunta sobre a estrutura interna de um polo subdividido precisa do que cada fatia amplifica *mais que as irmãs*.
+- Medido em 2026-10-13 (tweets fora do top-K, ≥ 10 RTs no cluster): o critério de exclusividade "≥ 90% dos RTs vêm de c" devolve centenas a milhares de tweets nos polos fechados (invasão c1: 1.776; RJ c1: 2.083) e ~0 nas fatias (eleições: 0–11 por cluster; mobilização c1–c3: 1–3). As fatias diferem em grau, não em exclusividade — o lift ordena os dois casos com uma regra só.
+- `lift > 1` é a definição de sobrerrepresentação, não um ajuste: sem ele, clusters com poucos candidatos (eleições c2, c4) completavam o top-50 com tweets sub-representados (lift 0,82–0,88).
+
+**Observação (2026-10-13):** nos polos fechados o lift satura no teto `1 / (RT_c / RT_graph)` (tweets 100% exclusivos) para todos os 50 selecionados; ali a ordem efetiva é por `rt_cluster` — a cauda vira "os exclusivos mais retuitados fora do top-K". Plano: 649 IDs, 625 novos, ≈ US$ 3,12 em tweets + autores novos.
+
+**Alternativas rejeitadas:**
+- Exclusividade absoluta ≥ X% — vazia exatamente nas fatias que se quer diferenciar.
+- Lift contra os clusters irmãos do mesmo polo — mais nítido para a estrutura interna, mas exige definir formalmente os polos (agrupar clusters), uma escolha analítica a mais.
+- Aumentar K do top-K — traz mais do que já é compartilhado, não o que é próprio.
+
+---
+
+## D17. Conteúdo compartilhado entre clusters (barra da visão geral)
+
+**Decisão (2026-10-14):** a visão geral do leitor mostra, por cluster *c*, `shared(c)` = fração dos retweets dados por *c* que vai a conteúdo que também circula em outros clusters, decomposta em `shared_with(c, d) = Σ_t rt_c(t)·rt_d(t)/rt_graph(t) ÷ Σ_t rt_c(t)`. Equivale a 1 − pureza média dos tweets que *c* retuíta, ponderada por `rt_c`. Sobre o log completo do evento (usuário×tweet distinto conta 1). Estágio `ContentOverlap` (`modules/overlap.py`); exportado em `event.json`.
+
+**Por quê:**
+- Mostra a forma da polarização (quem está isolado, quem é "irmão" de quem) sem nomear ninguém e **sem exigir definir polos** antes (a E1 ainda não formalizou o agrupamento).
+- Reaproveita a noção de pureza que o leitor já exibe por tweet — uma ideia a menos para explicar ao grupo focal.
+- Medido em 2026-10-14: polos fechados 1–3% (7/9 c0, RJ c1, eleições c3, 8/1 c1); fatias irmãs 22–77%, sempre apontando a irmã esperada; 7/9 c3 (Ciro) 24% com o polo anti-Bolsonaro e 2% com o bolsonarista.
+
+**Observação:** é assimétrica (8/1: c2→c0 50%, c0→c2 21%) — o grupo menor compartilha mais com o maior; o "Como ler esta tela" do app explica. Não substitui a hermeticidade por super-polo da E1 (grafo de usuários); são medidas complementares.
+
+**Alternativas rejeitadas:**
+- Nº de tweets em comum entre as seleções (top-K ∪ cauda) — depende de K e da atrição; fica só como dado secundário na comparação.
+- Hermeticidade por super-polo — exige definir os polos primeiro.
+
+---
+
 ## Histórico de decisões revisadas
 
 Este espaço é para registrar mudanças futuras de decisão. Toda vez que uma decisão acima for revisada, registrar aqui:
@@ -331,3 +372,5 @@ Este espaço é para registrar mudanças futuras de decisão. Toda vez que uma d
 | 2026-10-06 | D7 — score ideológico | Sai do escopo do TCC2: sem score por usuário nem painel de radicalização | "Esquerda/direita" descreve mal os polos (um reúne centro e imprensa de referência); as subdivisões internas não são ideológicas; rótulos passam a emergir do conteúdo e do grupo focal |
 | 2026-10-06 | D8 — uso de LLM | Deixa de classificar autores; gera sínteses narrativas ancoradas em tweets citados, com checagem automática das citações, comparação com a leitura manual e revisão humana | Decorre da revisão de D7; a ancoragem torna a síntese verificável |
 | 2026-10-06 | D10 — controle temporal do 8/1 | Sai do escopo do TCC2 (trabalho futuro) | O foco da ferramenta passa à comparação entre polos e comunidades, validada em grupo focal |
+| 2026-10-13 | D8 — uso de LLM | Síntese em texto livre como ajuda aos rotuladores (sem temas/protagonistas/tese impostos), com inclinação política provável + confiança, visível desde o início; corpus = top-K + cauda (D16); Sonnet 5.5 via `claude -p` | Decisão com a orientadora: a categorização é humana e posterior; o LLM só condensa. Rótulo ideológico volta como palpite descrito, com o trade-off de ancoragem assumido |
+| 2026-10-14 | D8 — uso de LLM | Tag binária colorida de inclinação (+ "outro") na visão geral, atribuída pelo autor a partir do texto do LLM; trecho curado literal | Decisão do autor para legibilidade; trade-off com D7 registrado; `?tags=0` como mitigação |

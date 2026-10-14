@@ -157,3 +157,106 @@ class TopTweetSelector(Stage):
         out = Path(out_dir)
         self.stats = json.loads((out / "top_tweets_stats.json").read_text())
         return pd.read_parquet(out / "top_tweets.parquet")
+
+
+TAIL_COLUMNS = ["community", "rank", "tweet_id", "rt_cluster", "rt_graph", "rt_event", "lift", "m"]
+
+
+class TailSelector(Stage):
+    """M8b — cauda característica de cada cluster, ranqueada por sobrerrepresentação.
+
+    Complementa o top-K (M8) para a síntese por LLM (M11, D16): o top-K mostra o que o
+    cluster mais amplifica, inclusive o que circula em todo o evento; a cauda mostra o
+    que ele amplifica *desproporcionalmente*. Para cada tweet t e cluster c:
+
+        lift(t, c) = (rt_c(t) / rt_graph(t)) / (RT_c / RT_graph)
+
+    onde RT_c e RT_graph são as mesmas contagens somadas sobre todos os tweets
+    (usuário×tweet distinto conta 1, como em M3/M8). Lift 1 = t circula em c na
+    proporção do peso de c no evento. Lift, e não exclusividade, porque as fatias de
+    um polo subdividido diferem em grau, não em exclusividade (medido em 2026-10-13).
+
+    Candidatos: rt_c(t) ≥ `min_rt`, lift > 1 (sobrerrepresentado — é a definição do
+    bloco; sem isso, clusters com poucos candidatos completariam o top-m com tweets
+    sub-representados) e t fora do top-K de c. Seleção: top-`m` por
+    lift desc → rt_cluster desc → tweet_id asc. Só clusters presentes em `top`.
+    """
+
+    FILES = ("tail_tweets.parquet", "tail_tweets_stats.json")
+
+    def __init__(self, m: int = 50, min_rt: int = 10):
+        self.m = m
+        self.min_rt = min_rt
+        self.stats: dict = {}
+
+    def select(self, nodes: pd.DataFrame, retweets: pd.DataFrame,
+               top: pd.DataFrame) -> pd.DataFrame:
+        rt = (retweets[["author_id", "referenced_tweet_id"]]
+              .astype(str).drop_duplicates())
+        rt_event = rt.groupby("referenced_tweet_id").size()
+        comm_of = pd.Series(nodes["community"].to_numpy().astype(int),
+                            index=nodes["user_id"].astype(str).to_numpy())
+        in_graph = rt.assign(community=rt["author_id"].map(comm_of)).dropna(subset=["community"])
+        in_graph = in_graph.assign(community=in_graph["community"].astype(int))
+        rt_graph = in_graph.groupby("referenced_tweet_id").size()
+        pairs = (in_graph.groupby(["community", "referenced_tweet_id"]).size()
+                 .rename("rt_cluster").reset_index())
+        RT_graph = len(in_graph)
+        RT_c = in_graph.groupby("community").size()
+
+        top_ids = top.groupby("community")["tweet_id"].agg(lambda s: set(map(str, s)))
+        frames, clusters = [], {}
+        for c in sorted(int(x) for x in top_ids.index):
+            cand = pairs[(pairs["community"] == c)
+                         & (pairs["rt_cluster"] >= self.min_rt)
+                         & ~pairs["referenced_tweet_id"].isin(top_ids[c])].copy()
+            cand["rt_graph"] = cand["referenced_tweet_id"].map(rt_graph).astype(int)
+            base = RT_c.get(c, 0) / RT_graph if RT_graph else 0.0
+            cand["lift"] = (cand["rt_cluster"] / cand["rt_graph"]) / base if base else np.nan
+            cand = cand[cand["lift"] > 1]
+            cand = cand.sort_values(["lift", "rt_cluster", "referenced_tweet_id"],
+                                    ascending=[False, False, True], kind="mergesort")
+            tail = cand.head(self.m).copy()
+            tail["rank"] = np.arange(1, len(tail) + 1)
+            tail["m"] = self.m
+            frames.append(tail)
+            clusters[str(c)] = {
+                "baseline_share": float(base),
+                "n_candidates": int(len(cand)),
+                "n_selected": int(len(tail)),
+                "min_lift_selected": float(tail["lift"].min()) if len(tail) else None,
+            }
+
+        out = (pd.concat(frames, ignore_index=True) if frames
+               else pd.DataFrame(columns=["community", "referenced_tweet_id", "rt_cluster",
+                                          "rt_graph", "lift", "rank", "m"]))
+        out = out.rename(columns={"referenced_tweet_id": "tweet_id"})
+        out["rt_event"] = out["tweet_id"].map(rt_event).astype(int)
+        out = out[TAIL_COLUMNS].reset_index(drop=True)
+        self.stats = {
+            "params": {"m": self.m, "min_rt": self.min_rt},
+            "clusters": clusters,
+            "n_slots": int(len(out)),
+            "n_unique_ids": int(out["tweet_id"].nunique()),
+        }
+        return out
+
+    def save(self, df: pd.DataFrame, out_dir) -> Path:
+        out = Path(out_dir)
+        out.mkdir(parents=True, exist_ok=True)
+        df.to_parquet(out / "tail_tweets.parquet", index=False)
+        (out / "tail_tweets_stats.json").write_text(
+            json.dumps(self.stats, indent=2, ensure_ascii=False))
+        return out / "tail_tweets.parquet"
+
+    # --- hooks de cache (Stage) ------------------------------------------
+    def _compute(self, nodes, retweets, top) -> pd.DataFrame:
+        return self.select(nodes, retweets, top)
+
+    def _save(self, df: pd.DataFrame, out_dir) -> None:
+        self.save(df, out_dir)
+
+    def _load(self, out_dir) -> pd.DataFrame:
+        out = Path(out_dir)
+        self.stats = json.loads((out / "tail_tweets_stats.json").read_text())
+        return pd.read_parquet(out / "tail_tweets.parquet")

@@ -3,6 +3,7 @@ import type { ClusterMeta, Slot, Tweet } from "../types";
 import { applyToolbar, DEFAULT_TOOLBAR, type ToolbarState } from "../lib/filter";
 import { useDebounce } from "../lib/useDebounce";
 import { GhostCard } from "./GhostCard";
+import { SummaryPanel, tweetAnchorId } from "./SummaryPanel";
 import { Toolbar } from "./Toolbar";
 import { TweetCard } from "./TweetCard";
 
@@ -28,12 +29,14 @@ export function CardList({ cluster, slots, toolbar, onToolbarChange }: Props) {
   // A busca entra com debounce; ordenação e filtros, imediatos. Cards são memoizados, então
   // uma tecla digitada só reconcilia os <li> — não re-renderiza 100 cards.
   const query = useDebounce(toolbar.query, 200);
-  const { sort, status, exclusivity } = toolbar;
+  const { sort, status, exclusivity, origin } = toolbar;
   const visible = useMemo(
-    () => applyToolbar(slots, { sort, status, exclusivity, query }),
-    [slots, sort, status, exclusivity, query],
+    () => applyToolbar(slots, { sort, status, exclusivity, origin, query }),
+    [slots, sort, status, exclusivity, origin, query],
   );
-  const ghosts = cluster.n_selected - cluster.n_hydrated;
+  const total = slots.length;
+  const hydrated = slots.filter((s) => s.status === "hydrated").length;
+  const pending = slots.filter((s) => s.status === "pending").length;
 
   return (
     <div className="space-y-3">
@@ -43,12 +46,14 @@ export function CardList({ cluster, slots, toolbar, onToolbarChange }: Props) {
           {cluster.label} <span className="font-normal text-muted">(c{cluster.community})</span>
         </h2>
         <span className="text-muted">
-          · {cluster.n_selected} slots · {cluster.n_hydrated} hidratados · {ghosts} não devolvidos
+          · {cluster.n_selected} top-K + {cluster.n_tail_selected} cauda · {hydrated} hidratados ·{" "}
+          {total - hydrated - pending} não devolvidos{pending > 0 && ` · ${pending} pendentes`}
         </span>
       </header>
-      <Toolbar state={toolbar} onChange={onToolbarChange} shown={visible.length} total={cluster.n_selected} />
+      <SummaryPanel cluster={cluster} />
+      <Toolbar state={toolbar} onChange={onToolbarChange} shown={visible.length} total={total} />
       {visible.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-gray-300 p-8 text-center text-muted">
+        <div className="rounded-xl border border-dashed border-line-strong p-8 text-center text-muted">
           nenhum tweet com esses filtros
           <div className="mt-3">
             <button type="button" className="chip" onClick={() => onToolbarChange(DEFAULT_TOOLBAR)}>
@@ -59,7 +64,7 @@ export function CardList({ cluster, slots, toolbar, onToolbarChange }: Props) {
       ) : (
         // key: qualquer mudança de cluster/ordem/filtro/busca recomeça a lista progressiva do zero
         <ProgressiveList
-          key={`${cluster.community}|${sort}|${status}|${exclusivity}|${query}`}
+          key={`${cluster.community}|${sort}|${status}|${exclusivity}|${origin}|${query}`}
           items={visible}
           color={cluster.color}
         />
@@ -80,7 +85,7 @@ function ProgressiveList({ items, color }: { items: Slot[]; color: string }) {
   return (
     <ol className="space-y-3">
       {items.slice(0, shown).map((s) => (
-        <li key={`${s.community}-${s.rank}`}>
+        <li key={`${s.origin}-${s.rank}`} id={tweetAnchorId(s.tweet_id)} className="rounded-2xl">
           {isHydrated(s) ? <TweetCard slot={s} color={color} /> : <GhostCard slot={s} color={color} />}
         </li>
       ))}

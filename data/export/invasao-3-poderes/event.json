@@ -39,7 +39,165 @@
    "n_not_authorized": 12,
    "n_other_errors": 0,
    "n_pending": 0,
-   "attrition": 0.28
+   "attrition": 0.28,
+   "n_tail_selected": 50,
+   "n_tail_hydrated": 31,
+   "top_accounts": [
+    {
+     "author_id": "1532219594806415360",
+     "username": "DanVitorPH",
+     "name": "Dan Hasse",
+     "verified": false,
+     "rt_cluster": 23771,
+     "n_tweets": 23
+    },
+    {
+     "author_id": "1114237991797522434",
+     "username": "Jakelyneloiola_",
+     "name": "Jakelyne Loiola",
+     "verified": true,
+     "rt_cluster": 12906,
+     "n_tweets": 12
+    },
+    {
+     "author_id": "42022064",
+     "username": "JulioRochaReal",
+     "name": "Júlio Rocha",
+     "verified": false,
+     "rt_cluster": 3758,
+     "n_tweets": 3
+    },
+    {
+     "author_id": "1120081015765131264",
+     "username": "stenyolaisson",
+     "name": "Joaquim Teixeirado",
+     "verified": false,
+     "rt_cluster": 3582,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "1214887979740803072",
+     "username": "ATROMBETA3",
+     "name": "A TROMBETA",
+     "verified": false,
+     "rt_cluster": 3370,
+     "n_tweets": 4
+    },
+    {
+     "author_id": "749082795662868481",
+     "username": "7minutos_news",
+     "name": "7Minutos Notícias",
+     "verified": true,
+     "rt_cluster": 3232,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "47284359",
+     "username": "OnePaul87",
+     "name": "OnePaul",
+     "verified": true,
+     "rt_cluster": 2972,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "1030559346638376968",
+     "username": "areamilitarof",
+     "name": "Área Militar",
+     "verified": true,
+     "rt_cluster": 2895,
+     "n_tweets": 3
+    },
+    {
+     "author_id": "1368033052434309123",
+     "username": "saulchristos",
+     "name": "Saul Christos 🇧🇷",
+     "verified": false,
+     "rt_cluster": 2777,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1513246185506721795",
+     "username": "capitaotelhada",
+     "name": "Capitão Telhada",
+     "verified": true,
+     "rt_cluster": 2658,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "159107278",
+     "username": "adilsonesp",
+     "name": "Adilson SP🏳️‍🌈",
+     "verified": true,
+     "rt_cluster": 2548,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "30960300",
+     "username": "FredRC",
+     "name": "Fred Rodrigues |🇧🇷✝️",
+     "verified": true,
+     "rt_cluster": 2168,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "1051123555545636864",
+     "username": "ncsabreu",
+     "name": "Abreu🇧🇷",
+     "verified": false,
+     "rt_cluster": 1920,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "299107466",
+     "username": "BartolSEP",
+     "name": "Orgulho Verde🇧🇷🇧🇷🇧🇷🇧🇷⭐⭐⭐⭐⭐",
+     "verified": false,
+     "rt_cluster": 1857,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1482428880040480771",
+     "username": "gutbsb",
+     "name": "NNB Nova Noticia Brasília🇧🇷🌻",
+     "verified": false,
+     "rt_cluster": 1554,
+     "n_tweets": 1
+    }
+   ],
+   "summary": {
+    "sintese": "O material mostra o 8 de janeiro visto de dentro da manifestação, com relato quase em tempo real de Brasília. Boa parte dos tweets é cobertura ao vivo: chegada de ônibus e de \"patriotas\" [1612030340398186500] [1612009274473074688], marcha \"de mais de 5km\" [1612131005376118784], Esplanada e Congresso \"tomados\" [1612161687615901698] [1612035570494054401] e imagens do interior do Supremo [1612169107880787969]. A série repetida de Dan Hasse, com a hashtag #SELMA, é o formato mais frequente [1612148173333581829] [1612140712153255946]. O tom é de entusiasmo e mobilização: \"O povo se levantou\" [1612131005376118784], \"Brasília está linda! Supremo é o Povo\" [1612163753826557956]. Há também pedidos de intervenção e de ação das Forças Armadas [1612172539328970756] [1612192469659025409] e a alegação de fraude nas urnas [1612172539328970756].\n\nO enquadramento mais forte é o dos \"infiltrados\". O texto \"FOI TUDO PLANEJADO! Ajudem a divulgar os infiltrados!\" aparece em várias contas [1612217019579138048] [1612223971528777731] [1612233242836361216]. Outros tweets atribuem o \"quebra quebra\" a infiltrados de esquerda [1612178336704335872] [1612181730676592641] e mostram supostas prisões deles [1612204366617878529] [1612245672706572289]. Um tweet diz que tudo foi arrumado para rotular os manifestantes de terroristas [1612220966884769792]. Esse enquadramento convive com imagens celebratórias da invasão, como o policial aplaudido [1612173272380067845].\n\nUm segundo eixo são as acusações de violência contra manifestantes: bombas, gás, \"balas de verdade\" e atropelamento [1612152153077944321] [1612158272064069632] [1612188294250483714] [1612155246427488256]. Um terceiro eixo é a reação do governo. Fábio... Flávio Dino é apontado como quem \"acionou o gatilho\" [1612199082021294084]. A intervenção federal é chamada de ato de \"ladrão\" ou \"criminoso\" [1612193858624028673] [1612192469659025409]. Há comparações com os atos de 2017 [1612210252262559744] [1612205494009008128] e críticas à imprensa [1612188403977670656] [1612075966016225282]. Poucos tweets destoam, como o que diz que não havia movimentação de tropas [1611901031058743301] ou o que teme censura posterior [1612151650285666304]. Os blocos A e B mostram o mesmo repertório; o B repete mais a série #SELMA e os apelos de divulgação.",
+    "contas_prevalentes": "Predominam perfis de influenciadores e ativistas bolsonaristas, muitos anônimos ou semianônimos, com bios como \"Direita\", \"Ptfobica\" e \"Bolsonaro sempre\" (@Jakelyneloiola_, @BartolSEP, @stenyolaisson). Dan Hasse (@DanVitorPH), conta não verificada de bio em inglês sobre tecnologia, é a mais retuitada e produz as séries ao vivo. Há também agregadores e canais alternativos (@ATROMBETA3, @7minutos_news, @OnePaul87, @areamilitarof) e deputados estaduais eleitos (@capitaotelhada, @FredRC). Pastor Malafaia e Magno Malta aparecem entre os tweets. Não há jornalistas ou veículos de imprensa tradicionais; a informação vem de perfis de apoiadores, com vídeos de manifestantes no local, e a imprensa é tratada como alvo de crítica [1612075966016225282] [1612188403977670656]. @adilsonesp, com bio sobre fé e amor próprio, replica o mesmo texto de outras contas [1612223971528777731].",
+    "inclinacao_politica": {
+     "texto": "Direita bolsonarista, favorável às manifestações. Os sinais são explícitos nas bios (\"Direita\", \"Bolsonaro sempre\", \"anti petista\") e nos tweets, que chamam os manifestantes de \"patriotas\" [1612153929512660992], alegam fraude eleitoral [1612172539328970756] [1612163753826557956], pedem intervenção [1612192469659025409] e atacam Lula, Dino e o STF [1612199082021294084] [1612195605589147650]. Os retweets parecem ser de adesão e amplificação, não de ironia ou denúncia. Há um pequeno elemento de cautela com o que ocorria, como o pedido de divulgar os \"infiltrados\" para não \"perder a batalha\" [1612217019579138048].",
+     "confianca": "alta"
+    },
+    "limites": "O material não permite afirmar quem realmente depredou os prédios nem se os \"infiltrados\" existiram: aparecem só como alegações dos tweets. Também não permite dizer o que os membros pensam além do ato de retuitar, nem estimar o tamanho real da multidão, citado de forma exagerada em alguns tweets [1612059387891179522]. Os vídeos e links dos tweets não foram vistos, então as descrições de imagens dependem do texto. Faltam 47 de 150 tweets, o que pode distorcer a proporção dos temas. O lift é quase uniforme (cerca de 2,1), então não distingue o que é mais próprio da comunidade. Ficam de fora outras comunidades e a cobertura da imprensa.",
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1",
+    "generated_at": "2026-10-14T02:47:22+00:00",
+    "invalid_ids": []
+   },
+   "curation": {
+    "trecho": [
+     "O material mostra o 8 de janeiro visto de dentro da manifestação, com relato quase em tempo real de Brasília.",
+     "O enquadramento mais forte é o dos \"infiltrados\"."
+    ],
+    "eixo": "direita",
+    "stale": false
+   },
+   "shared": 0.01617895206837043,
+   "shared_with": {
+    "0": 0.0115796993675105,
+    "2": 0.004234436312366615,
+    "3": 7.897792387927177e-06,
+    "4": 1.2345180632831243e-07,
+    "5": 0.00018001886531121135,
+    "6": 0.00010212778936276915,
+    "7": 1.1680591078988658e-05,
+    "8": 1.8311666806360868e-05,
+    "9": 1.4961477128374836e-05,
+    "10": 2.9694754611355753e-05
+   }
   },
   {
    "community": 0,
@@ -56,7 +214,165 @@
    "n_not_authorized": 5,
    "n_other_errors": 0,
    "n_pending": 0,
-   "attrition": 0.16
+   "attrition": 0.16,
+   "n_tail_selected": 50,
+   "n_tail_hydrated": 48,
+   "top_accounts": [
+    {
+     "author_id": "953378142198161409",
+     "username": "choquei",
+     "name": "CHOQUEI",
+     "verified": true,
+     "rt_cluster": 10151,
+     "n_tweets": 11
+    },
+    {
+     "author_id": "31139434",
+     "username": "gleisi",
+     "name": "Gleisi Hoffmann",
+     "verified": true,
+     "rt_cluster": 4924,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "2670726740",
+     "username": "LulaOficial",
+     "name": "Lula",
+     "verified": true,
+     "rt_cluster": 4726,
+     "n_tweets": 3
+    },
+    {
+     "author_id": "59150875",
+     "username": "reporterenato",
+     "name": "Renato Souza",
+     "verified": true,
+     "rt_cluster": 3629,
+     "n_tweets": 5
+    },
+    {
+     "author_id": "45859414",
+     "username": "Ana_Flor",
+     "name": "Ana Flor",
+     "verified": false,
+     "rt_cluster": 3389,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1486759002679791622",
+     "username": "anonymousSCT",
+     "name": "Anonymous SCT",
+     "verified": false,
+     "rt_cluster": 3202,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "42593930",
+     "username": "andretrig",
+     "name": "André Trigueiro",
+     "verified": false,
+     "rt_cluster": 2787,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "85327394",
+     "username": "randolfeap",
+     "name": "Randolfe Rodrigues",
+     "verified": true,
+     "rt_cluster": 2725,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1404506222892666885",
+     "username": "centralpolitcs",
+     "name": "Central da Política",
+     "verified": false,
+     "rt_cluster": 2160,
+     "n_tweets": 4
+    },
+    {
+     "author_id": "3331429624",
+     "username": "Metropoles",
+     "name": "Metrópoles",
+     "verified": true,
+     "rt_cluster": 1989,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "25577585",
+     "username": "FlavioDino",
+     "name": "Flávio Dino 🇧🇷",
+     "verified": true,
+     "rt_cluster": 1807,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "68313718",
+     "username": "STF_oficial",
+     "name": "STF",
+     "verified": true,
+     "rt_cluster": 1801,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "545643493",
+     "username": "lazarorosa25",
+     "name": "Lázaro Rosa 🇧🇷",
+     "verified": true,
+     "rt_cluster": 1633,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "72189315",
+     "username": "mamede_filho",
+     "name": "Mamede Filho",
+     "verified": false,
+     "rt_cluster": 1332,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1053378751189397504",
+     "username": "jairmearrependi",
+     "name": "jairme",
+     "verified": false,
+     "rt_cluster": 1315,
+     "n_tweets": 1
+    }
+   ],
+   "summary": {
+    "sintese": "O material trata o 8 de janeiro quase inteiramente como ataque \"terrorista\", \"golpista\" e \"antidemocrático\" feito por \"bolsonaristas\", em tom de denúncia, indignação e cobrança de punição. Lula fala em \"barbárie\" e \"fascistas\" [1612191803901444098], Randolfe em \"manifestação terrorista\" [1612160640554045441] e a nota do STF em \"atos criminosos e de delinquentes\" [1612214318006927362]. Um assunto forte é a responsabilização das autoridades do DF: o governador Ibaneis e o secretário de Segurança são acusados de omissão, cumplicidade ou prevarica��ão [1612157382129238020] [1612154406840967168] [1612170134315040782]. Aparecem também a cobrança de intervenção federal [1612166505889779714], pedidos de impeachment [1612247986414690306] e a notícia do afastamento do governador [1612293134171443202]. Outro eixo é a conivência da polícia, com vídeos de PMs conversando e tirando foto com manifestantes [1612160869533732865] [1612162945265569794] [1612163954754703364]. O ministro da Defesa e o Exército também são cobrados [1612163236060708864] [1612287114091106304]. Um terceiro eixo é identificar e punir participantes, financiadores e organizadores: há apelos para documentar convocações [1612192408703320071], páginas com fotos de envolvidos [1612226342019338240] [1612253311238815744], pedidos para apreender os ônibus [1612170368340590592] [1612292576446390275] e denúncias contra nomes específicos, como Magno Malta [1612219829846409218] e um coronel da FAB [1612245516984938496]. Circulam ainda relatos de agressões a jornalistas [1612262559792390145] [1612282583462600704], notícias de prisões [1612219598660849664], repúdio internacional [1612198932540698624] e envio de policiais por governadores [1612225317082390528]. Há registros anteriores ao ataque, como a portaria de Dino sobre a Força Nacional e a \"guerra\" prometida [1611847309566042113] [1611786061403025408]. O bloco B repete esses temas, com mais peso em Ibaneis, ônibus, impeachment e Magno Malta [1612216011553669121] [1612292576446390275] [1612224528641310721]. Vozes de fora do campo governista também condenam os ataques, como Ciro Gomes [1612183544624812033]. Um tweet contesta uma foto que circulava como se fosse do dia, dizendo ser de 2017 [1612174941834645505]. Quase nada no material defende ou minimiza os atos, exceto como alvo de crítica [1612179300798828544].",
+    "contas_prevalentes": "A mistura é de agregadores de notícias, políticos governistas, jornalistas e instituições. O @choquei lidera os RTs (10151), seguido de Gleisi Hoffmann, ministra e deputada federal (4924), e do perfil oficial de Lula (4726). Há também o senador Randolfe, líder do governo no Congresso (2725), e o ministro do STF Flávio Dino (1807), além do perfil do STF (1801). Entre os jornalistas e veículos estão Renato Souza e Ana Flor (jornalistas de política), André Trigueiro, o Metrópoles e a Central da Política. Há ainda perfis de ativismo e anônimos, como @anonymousSCT, @lazarorosa25 (que se descreve como \"ativista pela democracia\"), @jairmearrependi e @mamede_filho. A informação vem, assim, de autoridades do governo e do Judiciário, de jornalismo de política de Brasília e de agregadores e ativistas que repassam e comentam vídeos e denúncias. No bloco B aparecem veículos como Brasil 247, DCM e Fórum, parlamentares e comentaristas de esquerda.",
+    "inclinacao_politica": {
+     "texto": "A comunidade parece alinhada ao campo governista, de esquerda e centro-esquerda, e antibolsonarista. As contas mais retuitadas são o presidente Lula, ministros e parlamentares do governo (Gleisi, Randolfe, Dino). O conteúdo condena os atos, pede prisão de bolsonaristas e responsabiliza Ibaneis e Magno Malta. Há apoio a Moraes e ao STF, e o bloco B inclui veículos e perfis de esquerda como Brasil 247, Fórum, o diretório do PT-SP [1612238291289493504] e o MST [1612239518924505091]. A posição também aparece em um mesmo tweet que cita \"Dilma\" e Lula \"preso\" para recusar a \"falsa equivalência\" [1612198695876927488]. Ciro Gomes e jornalistas de grande imprensa também são amplificados, o que sugere que parte do alinhamento é uma defesa da ordem democrática, e não só partidária.",
+     "confianca": "alta"
+    },
+    "limites": "O material é de um único dia e traz só tweets amplificados, então não mostra o debate interno nem outras opiniões da comunidade. Retuitar pode ser ironia, denúncia ou informação, e não prova adesão, embora aqui o tom seja bastante uniforme. Não dá para saber quantos usuários concordam com cada tweet, nem se as acusações citadas (por exemplo contra pessoas nomeadas, a PM ou o Exército) se confirmaram, pois os tweets apenas as afirmam. Os 18 tweets indisponíveis podem alterar o quadro. A tabela de contas e os lifts dizem o que circulou, não quem são os 11.410 usuários, e não há dados sobre perfis anônimos ou automatizados. Qualquer leitura da política dessas pessoas é uma inferência a partir do que retuitaram.",
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1",
+    "generated_at": "2026-10-14T02:48:09+00:00",
+    "invalid_ids": []
+   },
+   "curation": {
+    "trecho": [
+     "O material trata o 8 de janeiro quase inteiramente como ataque \"terrorista\", \"golpista\" e \"antidemocrático\" feito por \"bolsonaristas\", em tom de denúncia, indignação e cobrança de punição.",
+     "Outro eixo é a conivência da polícia, com vídeos de PMs conversando e tirando foto com manifestantes."
+    ],
+    "eixo": "esquerda",
+    "stale": false
+   },
+   "shared": 0.223897049293033,
+   "shared_with": {
+    "1": 0.014572333834983681,
+    "2": 0.20837974552501534,
+    "3": 0.00019617326529475465,
+    "4": 2.2356990726651448e-05,
+    "5": 0.00015991169162467257,
+    "6": 0.00024381823958455226,
+    "7": 2.7465994490607617e-05,
+    "8": 0.00025535841513817396,
+    "9": 3.9806760107132473e-05,
+    "10": 7.85760674497481e-08
+   }
   },
   {
    "community": 2,
@@ -73,7 +389,165 @@
    "n_not_authorized": 3,
    "n_other_errors": 0,
    "n_pending": 0,
-   "attrition": 0.11
+   "attrition": 0.11,
+   "n_tail_selected": 50,
+   "n_tail_hydrated": 39,
+   "top_accounts": [
+    {
+     "author_id": "953378142198161409",
+     "username": "choquei",
+     "name": "CHOQUEI",
+     "verified": true,
+     "rt_cluster": 15344,
+     "n_tweets": 26
+    },
+    {
+     "author_id": "2670726740",
+     "username": "LulaOficial",
+     "name": "Lula",
+     "verified": true,
+     "rt_cluster": 4298,
+     "n_tweets": 3
+    },
+    {
+     "author_id": "132699857",
+     "username": "tracklist",
+     "name": "Tracklist",
+     "verified": true,
+     "rt_cluster": 3279,
+     "n_tweets": 7
+    },
+    {
+     "author_id": "582230335",
+     "username": "updatecharts",
+     "name": "UpdateCharts",
+     "verified": true,
+     "rt_cluster": 1535,
+     "n_tweets": 5
+    },
+    {
+     "author_id": "904095261689073664",
+     "username": "thiagoooqz",
+     "name": "Thiago",
+     "verified": false,
+     "rt_cluster": 1451,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1479458221266022408",
+     "username": "colombogabrielm",
+     "name": "Gabriel Colombo",
+     "verified": false,
+     "rt_cluster": 1374,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "72189315",
+     "username": "mamede_filho",
+     "name": "Mamede Filho",
+     "verified": false,
+     "rt_cluster": 1292,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "31139434",
+     "username": "gleisi",
+     "name": "Gleisi Hoffmann",
+     "verified": true,
+     "rt_cluster": 1148,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "3120745861",
+     "username": "maiconkuster",
+     "name": "Maicon Küster",
+     "verified": true,
+     "rt_cluster": 1125,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1486759002679791622",
+     "username": "anonymousSCT",
+     "name": "Anonymous SCT",
+     "verified": false,
+     "rt_cluster": 897,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "1053378751189397504",
+     "username": "jairmearrependi",
+     "name": "jairme",
+     "verified": false,
+     "rt_cluster": 858,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "45859414",
+     "username": "Ana_Flor",
+     "name": "Ana Flor",
+     "verified": false,
+     "rt_cluster": 845,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1056000463357833217",
+     "username": "memexpropriados",
+     "name": "Memes comunistas expropriados ☭",
+     "verified": false,
+     "rt_cluster": 841,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "788794760764985344",
+     "username": "bchartsnet",
+     "name": "BCharts",
+     "verified": true,
+     "rt_cluster": 812,
+     "n_tweets": 4
+    },
+    {
+     "author_id": "68313718",
+     "username": "STF_oficial",
+     "name": "STF",
+     "verified": true,
+     "rt_cluster": 711,
+     "n_tweets": 1
+    }
+   ],
+   "summary": {
+    "sintese": "O material mostra uma comunidade que acompanha os ataques em tempo real e os enquadra, de forma quase uniforme, como 'terrorismo', 'golpe' e 'barbárie' de 'bolsonaristas'. O mais amplificado são os pronunciamentos de Lula, citados diretamente ou replicados por páginas de notícias e entretenimento: ele fala em 'barbárie' e 'fascistas' [1612191803901444098], promete descobrir os financiadores [1612191807940460545], pede punição a policiais que ajudaram os 'terroristas' [1612193054038827014] e lembra que a esquerda nunca invadiu o Congresso [1612192617260777480]. Outro assunto muito frequente é a atuação da polícia militar do DF, mostrada tirando foto e conversando com os invasores [1612160869533732865] [1612162945265569794] [1612163954754703364], junto com cobranças ao governador e ao secretário de segurança [1612160640554045441] [1612157382129238020] [1612265095068893186]. Há comparações com o tratamento dado a estudantes, professores e MST [1612160681310134272] [1612178830671712266] [1612174941834645505] e com a PRF que parava ônibus de eleitores [1612170461269430273] [1612171970061238272]. Também circulam a cobertura de prisões e punições [1612195906136293376] [1612199930092822530] [1612197953128783872], condenações de governos e políticos estrangeiros [1612211361697628163] [1612215246109933569] [1612178917523353600], a nota do STF [1612214318006927362] e pedidos para identificar e denunciar participantes [1612226342019338240] [1612192408703320071] [1612193596790259713]. O bloco A tem tom noticioso e militante. O bloco B, mais próprio da comunidade, é dominado por humor e fandoms: piadas sobre a PM, a torcida Gaviões da Fiel e o carro 'fox' [1612202813932584962] [1612167421263237120] [1612203759282622466], ironia sobre os policiais perderem o emprego [1612174102160199684], e avisos e notas de repúdio de fãs de K-pop [1612210429337509890] [1612260443057258497] [1612231344968593408]. Aparecem ainda desejos de violência contra os invasores, como querê-los 'no cemitério' [1612177195023142913]. O material é um conjunto de reações rápidas, não de análise, e o evento aparece sobretudo como crime a punir e falha da polícia local.",
+    "contas_prevalentes": "Domina a página de notícias e entretenimento @choquei, de longe a mais retuitada (15344 RTs), seguida de outras páginas de cultura pop e música com selo de verificação, como @tracklist, @updatecharts e @bchartsnet, que retransmitem falas de Lula, prisões e condenações internacionais [1612193054038827014] [1612192617260777480] [1612164050795757568] [1612215246109933569]. Em segundo plano vêm contas institucionais e de políticos governistas: @LulaOficial, @gleisi, @randolfeap e @STF_oficial [1612191803901444098] [1612157382129238020] [1612160640554045441] [1612214318006927362]. Há também jornalistas e veículos (@Ana_Flor, @Metropoles), perfis anônimos ou humorísticos (@thiagoooqz, @maiconkuster, @memexpropriados, @jairmearrependi, @anonymousSCT) e um perito do INCRA [1612160869533732865] [1612279562188070914] [1612169657154256901] [1612164676145610757] [1612159129107288071] [1612174941834645505]. A informação vem, portanto, menos da imprensa tradicional e mais de agregadores de viralização e do próprio governo, com humor de perfis comuns.",
+    "inclinacao_politica": {
+     "texto": "Provável alinhamento com a esquerda e o campo governista, com fortes sinais de apoio a Lula e oposição a Bolsonaro e seus apoiadores. Isso aparece na amplificação dos discursos de Lula e de Gleisi [1612191803901444098] [1612183259609284616], no uso de 'bolsonaristas' como termo de acusação [1612159129107288071], em referências a 'Dilma sofreu golpe' e 'Anistia é o caralho' [1612221039362072581] e em perfis de esquerda como @memexpropriados e @uneoficial [1612160681310134272]. Contudo, boa parte da comunidade parece reunida mais por interesse em notícia, memes e fandoms do que por militância, e há retuítes de centro (Eduardo Leite [1612172779406647301]) e de jornalistas [1612160869533732865]. Como o evento unifica a condenação, o sinal é forte nele, mas não mostra o perfil político fora dele.",
+     "confianca": "alta"
+    },
+    "limites": "O material não permite afirmar o que cada usuário pensa: retuitar pode ser amplificação, ironia ou informação, e não há como medir adesão. Os tweets são uma seleção, com 22 de 150 indisponíveis, e o bloco B tem poucos RTs absolutos, então seu peso real é menor do que o destaque sugere. Não mostra o que outras comunidades disseram, nem o que a comunidade pensa fora do evento, nem a veracidade das alegações (por exemplo, sobre cumplicidade da polícia ou financiadores). As posições políticas são inferidas do conteúdo, não de autodeclaração. Também não se sabe quanto das contas de fandom e entretenimento é habitualmente política.",
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1",
+    "generated_at": "2026-10-14T02:49:12+00:00",
+    "invalid_ids": []
+   },
+   "curation": {
+    "trecho": [
+     "O material mostra uma comunidade que acompanha os ataques em tempo real e os enquadra, de forma quase uniforme, como 'terrorismo', 'golpe' e 'barbárie' de 'bolsonaristas'.",
+     "O bloco B, mais próprio da comunidade, é dominado por humor e fandoms"
+    ],
+    "eixo": "esquerda",
+    "stale": false
+   },
+   "shared": 0.5147941164412017,
+   "shared_with": {
+    "0": 0.501456433636232,
+    "1": 0.012823457508800613,
+    "3": 9.906903782252544e-05,
+    "4": 2.1394674212135488e-05,
+    "5": 5.448374908314988e-05,
+    "6": 0.00015374446258011268,
+    "7": 1.0713654093218872e-05,
+    "8": 0.00015029740300054938,
+    "9": 2.43541952384504e-05,
+    "10": 1.6812013876104616e-07
+   }
   }
  ],
  "files": {

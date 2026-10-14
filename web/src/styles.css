@@ -1,11 +1,51 @@
 @import "tailwindcss";
 
+/* `dark:` segue o tema escolhido (atributo data-theme no <html>), não o do sistema */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* Tokens de cor (referência: X, sem assets de marca). Claro por padrão no CSS; o app liga
+   o escuro (padrão do produto, spec 2026-10-14 §2.4) gravando data-theme no <html>. */
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --subtle: #f7f9f9;
+  --hover: #eff3f4;
+  --ink: #0f1419;
+  --muted: #536471;
+  --line: #eff3f4;
+  --line-strong: #cfd9de;
+  --halo: #ffffff;
+  --map-grey: #c7ccd6;
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  --bg: #000000;
+  --surface: #16181c;
+  --subtle: #0b0d10;
+  --hover: #1d1f23;
+  --ink: #e7e9ea;
+  --muted: #8b9095;
+  --line: #2f3336;
+  --line-strong: #3e4144;
+  --halo: #000000;
+  --map-grey: #34383d;
+  color-scheme: dark;
+}
+
 @theme {
-  /* paleta neutra do card (referência: X), sem assets de marca */
-  --color-ink: #0f1419;
-  --color-muted: #536471;
-  --color-line: #eff3f4;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-subtle: var(--subtle);
+  --color-hover: var(--hover);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
   --color-x-blue: #1d9bf0;
+  /* tag de inclinação (spec §3.2): direita azul, esquerda vermelho, outro amarelo */
+  --color-axis-right: #2563eb;
+  --color-axis-left: #dc2626;
+  --color-axis-other: #eab308;
 }
 
 html,
@@ -16,27 +56,34 @@ body,
 
 body {
   margin: 0;
-  background: #fff;
+  background: var(--bg);
   color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
 }
 
 @layer components {
   .chip {
-    @apply inline-flex items-center gap-1 rounded-full border border-line bg-gray-50 px-2.5 py-1 text-[13px] text-ink hover:bg-gray-100;
+    @apply inline-flex items-center gap-1 rounded-full border border-line bg-subtle px-2.5 py-1 text-[13px] text-ink hover:bg-hover;
   }
   .badge {
     @apply inline-flex items-center gap-1 rounded border border-line px-1.5 py-0.5 text-[11px] uppercase tracking-wide text-muted;
   }
   .select {
-    @apply rounded-md border border-gray-300 bg-white px-2 py-1 text-[13px] text-ink;
+    @apply rounded-md border border-line-strong bg-surface px-2 py-1 text-[13px] text-ink;
   }
-  /* rótulo do mini-mapa: halo branco como na figura da fase 1 */
+  /* rótulo do mini-mapa: halo da cor do fundo (branco no claro, como na figura da fase 1) */
   .label-halo {
     text-shadow:
-      0 0 3px #fff,
-      0 0 3px #fff,
-      0 0 4px #fff,
-      0 0 4px #fff;
+      0 0 3px var(--halo),
+      0 0 3px var(--halo),
+      0 0 4px var(--halo),
+      0 0 4px var(--halo);
   }
+}
+
+/* citação da síntese → card: destaque breve no card de destino */
+.cite-flash {
+  outline: 3px solid #1d9bf0;
+  outline-offset: 2px;
+  transition: outline-color 1.2s ease-out;
 }

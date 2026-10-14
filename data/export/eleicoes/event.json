@@ -39,7 +39,162 @@
    "n_not_authorized": 3,
    "n_other_errors": 0,
    "n_pending": 0,
-   "attrition": 0.17
+   "attrition": 0.17,
+   "n_tail_selected": 50,
+   "n_tail_hydrated": 44,
+   "top_accounts": [
+    {
+     "author_id": "85327394",
+     "username": "randolfeap",
+     "name": "Randolfe Rodrigues",
+     "verified": true,
+     "rt_cluster": 3201,
+     "n_tweets": 3
+    },
+    {
+     "author_id": "1198004545",
+     "username": "AndreJanonesMG",
+     "name": "André Janones",
+     "verified": true,
+     "rt_cluster": 1720,
+     "n_tweets": 3
+    },
+    {
+     "author_id": "2508415207",
+     "username": "simonetebetbr",
+     "name": "Simone Tebet",
+     "verified": true,
+     "rt_cluster": 1468,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "105155795",
+     "username": "MarinaSilva",
+     "name": "Marina Silva",
+     "verified": true,
+     "rt_cluster": 1376,
+     "n_tweets": 3
+    },
+    {
+     "author_id": "48298703",
+     "username": "eduardopaes",
+     "name": "Eduardo Paes",
+     "verified": true,
+     "rt_cluster": 1242,
+     "n_tweets": 3
+    },
+    {
+     "author_id": "1097073004658470913",
+     "username": "PedroRonchi2",
+     "name": "Pedro Ronchi",
+     "verified": true,
+     "rt_cluster": 866,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "805922985483862016",
+     "username": "Carlinhosmaiaof",
+     "name": "Carlinhos Maia",
+     "verified": true,
+     "rt_cluster": 802,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "16814640",
+     "username": "miriamleitao",
+     "name": "Míriam Leitão",
+     "verified": true,
+     "rt_cluster": 749,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "105795333",
+     "username": "RonaldSorriso13",
+     "name": "Ronald Sorriso 13 🇧🇷🚩",
+     "verified": false,
+     "rt_cluster": 491,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "705560912078438402",
+     "username": "ocolunista_",
+     "name": "Cleber Lourenço",
+     "verified": false,
+     "rt_cluster": 472,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "39116717",
+     "username": "jandira_feghali",
+     "name": "Jandira Feghali 6️⃣5️⃣6️⃣5️⃣",
+     "verified": true,
+     "rt_cluster": 453,
+     "n_tweets": 5
+    },
+    {
+     "author_id": "52558216",
+     "username": "Nailahnv",
+     "name": "Preta Ijimú",
+     "verified": false,
+     "rt_cluster": 381,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1278684038333685760",
+     "username": "sacha_faria",
+     "name": "Sacha Faria",
+     "verified": true,
+     "rt_cluster": 287,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "1094038644770385920",
+     "username": "SergioAJBarrett",
+     "name": "Sérgio A J Barretto",
+     "verified": true,
+     "rt_cluster": 260,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "27168893",
+     "username": "danielamercury",
+     "name": "Daniela Mercury",
+     "verified": true,
+     "rt_cluster": 218,
+     "n_tweets": 4
+    }
+   ],
+   "summary": {
+    "sintese": "O material gira, em grande parte, em torno de uma denúncia repetida: operações e blitze da PRF, e também cortes de transporte público, estariam impedindo eleitores, sobretudo do Nordeste, de chegar às urnas no dia do 2º turno. O tweet mais amplificado diz que Bolsonaro usa a máquina pública para impedir o voto dos mais pobres, com as palavras \"BANDIDOS! CRIMINOSOS!\" [1586754211311947776]. Outros falam em \"tentativa de golpe de Estado\" [1586761609921323009], \"golpe com apoio da PRF\" [1586788709965467650] e \"PRF virou cúmplice do bolsonarismo\" [1586758997562085386]. \"Democracia\" é o enquadramento geral: o ataque aparece como \"crime contra a democracia\" [1586775660395057152] e a ida às urnas como defesa dela [1586737064023916544]. Circulam pedidos de \"Deixem o Nordeste votar\" [1586754533966974976][1586783392557043717] e cobranças de resposta institucional: ao TSE e ao STF, à extensão do horário e ao afastamento ou prisão do diretor da PRF [1586785935437561862][1586770200988471297][1586776951888519178]. Há também cobrança ao Congresso e pedido de CPI [1586782931971883012][1586788058866880513]. Aparecem relatos de normalização após pressão, como o metrô de BH e operações cessadas [1586758938481070080], e o prefeito do Rio dizendo monitorar a Av. Brasil [1586782244961763328]. Pedidos para a GloboNews abrir o sinal [1586768283570769921] e a coluna de Míriam Leitão [1586774213469392896] mostram a imprensa tratada como aliada na denúncia. O Bloco B é menos de denúncia e mais de mobilização afetiva e identitária: declarações de voto \"13 pela democracia\" [1586677042464137217][1586691984281976832], homenagem a Paulo Gustavo e às vítimas da covid [1586715078946086916], valores como ciência, cultura e antirracismo [1586697886775103488][1586722724386324482], a \"frente ampla\" [1586699757883359234] e Tebet falando da democracia como \"guarda-chuva\" [1586668200112148482]. Há também tom duro contra bolsonaristas, como \"praga bolsonarenta\" [1586756539095961611] e \"A extrema direita não aceita Democracia\" [1586771523674771456]. Parte menor trata da violência armada e de Carla Zambelli [1586470011064840193][1586531609859137537]. Em resumo, o evento aparece como dia de voto sob ameaça, com a democracia como moldura e Lula/13 como destino do voto.",
+    "contas_prevalentes": "Dominam políticos com mandato ou cargo: o senador Randolfe Rodrigues, o deputado André Janones, a senadora Simone Tebet, Marina Silva, Eduardo Paes e Jandira Feghali, todos verificados, como mostra a tabela. Randolfe, que aparece na bio como líder do governo Lula no Congresso, é a conta mais retuitada. Também pesam jornalistas e veículos (Míriam Leitão, O Globo, Folha, Fórum, Noblat) [1586774213469392896][1586776525122244609][1586658432987369472][1586755841394368513], influenciadores e artistas (Carlinhos Maia, Daniela Mercury, Jovem Nerd) [1586742694847684608][1586706316332753920], além de comentaristas e militantes de menor porte, como Ronald Sorriso (PT, não verificado) e Cleber Lourenço (jornalista) [1586687053949026304][1586768283570769921]. A informação vem sobretudo de lideranças políticas e de campanha, com relatos de militantes e jornalistas; veículos de imprensa aparecem menos como fonte primária e mais como citados ou cobrados.",
+    "inclinacao_politica": {
+     "texto": "Provavelmente apoiadora de Lula e contrária a Bolsonaro, com identidade de campo progressista e de esquerda ampliada a uma frente com centristas e ex-adversários. Os sinais são explícitos: voto declarado em Lula/13 [1586742694847684608][1586533427586531328], hashtags e frases como \"13 pela democracia\" [1586664145050558465], ataques a Bolsonaro e ao bolsonarismo [1586788058866880513], e amplificação de Tebet, Marina e Alckmin, que apoiam Lula [1586737064023916544][1586512733826011136]. Mesmo o liberal Ivan Lins, que diz não ser petista, vota em Lula [1586662768228302849]. A maioria dos retuítes parece adesão, não ironia.",
+     "confianca": "alta"
+    },
+    "limites": "O material mostra o que circulou, não a opinião individual de cada um dos 3.017 usuários; um retuíte pode ser informativo ou de denúncia, e não prova adesão. Não permite verificar se as blitze, os cortes de ônibus e as denúncias aconteceram como descritos, nem sua dimensão; apenas como a comunidade as apresentou. Os tweets de Bolsonaro, da PRF ou de quem discordava aparecem só por citação, então não dá para saber como o outro lado respondeu. Há 23 tweets indisponíveis dos 150 selecionados, e os mais retuitados pesam mais no recorte. A seleção de tweets pelo lift destaca o que é próprio da comunidade e pode exagerar temas menores. Não há dados sobre efeitos nem sobre o que aconteceu depois do dia.",
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1",
+    "generated_at": "2026-10-14T02:44:03+00:00",
+    "invalid_ids": [
+     "1586706316332753920"
+    ]
+   },
+   "curation": {
+    "trecho": [
+     "\"Democracia\" é o enquadramento geral: o ataque aparece como \"crime contra a democracia\" e a ida às urnas como defesa dela.",
+     "O Bloco B é menos de denúncia e mais de mobilização afetiva e identitária"
+    ],
+    "eixo": "esquerda",
+    "stale": false
+   },
+   "shared": 0.516579199080411,
+   "shared_with": {
+    "0": 0.20367230958589694,
+    "2": 0.165126408568594,
+    "3": 0.0009233748793788916,
+    "4": 0.14685710604654106,
+    "5": 0.0
+   }
   },
   {
    "community": 0,
@@ -56,7 +211,160 @@
    "n_not_authorized": 6,
    "n_other_errors": 0,
    "n_pending": 0,
-   "attrition": 0.24
+   "attrition": 0.24,
+   "n_tail_selected": 50,
+   "n_tail_hydrated": 36,
+   "top_accounts": [
+    {
+     "author_id": "48298703",
+     "username": "eduardopaes",
+     "name": "Eduardo Paes",
+     "verified": true,
+     "rt_cluster": 877,
+     "n_tweets": 3
+    },
+    {
+     "author_id": "105155795",
+     "username": "MarinaSilva",
+     "name": "Marina Silva",
+     "verified": true,
+     "rt_cluster": 781,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "52558216",
+     "username": "Nailahnv",
+     "name": "Preta Ijimú",
+     "verified": false,
+     "rt_cluster": 596,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "85327394",
+     "username": "randolfeap",
+     "name": "Randolfe Rodrigues",
+     "verified": true,
+     "rt_cluster": 565,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "805922985483862016",
+     "username": "Carlinhosmaiaof",
+     "name": "Carlinhos Maia",
+     "verified": true,
+     "rt_cluster": 548,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "105795333",
+     "username": "RonaldSorriso13",
+     "name": "Ronald Sorriso 13 🇧🇷🚩",
+     "verified": false,
+     "rt_cluster": 461,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "609463117",
+     "username": "LucianoBaia1",
+     "name": "Luciano Baia",
+     "verified": false,
+     "rt_cluster": 333,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1097073004658470913",
+     "username": "PedroRonchi2",
+     "name": "Pedro Ronchi",
+     "verified": true,
+     "rt_cluster": 293,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "705560912078438402",
+     "username": "ocolunista_",
+     "name": "Cleber Lourenço",
+     "verified": false,
+     "rt_cluster": 274,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "64514398",
+     "username": "lucasapaulino",
+     "name": "Lucas Paulino",
+     "verified": true,
+     "rt_cluster": 265,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "16814640",
+     "username": "miriamleitao",
+     "name": "Míriam Leitão",
+     "verified": true,
+     "rt_cluster": 254,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "13694562",
+     "username": "ricardocorrea",
+     "name": "Ricardo Corrêa",
+     "verified": false,
+     "rt_cluster": 194,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1170702068098707456",
+     "username": "tomaschiaverini",
+     "name": "Tomás Chiaverini",
+     "verified": false,
+     "rt_cluster": 192,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "3393104326",
+     "username": "cacocardassi",
+     "name": "Caco Cardassi",
+     "verified": true,
+     "rt_cluster": 177,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "2508415207",
+     "username": "simonetebetbr",
+     "name": "Simone Tebet",
+     "verified": true,
+     "rt_cluster": 167,
+     "n_tweets": 1
+    }
+   ],
+   "summary": {
+    "sintese": "O material gira quase todo em torno de uma única denúncia: no dia do 2º turno, a Polícia Rodoviária Federal (PRF) faria blitze e barreiras que impediriam eleitores, sobretudo do Nordeste, de chegar às urnas. A palavra \"democracia\" funciona como moldura de quase tudo. A ação é descrita como \"crime contra a democracia\" [1586770200988471297][1586775660395057152], \"tentativa de golpe de Estado\" [1586761609921323009][1586763201601044481] e \"coisa de ditadura\" [1586751403468460033]. O alvo é Bolsonaro e o \"bolsonarismo\", apontados como mandantes ou beneficiários: \"Bolsonaro nem perdeu ainda e já está tentando um golpe\" [1586771200201687040][1586792435463716864]. Também são citados o diretor da PRF, cuja prisão é pedida [1586770200988471297][1586774219769233408], além de PM, Exército e a Prefeitura de São Gonçalo/RJ, acusados de bloquear vias ou cortar transporte [1586687053949026304][1586785564954710016]. Os tweets se dirigem ao TSE e ao STF, pedindo extensão do horário de votação [1586785935437561862][1586762932242812929], e ao eleitor, pedindo que vote e denuncie [1586751320702304263][1586783018785509376]. O enquadramento social destaca pobres, favelados, indígenas e nordestinos, com a acusação de \"nojo de pobre\" [1586754533966974976][1586783118811340802]. Políticos aparecem tranquilizando eleitores e anunciando providências [1586782244961763328][1586775774710857735]. Circula também o pedido de que a GloboNews abra o sinal [1586768283570769921]. O tweet mais amplificado, de Marina Silva, põe em dúvida a promessa de Bolsonaro de aceitar o resultado [1586784016895774737]. O bloco B mostra o que é mais próprio da comunidade: um tom mais emotivo e coletivo, com o bordão \"DEIXEM O NORDESTE VOTAR\" [1586761180655374337][1586771867628883971]. Há mobilização de fandoms, com menção ao app \"Pardal\" e à hashtag #ArmyNasUrnas [1586783018785509376][1586786620522504202]. Há ainda muitas declarações de voto em Lula, com listas de hashtags e votos no exterior [1586705103913877504][1586713985956593664]. O tom vai do institucional [1586773490748866560] ao xingamento [1586777170600419328].",
+    "contas_prevalentes": "A tabela mostra mistura de políticos com mandato ou candidatos (Eduardo Paes, Marina Silva, Randolfe Rodrigues, Simone Tebet), que respondem por boa parte dos retweets [1586784016895774737][1586782244961763328][1586775774710857735]. Há também jornalistas e colunistas (Míriam Leitão, Ricardo Corrêa, Tomás Chiaverini, Cleber Lourenço) [1586774213469392896][1586751403468460033][1586768283570769921], acadêmicos e juristas (Preta Ijimú, Lucas Paulino) [1586754533966974976][1586761609921323009], influenciadores (Carlinhos Maia, Caco Cardassi) [1586742694847684608][1586737207267803140] e militantes ou perfis pessoais (Ronald Sorriso 13, Luciano Baia) [1586687053949026304][1586770200988471297]. No bloco B predominam perfis pequenos, de fandoms e de apoio a Lula [1586783018785509376][1586786620522504202][1586705103913877504]. A informação vem de figuras públicas e da imprensa, mas a repetição do bordão vem de contas de base. As denúncias partem de relatos de usuários e de políticos, e nem todas têm fonte checável no material.",
+    "inclinacao_politica": {
+     "texto": "A comunidade é favorável a Lula e à oposição a Bolsonaro, em campo amplo de centro-esquerda e esquerda, com apoio de figuras de centro. O sinal é explícito: há pedidos de voto em Lula, como \"hoje é LULA é 13\" [1586742694847684608], e o PT é citado como identidade em bios e tweets [1586687053949026304][1586702852038303745]. Há também apoio declarado por não petistas, em nome da democracia [1586662768228302849]. Bolsonaro e o bolsonarismo são tratados como ameaça golpista [1586771200201687040][1586788709965467650]. Parte do material vem de políticos de centro, de jornalistas e de veículos [1586774213469392896][1586737064023916544], e o que une a comunidade é antes a defesa do voto e a rejeição a Bolsonaro do que uma doutrina de esquerda.",
+     "confianca": "alta"
+    },
+    "limites": "O material não permite verificar se as blitze e bloqueios descritos ocorreram como narrados, nem sua escala. Mostra apenas como a comunidade os enquadrou. Os retweets podem indicar amplificação sem adesão, embora aqui o tom seja quase sempre concordante. Não se sabe como outras comunidades trataram o tema, nem o que circulou no campo oposto. Os 38 tweets indisponíveis de 150 selecionados podem alterar o quadro. Contagens de RTs medem circulação interna, não alcance. A inclinação política se baseia em textos e bios e não em dados sobre cada usuário. A presença de fandoms sugere mobilização organizada por hashtag, mas o material não permite saber seu tamanho nem como se coordenou.",
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1",
+    "generated_at": "2026-10-14T02:44:49+00:00",
+    "invalid_ids": []
+   },
+   "curation": {
+    "trecho": [
+     "O material gira quase todo em torno de uma única denúncia: no dia do 2º turno, a Polícia Rodoviária Federal (PRF) faria blitze e barreiras que impediriam eleitores, sobretudo do Nordeste, de chegar às urnas.",
+     "Há mobilização de fandoms, com menção ao app \"Pardal\" e à hashtag #ArmyNasUrnas."
+    ],
+    "eixo": "esquerda",
+    "stale": false
+   },
+   "shared": 0.6275126917720399,
+   "shared_with": {
+    "1": 0.2930086830895723,
+    "2": 0.19837108229903608,
+    "3": 0.0008409607676840716,
+    "4": 0.1352919656157475,
+    "5": 0.0
+   }
   },
   {
    "community": 2,
@@ -73,7 +381,161 @@
    "n_not_authorized": 7,
    "n_other_errors": 0,
    "n_pending": 0,
-   "attrition": 0.23
+   "attrition": 0.23,
+   "n_tail_selected": 40,
+   "n_tail_hydrated": 35,
+   "top_accounts": [
+    {
+     "author_id": "942133460847689738",
+     "username": "poty_oficial",
+     "name": "Poty",
+     "verified": false,
+     "rt_cluster": 2046,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "48298703",
+     "username": "eduardopaes",
+     "name": "Eduardo Paes",
+     "verified": true,
+     "rt_cluster": 814,
+     "n_tweets": 3
+    },
+    {
+     "author_id": "105155795",
+     "username": "MarinaSilva",
+     "name": "Marina Silva",
+     "verified": true,
+     "rt_cluster": 770,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "85327394",
+     "username": "randolfeap",
+     "name": "Randolfe Rodrigues",
+     "verified": true,
+     "rt_cluster": 754,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "52558216",
+     "username": "Nailahnv",
+     "name": "Preta Ijimú",
+     "verified": false,
+     "rt_cluster": 637,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1198004545",
+     "username": "AndreJanonesMG",
+     "name": "André Janones",
+     "verified": true,
+     "rt_cluster": 619,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "805922985483862016",
+     "username": "Carlinhosmaiaof",
+     "name": "Carlinhos Maia",
+     "verified": true,
+     "rt_cluster": 467,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "105795333",
+     "username": "RonaldSorriso13",
+     "name": "Ronald Sorriso 13 🇧🇷🚩",
+     "verified": false,
+     "rt_cluster": 418,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1097073004658470913",
+     "username": "PedroRonchi2",
+     "name": "Pedro Ronchi",
+     "verified": true,
+     "rt_cluster": 344,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "73225006",
+     "username": "JacyCarvalho",
+     "name": "ondejacyviu",
+     "verified": true,
+     "rt_cluster": 259,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1170702068098707456",
+     "username": "tomaschiaverini",
+     "name": "Tomás Chiaverini",
+     "verified": false,
+     "rt_cluster": 229,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "2508415207",
+     "username": "simonetebetbr",
+     "name": "Simone Tebet",
+     "verified": true,
+     "rt_cluster": 217,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "13694562",
+     "username": "ricardocorrea",
+     "name": "Ricardo Corrêa",
+     "verified": false,
+     "rt_cluster": 200,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "705560912078438402",
+     "username": "ocolunista_",
+     "name": "Cleber Lourenço",
+     "verified": false,
+     "rt_cluster": 186,
+     "n_tweets": 3
+    },
+    {
+     "author_id": "770973413477408768",
+     "username": "pedrocertezas",
+     "name": "Pedro Certezas",
+     "verified": true,
+     "rt_cluster": 183,
+     "n_tweets": 1
+    }
+   ],
+   "summary": {
+    "sintese": "O material gira quase todo em torno de uma denúncia: no dia da votação, a PRF e outras forças policiais estariam impedindo eleitores, sobretudo do Nordeste, de chegar às urnas. O tweet mais amplificado, de @poty_oficial, diz ser a \"primeira vez na história da democracia brasileira que um dos lados tenta evitar que as pessoas possam ir votar\", usando PRF e PF [1586725552643268608]. Marina Silva fala em \"desespero em golpear nossa democracia\" [1586784016895774737], e Randolfe acusa Bolsonaro de usar a máquina pública contra os mais pobres [1586754211311947776]. \"Golpe\" e \"atentado contra a democracia\" são termos recorrentes [1586761609921323009] [1586763201601044481] [1586779146444853251], e o bordão \"Deixem o Nordeste votar\" aparece em muitos tweets [1586754533966974976] [1586749323055976448]. Há denúncias locais, como o corte de transporte no Complexo do Salgueiro [1586687053949026304], a situação na Av. Brasil [1586782244961763328], a blitz na ponte Rio-Niterói [1586785564954710016] e um relato de blitz na Bahia [1586769513617522688]. Outro fio é a mobilização prática: pedidos de prorrogação do horário de votação [1586762932242812929] [1586778556520071173], transporte gratuito e fim de operações [1586758938481070080], e cobrança de prisão do diretor da PRF [1586770200988471297]. Um terceiro fio são apelos de voto em Lula a indecisos e abstencionistas [1586771200201687040] [1586785689961566209] e declarações de voto de artistas [1586706306332753920] [1586790206358933504]. O tom é alarmado, com caixa alta e palavrões [1586783118811340802]. O Bloco B repete esse conteúdo, mas com mais perfis de fãs de K-pop e de charts, como #ArmyNasUrnas [1586792435463716864] [1586786620522504202], e mais desabafo [1586758034147221512]. Há vozes mais cautelosas, que pedem tranquilidade e confiança nas instituições [1586790631329959936] ou veem a prorrogação como precedente preocupante [1586775440198361096], e uma crítica ao TSE por \"lavar as mãos\" [1586790828432932865].",
+    "contas_prevalentes": "A tabela mostra uma mistura. Há políticos com mandato ou candidatos, como Eduardo Paes, Marina Silva, Randolfe Rodrigues (que se apresenta como líder do Governo Lula no Congresso), André Janones e Simone Tebet. Há também jornalistas e comentaristas (Ricardo Corrêa, Tomás Chiaverini, Cleber Lourenço), uma colunista de jornal (Míriam Leitão, no Bloco A) e influenciadores e humoristas (Carlinhos Maia, Pedro Certezas). A conta mais retuitada é a de um cantor, @poty_oficial, não verificado, com 2046 RTs; isso é muito mais que qualquer outra conta, e a amplificação parece concentrada nele. Há ainda perfis militantes não verificados, como @RonaldSorriso13 (que se declara do PT) e @Nailahnv, cientista política. Não aparecem perfis oficiais de instituições. A informação vem de políticos aliados à candidatura de Lula, de jornalistas e de artistas e fãs, em geral por denúncia e relato em primeira mão, e não por apuração de veículos de imprensa [1586754211311947776] [1586774213469392896].",
+    "inclinacao_politica": {
+     "texto": "A comunidade parece alinhada a Lula e ao campo oposto a Bolsonaro, com tom de mobilização. Os tweets pedem voto \"13\" ou em Lula [1742424242424242424], atribuem os bloqueios ao bolsonarismo e chamam Bolsonaro de golpista [1586805726328115212] [1586788709965467650]. Quem os produz é majoritariamente aliado declarado, como Randolfe, o militante do PT e a cantora que fala em \"Hj é LULA\" [1586790206358933504]. Alguns amplificados vêm de pessoas que se declaram não petistas, mas votam em Lula pela democracia [1586662768228302849], e Simone Tebet fala em estar \"do lado certo da história\" [1586737064023916544]. Isso sugere um bloco amplo anti-Bolsonaro, e não apenas petista. Retuitar pode ser denúncia ou informação, mas o conteúdo é muito uniforme.",
+     "confianca": "alta"
+    },
+    "limites": "O material não permite afirmar se as blitze e os bloqueios ocorreram como descritos, nem sua dimensão: os tweets são denúncias e relatos de uma comunidade engajada, e não verificações. Não mostra o que a comunidade pensa fora do evento nem quem a compõe individualmente. Os 2.062 usuários são conhecidos só por terem retuitado os mesmos tweets, e retuíte pode ser ironia, denúncia ou informação. Os tweets são uma seleção de 140, dos quais 28 estavam indisponíveis, então podem faltar pontos de vista. As contas mais retuitadas somam RTs só entre os tweets listados. A concentração em @poty_oficial pesa nos números e pode esconder diversidade. Não há aqui dados sobre quem se opõe a essa narrativa nem sobre outras comunidades.",
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1",
+    "generated_at": "2026-10-14T02:45:36+00:00",
+    "invalid_ids": [
+     "1742424242424242424"
+    ]
+   },
+   "curation": {
+    "trecho": [
+     "O tweet mais amplificado, de @poty_oficial, diz ser a \"primeira vez na história da democracia brasileira que um dos lados tenta evitar que as pessoas possam ir votar\", usando PRF e PF."
+    ],
+    "eixo": "esquerda",
+    "stale": false
+   },
+   "shared": 0.6448591469296573,
+   "shared_with": {
+    "0": 0.23256339755415664,
+    "1": 0.2785018204252352,
+    "3": 0.00043109034724464604,
+    "4": 0.13332387275658517,
+    "5": 3.896584643559919e-05
+   }
   },
   {
    "community": 4,
@@ -90,7 +552,160 @@
    "n_not_authorized": 5,
    "n_other_errors": 0,
    "n_pending": 0,
-   "attrition": 0.19
+   "attrition": 0.19,
+   "n_tail_selected": 38,
+   "n_tail_hydrated": 30,
+   "top_accounts": [
+    {
+     "author_id": "1198004545",
+     "username": "AndreJanonesMG",
+     "name": "André Janones",
+     "verified": true,
+     "rt_cluster": 1542,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "48298703",
+     "username": "eduardopaes",
+     "name": "Eduardo Paes",
+     "verified": true,
+     "rt_cluster": 655,
+     "n_tweets": 3
+    },
+    {
+     "author_id": "105155795",
+     "username": "MarinaSilva",
+     "name": "Marina Silva",
+     "verified": true,
+     "rt_cluster": 490,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "805922985483862016",
+     "username": "Carlinhosmaiaof",
+     "name": "Carlinhos Maia",
+     "verified": true,
+     "rt_cluster": 365,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "85327394",
+     "username": "randolfeap",
+     "name": "Randolfe Rodrigues",
+     "verified": true,
+     "rt_cluster": 345,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "52558216",
+     "username": "Nailahnv",
+     "name": "Preta Ijimú",
+     "verified": false,
+     "rt_cluster": 288,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "705560912078438402",
+     "username": "ocolunista_",
+     "name": "Cleber Lourenço",
+     "verified": false,
+     "rt_cluster": 276,
+     "n_tweets": 5
+    },
+    {
+     "author_id": "105795333",
+     "username": "RonaldSorriso13",
+     "name": "Ronald Sorriso 13 🇧🇷🚩",
+     "verified": false,
+     "rt_cluster": 248,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1097073004658470913",
+     "username": "PedroRonchi2",
+     "name": "Pedro Ronchi",
+     "verified": true,
+     "rt_cluster": 212,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "2508415207",
+     "username": "simonetebetbr",
+     "name": "Simone Tebet",
+     "verified": true,
+     "rt_cluster": 162,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "16814640",
+     "username": "miriamleitao",
+     "name": "Míriam Leitão",
+     "verified": true,
+     "rt_cluster": 153,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1170702068098707456",
+     "username": "tomaschiaverini",
+     "name": "Tomás Chiaverini",
+     "verified": false,
+     "rt_cluster": 125,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "64514398",
+     "username": "lucasapaulino",
+     "name": "Lucas Paulino",
+     "verified": true,
+     "rt_cluster": 109,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "609463117",
+     "username": "LucianoBaia1",
+     "name": "Luciano Baia",
+     "verified": false,
+     "rt_cluster": 101,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1336358437693874177",
+     "username": "arthurpicoli",
+     "name": "Arthur Picoli 🎮",
+     "verified": true,
+     "rt_cluster": 93,
+     "n_tweets": 1
+    }
+   ],
+   "summary": {
+    "sintese": "O material gira quase todo em torno de um assunto: denúncias de que a PRF, polícias militares, o Exército e prefeituras estariam dificultando o acesso de eleitores, sobretudo do Nordeste, às urnas no dia do segundo turno. \"Democracia\" funciona como palavra de enquadramento em praticamente todos os tweets, e o ataque a ela é atribuído a Bolsonaro e ao \"bolsonarismo\" [1586754211311947776, 1586775692141813762]. As blitze são chamadas de \"tentativa de golpe de Estado\" [1586761609921323009], \"golpe rodoviário\" [1586763890603458561], \"supressão de voto\" [1586745463071449094] e \"crime contra a democracia\" [1586775660395057152]. Há pedidos de prisão do diretor da PRF [1586770200988471297], de prorrogação do horário de votação [1586762932242812929, 1586778556520071173] e de ação do TSE e do STF [1586783063614398474]. O tom é de alarme e indignação, com caixa alta e a hashtag \"Deixem o Nordeste votar\" [1586749323055976448, 1586760250903994369]. Parte relevante é mobilização prática: relato de transporte cortado no Complexo do Salgueiro [1586687053949026304], canais de denúncia [1586756371491569665, 1586748068539531264], acionamento judicial no Amapá [1586775774710857735] e avisos de que o metrô e a situação na via foram normalizados [1586758938481070080, 1586782244961763328]. Um segundo conjunto de tweets é de chamado ao voto em Lula/13 \"pela democracia\", feito por artistas e políticos, incluindo apelos a quem pensa em votar nulo ou se abster [1586742694847684608, 1586776452774739970, 1586771200201687040]. O bloco B reforça esse perfil: muitas respostas ao deputado André Janones com lift alto [1586781206242365442, 1586763730695720963], canais de denúncia e declarações de voto [1586728117254619136]. Aparecem, em menor grau, a cobrança a quem não se posicionou, como Ciro Gomes [1586765337168859136], a cautela de um jornalista sobre o precedente de prorrogar a votação [1586775440198361096] e referências à véspera, como a ameaça armada atribuída a Carla Zambelli [1586470011064840193]. Não há voz que dispute o enquadramento dominante.",
+    "contas_prevalentes": "Dominam políticos com mandato ou candidatos de campo governista/progressista: Janones, Eduardo Paes, Marina Silva, Randolfe Rodrigues e Simone Tebet, todos verificados na tabela. Janones sozinho soma 1542 RTs, bem acima das demais contas. Em seguida vêm influenciadores e artistas, como Carlinhos Maia [1586742694847684608], Arthur Picoli [1586741145329082369] e Ludmilla e Ivete via perfis de fãs [1586728345068347394, 1586801786718928897]. Há também jornalistas e comentaristas, como Míriam Leitão, Cleber Lourenço e Tomás Chiaverini, e perfis militantes ou acadêmicos como Preta Ijimú, Ronald Sorriso 13 (bio: \"PT\") e Lucas Paulino. Muitos tweets do bloco B são respostas de contas pequenas a Janones. A informação vem sobretudo de lideranças políticas e de militantes que relatam ocorrências, e não de veículos de imprensa. A imprensa aparece só de forma pontual [1586774213469392896, 1586784790149201922].",
+    "inclinacao_politica": {
+     "texto": "A comunidade tem inclinação provável de apoio a Lula e ao PT, com campo de esquerda e centro-esquerda amplo, incluindo aliados recentes como Tebet, Marina e Alckmin. Os sinais são explícitos e frequentes: pedidos de voto em \"Lula 13\" [1586742694847684608, 1586696218398392322, 1586763792888864771], acusações dirigidas a Bolsonaro [1586754211311947776, 1586788709965467650] e declarações de voto de quem diz não ser petista [1586662768228302849, 1586667334793662465]. Há também a crítica a Ciro Gomes por silêncio [1586765337168859136].",
+     "confianca": "alta"
+    },
+    "limites": "O material mostra o que foi retuitado, e retuitar não equivale a adesão. Não permite afirmar que as ocorrências relatadas (blitze, cortes de transporte, ação de agentes) são verdadeiras, nem sua dimensão. Os tweets as apresentam como fato ou denúncia, mas não há como verificá-las aqui. Não mostra a visão de outras comunidades sobre o mesmo dia. Também não dá para saber o que une cada membro além do padrão de co-retweet. Quase um quinto dos tweets selecionados (27 de 138) está indisponível e pode alterar o quadro. Os lifts altos de respostas pequenas a Janones podem refletir a dinâmica de amplificação em torno dele, não um tema à parte. A leitura sobre inclinação política vem do conteúdo dos tweets, não de dados sobre os usuários.",
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1",
+    "generated_at": "2026-10-14T02:46:18+00:00",
+    "invalid_ids": []
+   },
+   "curation": {
+    "trecho": [
+     "O material gira quase todo em torno de um assunto: denúncias de que a PRF, polícias militares, o Exército e prefeituras estariam dificultando o acesso de eleitores, sobretudo do Nordeste, às urnas no dia do segundo turno.",
+     "O bloco B reforça esse perfil: muitas respostas ao deputado André Janones com lift alto, canais de denúncia e declarações de voto."
+    ],
+    "eixo": "esquerda",
+    "stale": false
+   },
+   "shared": 0.7704244113171296,
+   "shared_with": {
+    "0": 0.22627251282587035,
+    "1": 0.35334850763603676,
+    "2": 0.1901974601010936,
+    "3": 0.0006059307541288109,
+    "5": 0.0
+   }
   },
   {
    "community": 3,
@@ -107,7 +722,160 @@
    "n_not_authorized": 1,
    "n_other_errors": 0,
    "n_pending": 0,
-   "attrition": 0.1
+   "attrition": 0.1,
+   "n_tail_selected": 12,
+   "n_tail_hydrated": 9,
+   "top_accounts": [
+    {
+     "author_id": "58574365",
+     "username": "MaraMaravilha",
+     "name": "Mara Maravilha",
+     "verified": false,
+     "rt_cluster": 271,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "80306410",
+     "username": "Miltonneves",
+     "name": "Milton Neves",
+     "verified": true,
+     "rt_cluster": 196,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "464128120",
+     "username": "JoaquinTeixeira",
+     "name": "Joaquin Teixeira",
+     "verified": true,
+     "rt_cluster": 167,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1263282364844781570",
+     "username": "ManePistola",
+     "name": "Índio Pistola🗯",
+     "verified": false,
+     "rt_cluster": 121,
+     "n_tweets": 4
+    },
+    {
+     "author_id": "1467371967984590850",
+     "username": "ricardors_of",
+     "name": "Ricardo Oliveira",
+     "verified": true,
+     "rt_cluster": 121,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "67042497",
+     "username": "fabifbbr",
+     "name": "Fabiana Barroso",
+     "verified": true,
+     "rt_cluster": 115,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1058819604741525510",
+     "username": "GeneralMourao",
+     "name": "General Hamilton Mourão",
+     "verified": true,
+     "rt_cluster": 114,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "3237751515",
+     "username": "sensoinc",
+     "name": "Senso Incomum ⚓ by Flavio Morgenstern",
+     "verified": true,
+     "rt_cluster": 86,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "1090291692744466433",
+     "username": "SigaGazetaBR",
+     "name": "Gazeta Brasil",
+     "verified": true,
+     "rt_cluster": 39,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "270399607",
+     "username": "TerezaCrisMS",
+     "name": "Tereza Cristina",
+     "verified": true,
+     "rt_cluster": 37,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "52297557",
+     "username": "thigagliasso",
+     "name": "Thiago Gagliasso",
+     "verified": true,
+     "rt_cluster": 25,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "52189996",
+     "username": "rogeriosmarinho",
+     "name": "Rogério Marinho🇧🇷",
+     "verified": true,
+     "rt_cluster": 19,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "2159646294",
+     "username": "rafaelgloves",
+     "name": "Rafael Gloves 🥊",
+     "verified": true,
+     "rt_cluster": 17,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "994303120376303616",
+     "username": "JornalDaCidadeO",
+     "name": "Jornal da Cidade Online",
+     "verified": true,
+     "rt_cluster": 17,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "67098726",
+     "username": "ciro_nogueira",
+     "name": "Ciro Nogueira",
+     "verified": true,
+     "rt_cluster": 15,
+     "n_tweets": 1
+    }
+   ],
+   "summary": {
+    "sintese": "O material gira em torno da palavra \"democracia\", usada como termo em disputa no dia do 2º turno. Quase todos os tweets a mobilizam a favor do voto em Bolsonaro/22 ou contra Lula, o STF e o TSE. Há convocações e relatos de voto: \"Já votou hoje? Em quem?\" [1586779391278784512], \"Bom dia, cidadãos brasileiros! Já votaram?!\" [1586703337088499712], o general que diz ter votado e confirma \"o 22 pelo bem da nossa verdadeira democracia\" [1586719989343682562] e a mensagem de véspera sobre \"sentimento de vitória de nosso capitão\" [1586518769563828224]. O fim da eleição aparece como \"relógio da democracia\" a favor do \"FUTURO\" [1586448767905062915]. Um tweet de Milton Neves relata voto sem filas e fotos com petistas \"muito amigáveis\" [1586806137210429441].\n\nUm segundo assunto é a fiscalização da PRF a ônibus fretados. Ela é enquadrada como cumprimento da lei e \"a democracia em exercício\" [1586788400711045122], com agradecimentos à polícia [1586799481395195904] [1586780184052654083] e ironia sobre o destino do dinheiro, as \"pombas brancas\" [1586800102764683264]. Outros tweets invertem a acusação: crime seria \"investigar e revelar quem tá comprando\" [1586737936141352960], ou operações contra crimes é que seriam tratadas como crime [1586791607176765442].\n\nUm terceiro assunto é a desconfiança do STF e do TSE: pedido de \"selo de investigação do Supremo Tribunal Militar\" [1586766089941385216], \"O Xandinho não quer que Bolsonaro vença nem a pau\" [1586782813465952256], \"30 Bilhõe$ segundo Gilmar Mendes contra a democracia\" [1586777215735369732] e \"se não vir do povo a democracia, virá das FFAAs! Não vai ter golpe\" [1586778995869483008]. Há também o tweet de Bolsonaro sobre a composição do Supremo e a \"Carta da Democracia\" [1586481729723850752] e o alerta de um jurista sobre a Constituição [1586759086850310144].\n\nAparecem ainda ironia sobre Cuba [1586753662558289926], sobre Lula e MEI [1586706396149587976] [1586716366769364993] e apelo moral (\"Pedofilia não! Hipocrisia não!\") [1586115363485483008]. A fala de Anitta sobre \"liberdade é democracia\" é retuitada e reapropriada como apoio ao 22 [1586721068357718016] [1586654467822419968] [1586567612955336704]. Os blocos A e B mostram o mesmo conjunto de enquadramentos. O B traz mais réplicas e variações dos mesmos temas.",
+    "contas_prevalentes": "Predominam políticos com mandato ou candidatos alinhados a Bolsonaro, como o senador e general Mourão [1586719989343682562], a senadora Tereza Cristina [1586703337088499712], o senador Rogério Marinho [1586518769563828224], Ciro Nogueira [1586448767905062915], Thiago Gagliasso [1586799481395195904] e o próprio Bolsonaro [1586481729723850752]. Há também comentaristas e influenciadores de direita: Fabiana Barroso, comentarista da Revista Oeste e da Gazeta do Povo, Ricardo Oliveira, vereador que se descreve como \"Direita | Conservador\", e Senso Incomum. O perfil @ManePistola, de bio \"CENSURED\", é o mais próximo de um perfil anônimo. Completam a lista figuras da mídia e do entretenimento, como Mara Maravilha, apresentadora de TV gospel, e Milton Neves, jornalista esportivo, além de veículos como Gazeta Brasil e Jornal da Cidade Online. Os dois nomes mais retuitados, Mara Maravilha e Milton Neves, não são políticos. A informação vem sobretudo de lideranças partidárias, influenciadores e mídia alinhada, mais do que de imprensa tradicional ou de instituições.",
+    "inclinacao_politica": {
+     "texto": "A comunidade parece alinhada à direita bolsonarista, favorável à reeleição de Bolsonaro (22) e crítica a Lula, ao PT, ao STF e ao TSE. Os sinais são explícitos: pedidos de voto em Bolsonaro [1586115363485483008] [1586518769563828224] [1586719989343682562], tweets do próprio candidato [1586481729723850752], ironia sobre Lula e MEI [1586706396149587976], ataques a ministros do STF [1586782813465952256] [1586777215735369732] e bios que se declaram de direita [1586766567429361666]. O único tweet que destoa em origem é o de Anitta, e ele é reenquadrado a favor do 22 [1586654467822419968].",
+     "confianca": "alta"
+    },
+    "limites": "O material cobre só uma amostra de tweets (5 de 32 estavam indisponíveis) e não mostra quem retuitou nem por quê. Retweets podem ser irônicos ou informativos, então não provam adesão individual. O lift é quase uniforme (cerca de 40,85) e dá pouca informação sobre o que é mais próprio da comunidade. A exceção é o tweet de Anitta, com lift 5,27 [1586567612955336704]. Os textos vêm sem o contexto de imagens, vídeos e links, como a mídia do tweet de Mara Maravilha [1586744691411787776], e sem as respostas. O material não permite afirmar fatos sobre as operações da PRF, as acusações de compra de votos ou as declarações atribuídas a Lula e a ministros do STF. Também não permite generalizar para outras comunidades nem para o conjunto do evento. A inclinação é inferida do conteúdo dos tweets, não de dados sobre os usuários.",
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1",
+    "generated_at": "2026-10-14T02:46:51+00:00",
+    "invalid_ids": []
+   },
+   "curation": {
+    "trecho": [
+     "O material gira em torno da palavra \"democracia\", usada como termo em disputa no dia do 2º turno.",
+     "Quase todos os tweets a mobilizam a favor do voto em Bolsonaro/22 ou contra Lula, o STF e o TSE."
+    ],
+    "eixo": "direita",
+    "stale": false
+   },
+   "shared": 0.029701403923820164,
+   "shared_with": {
+    "0": 0.008614908620126205,
+    "1": 0.013608225495075227,
+    "2": 0.003766866573548851,
+    "4": 0.003711403235069883,
+    "5": 0.0
+   }
   }
  ],
  "files": {

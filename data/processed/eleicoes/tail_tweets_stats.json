@@ -1,0 +1,40 @@
+{
+  "params": {
+    "m": 50,
+    "min_rt": 10
+  },
+  "clusters": {
+    "0": {
+      "baseline_share": 0.2507751550310062,
+      "n_candidates": 144,
+      "n_selected": 50,
+      "min_lift_selected": 2.2786490605814564
+    },
+    "1": {
+      "baseline_share": 0.36077215443088617,
+      "n_candidates": 94,
+      "n_selected": 50,
+      "min_lift_selected": 1.385916273911838
+    },
+    "2": {
+      "baseline_share": 0.21390528105621123,
+      "n_candidates": 40,
+      "n_selected": 40,
+      "min_lift_selected": 1.1402357053554755
+    },
+    "3": {
+      "baseline_share": 0.02447989597919584,
+      "n_candidates": 12,
+      "n_selected": 12,
+      "min_lift_selected": 5.270947971926587
+    },
+    "4": {
+      "baseline_share": 0.14994248849769953,
+      "n_candidates": 38,
+      "n_selected": 38,
+      "min_lift_selected": 1.0003835570749604
+    }
+  },
+  "n_slots": 190,
+  "n_unique_ids": 179
+}

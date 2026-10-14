@@ -37,8 +37,47 @@ export interface ClusterMeta {
   n_not_authorized: number;
   n_other_errors: number;
   n_pending: number;
-  attrition: number; // (n_selected − n_hydrated) / n_selected
+  attrition: number; // (n_selected − n_hydrated) / n_selected — só do top-K
+  n_tail_selected: number; // cauda característica (M8b, D16)
+  n_tail_hydrated: number;
+  top_accounts: TopAccount[]; // calculado: soma de rt_cluster por autor (top-K ∪ cauda hidratados)
+  summary: ClusterSummary | null; // síntese por LLM (M11, D8); null se ainda não gerada
+  curation: Curation | null; // curadoria humana do cartão (data/curation/clusters.json); null se não curado
+  shared: number | null; // D17: fração dos RTs do grupo em conteúdo que também circula em outros (0–1)
+  shared_with: Record<string, number> | null; // a mesma fração, por community (todas, inclusive < 1%)
 }
+
+export type Axis = "direita" | "esquerda" | "outro";
+
+/** Spec 2026-10-14 §3: trecho = fragmentos LITERAIS da síntese; eixo atribuído pelo autor lendo o LLM. */
+export interface Curation {
+  trecho: string[];
+  eixo: Axis;
+  stale: boolean; // há síntese mais nova que a referenciada
+}
+
+export interface TopAccount {
+  author_id: string;
+  username: string | null; // null se o perfil não foi hidratado
+  name: string | null;
+  verified: boolean | null;
+  rt_cluster: number;
+  n_tweets: number;
+}
+
+/** Saída do M11 (texto livre, citações `[tweet_id]` inline) + carimbo de proveniência. */
+export interface ClusterSummary {
+  sintese: string;
+  contas_prevalentes: string;
+  inclinacao_politica: { texto: string; confianca: "alta" | "media" | "baixa" };
+  limites: string;
+  model: string;
+  prompt_version: string;
+  generated_at: string;
+  invalid_ids: string[]; // citados pelo modelo mas fora do corpus do cluster
+}
+
+export type SlotOrigin = "amplified" | "characteristic";
 
 export type SlotStatus = "hydrated" | "not_found" | "not_authorized" | "error" | "pending";
 export type AuthorStatus = "hydrated" | "not_found" | "not_authorized" | "error" | "pending" | null;
@@ -46,14 +85,16 @@ export type AuthorStatus = "hydrated" | "not_found" | "not_authorized" | "error"
 export interface Slot {
   community: number;
   group: number;
-  rank: number;
-  k: number;
+  rank: number; // dentro da origem: top-K (amplified) e cauda (characteristic) têm rankings próprios
+  k: number; // K do top-K, ou m da cauda
+  origin: SlotOrigin;
+  lift: number | null; // só na cauda: sobrerrepresentação no cluster (D16)
   tweet_id: string;
   rt_cluster: number; // membros do cluster que retuitaram (critério do ranking)
   rt_graph: number; // nós do grafo (qualquer cluster) que retuitaram
   rt_event: number; // usuários do evento, inclusive periferia filtrada
   purity: number | null; // rt_cluster / rt_graph, 4 casas
-  also_in: { community: number; group: number; rank: number }[]; // outros clusters do MESMO evento
+  also_in: { community: number; group: number; rank: number; origin: SlotOrigin }[]; // outros clusters do MESMO evento
   status: SlotStatus;
   error: { title: string; detail: string } | null; // só quando status ∉ {hydrated, pending}
   tweet: Tweet | null; // null se não hidratado
@@ -100,6 +141,17 @@ export interface Tweet {
   entities: TweetEntities; // offsets em code points Unicode (Array.from), não UTF-16
   referenced_tweets: { type: ReferencedTweetType; id: string }[];
   url: string; // https://x.com/i/web/status/<id>
+  media: Media[]; // M9c; vazio se o tweet não tem mídia ou ela não voltou da API
+}
+
+export interface Media {
+  media_key: string;
+  type: "photo" | "video" | "animated_gif";
+  url: string | null; // fotos
+  preview_image_url: string | null; // vídeos e GIFs (miniatura)
+  width: number | null;
+  height: number | null;
+  alt_text: string | null;
 }
 
 export interface Author {

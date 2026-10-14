@@ -4,16 +4,18 @@ import Sigma from "sigma";
 import { LocateFixed } from "lucide-react";
 import type { ClusterMeta, Layout } from "../types";
 import { formatInt, formatPct } from "../lib/format";
+import { useTheme } from "../lib/theme";
 
-/** Cinza da fase 1 para nós fora do cluster selecionado e comunidades < 1%. */
-const GREY = "#c7ccd6";
+/** Cinza da fase 1 para nós fora do cluster selecionado e comunidades < 1% (escurecido no tema escuro). */
+const GREY = { light: "#c7ccd6", dark: "#34383d" } as const;
 const NODE_SIZE = 1.3;
 
 interface Props {
   layout: Layout;
   clusters: ClusterMeta[];
-  selected: number;
+  selected: number | null; // null = todos os grupos coloridos (visão geral)
   onSelect: (community: number) => void;
+  height?: number;
 }
 
 /**
@@ -22,7 +24,10 @@ interface Props {
  * Rótulos "Grupo g · XX%" são HTML absoluto reposicionado em `afterRender` via `graphToViewport(centroid)`.
  * Orientação: o espaço `graph` do Sigma tem y para cima, igual ao matplotlib da figura da fase 1 — não inverter.
  */
-export function MiniMap({ layout, clusters, selected, onSelect }: Props) {
+export function MiniMap({ layout, clusters, selected, onSelect, height = 360 }: Props) {
+  const { theme } = useTheme();
+  const greyRef = useRef<string>(GREY[theme]);
+  greyRef.current = GREY[theme];
   const containerRef = useRef<HTMLDivElement>(null);
   const sigmaRef = useRef<Sigma | null>(null);
   const labelRefs = useRef(new Map<number, HTMLButtonElement>());
@@ -47,7 +52,7 @@ export function MiniMap({ layout, clusters, selected, onSelect }: Props) {
         x: layout.x[i],
         y: layout.y[i],
         size: NODE_SIZE,
-        color: GREY,
+        color: greyRef.current,
         community: layout.community[i],
       });
     }
@@ -58,7 +63,9 @@ export function MiniMap({ layout, clusters, selected, onSelect }: Props) {
       allowInvalidContainer: true,
       nodeReducer: (_node, data) => {
         const community = data.community as number;
-        const color = community === selectedRef.current ? (colorRef.current.get(community) ?? GREY) : GREY;
+        const grey = greyRef.current;
+        const on = selectedRef.current === null || community === selectedRef.current;
+        const color = on ? (colorRef.current.get(community) ?? grey) : grey;
         return { ...data, color };
       },
     });
@@ -91,10 +98,10 @@ export function MiniMap({ layout, clusters, selected, onSelect }: Props) {
     performance.mark("minimap:refresh:start");
     sigmaRef.current.refresh({ skipIndexation: true });
     performance.measure("minimap:refresh", "minimap:refresh:start");
-  }, [selected, colorByCommunity]);
+  }, [selected, colorByCommunity, theme]);
 
   return (
-    <div className="relative h-[360px] w-full overflow-hidden rounded-xl border border-line bg-white">
+    <div className="relative w-full overflow-hidden rounded-xl border border-line bg-surface" style={{ height }}>
       <div ref={containerRef} className="absolute inset-0" />
       <div className="pointer-events-none absolute inset-0">
         {clusters.map((c) => (
@@ -108,7 +115,7 @@ export function MiniMap({ layout, clusters, selected, onSelect }: Props) {
             onClick={() => onSelect(c.community)}
             title={`${c.label} (c${c.community}) — clique para selecionar`}
             className="label-halo pointer-events-auto absolute left-0 top-0 whitespace-nowrap text-[13px] font-bold"
-            style={{ color: c.color, opacity: c.community === selected ? 1 : 0.8 }}
+            style={{ color: c.color, opacity: selected === null || c.community === selected ? 1 : 0.8 }}
           >
             {c.label} · {formatPct(c.frac_nodes)}
           </button>
@@ -118,7 +125,7 @@ export function MiniMap({ layout, clusters, selected, onSelect }: Props) {
         type="button"
         onClick={() => sigmaRef.current?.getCamera().animatedReset({ duration: 300 })}
         title="recentrar"
-        className="absolute right-2 top-2 rounded-md border border-line bg-white/90 p-1 text-muted hover:text-ink"
+        className="absolute right-2 top-2 rounded-md border border-line bg-surface/90 p-1 text-muted hover:text-ink"
       >
         <LocateFixed size={14} />
       </button>

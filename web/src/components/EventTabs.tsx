@@ -21,7 +21,7 @@ export function EventTabs({ events, activeSlug, onSelect }: Props) {
             onClick={() => onSelect(e)}
             title={e.name}
             aria-current={active ? "page" : undefined}
-            className={`flex flex-col items-start rounded-lg px-3 py-1.5 text-left leading-tight hover:bg-gray-100 ${
+            className={`flex flex-col items-start rounded-lg px-3 py-1.5 text-left leading-tight hover:bg-hover ${
               active ? "text-ink" : "text-muted"
             }`}
           >

@@ -39,7 +39,164 @@
    "n_not_authorized": 1,
    "n_other_errors": 0,
    "n_pending": 0,
-   "attrition": 0.12
+   "attrition": 0.12,
+   "n_tail_selected": 50,
+   "n_tail_hydrated": 40,
+   "top_accounts": [
+    {
+     "author_id": "69650953",
+     "username": "KennedyAlencar",
+     "name": "Kennedy Alencar",
+     "verified": false,
+     "rt_cluster": 1471,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "1198004545",
+     "username": "AndreJanonesMG",
+     "name": "André Janones",
+     "verified": true,
+     "rt_cluster": 1324,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "85327394",
+     "username": "randolfeap",
+     "name": "Randolfe Rodrigues",
+     "verified": true,
+     "rt_cluster": 1248,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "1097073004658470913",
+     "username": "PedroRonchi2",
+     "name": "Pedro Ronchi",
+     "verified": true,
+     "rt_cluster": 1017,
+     "n_tweets": 7
+    },
+    {
+     "author_id": "762402774260875265",
+     "username": "GuilhermeBoulos",
+     "name": "Guilherme Boulos",
+     "verified": true,
+     "rt_cluster": 916,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "112498734",
+     "username": "IvanValente",
+     "name": "Ivan Valente",
+     "verified": true,
+     "rt_cluster": 807,
+     "n_tweets": 3
+    },
+    {
+     "author_id": "69069168",
+     "username": "GugaNoblat",
+     "name": "GugaNoblat",
+     "verified": true,
+     "rt_cluster": 797,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "18286139",
+     "username": "reinaldoazevedo",
+     "name": "Reinaldo Azevedo",
+     "verified": true,
+     "rt_cluster": 779,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "248890506",
+     "username": "brasil247",
+     "name": "Brasil 247",
+     "verified": true,
+     "rt_cluster": 777,
+     "n_tweets": 6
+    },
+    {
+     "author_id": "16794066",
+     "username": "BlogdoNoblat",
+     "name": "Blog do Noblat",
+     "verified": true,
+     "rt_cluster": 741,
+     "n_tweets": 6
+    },
+    {
+     "author_id": "39522911",
+     "username": "ptbrasil",
+     "name": "PT Brasil",
+     "verified": true,
+     "rt_cluster": 699,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "1345206382312775680",
+     "username": "desmentindobozo",
+     "name": "Desmentindo Bolsonaro",
+     "verified": false,
+     "rt_cluster": 645,
+     "n_tweets": 4
+    },
+    {
+     "author_id": "2670726740",
+     "username": "LulaOficial",
+     "name": "Lula",
+     "verified": true,
+     "rt_cluster": 587,
+     "n_tweets": 3
+    },
+    {
+     "author_id": "27703690",
+     "username": "samiabomfim",
+     "name": "Sâmia 5️⃣0️⃣0️⃣0️⃣",
+     "verified": true,
+     "rt_cluster": 563,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "142393421",
+     "username": "GloboNews",
+     "name": "GloboNews",
+     "verified": true,
+     "rt_cluster": 562,
+     "n_tweets": 4
+    }
+   ],
+   "summary": {
+    "sintese": "O material gira quase todo em torno de um enquadramento: o 7 de setembro de 2022 aparece como data \"sequestrada\" por Bolsonaro e transformada em comício de campanha. \"Sequestro\" e variantes aparecem em vários tweets [1567633084702392321] [1567568436271759361] [1567612405420548106] [1567531424542081025]. Junto vêm \"crime eleitoral\", \"abuso de poder\" e uso de dinheiro público [1567620494626537472] [1567619955549429761] [1567613445377347585]. Há muitos anúncios de que PSOL, Rede e PT acionariam o TSE [1567610346516480006] [1567635035049566209] [1567602802490318850] [1567613946898563072]. Um segundo eixo é o coro de \"imbrochável\" puxado por Bolsonaro, tratado com deboche e como sinal de \"insegurança masculina\" [1567557612333420547] [1567526147549691909] [1567548264232140801] [1567578565964713986]. Esse eixo inclui piadas, como a do Viagra [1567638933189656579] e a do \"papo erétil\" [1567720373545730048]. Um terceiro eixo é o balanço de público: os atos teriam \"flopado\", com comparação com 2021 e imagens aéreas [1567534607897174019] [1567579261531312135] [1567579586430476295] [1567568472237826049]. Aparece junto a leitura de que Bolsonaro \"não ganhou um voto\" e falou só à sua base [1567600640750141442] [1567683740716900352]. Também se diz que não houve golpe [1567606697899835398] [1567633573439590401], embora o temor de golpe apareça antes do dia [1567493825077067776] [1567519832001634304]. Surgem ainda denúncias de ônibus e R$ 100 pagos por empresários [1567464547677528065] [1567592420916731905] e referências a imóveis comprados em dinheiro vivo [1567602264457592834] [1567674522916065280]. Lula é citado nas falas sobre a data [1567465717741625346] [1567175573427916800] e na resposta à noite na GloboNews [1567672507741650945] [1567725113763663877]. A hashtag COM LULA PELO BRASIL e a referência a 2 de outubro funcionam como mobilização eleitoral [1567467684756946947] [1567486916257349633] [1567602264457592834]. A cobertura da imprensa também é discutida, com cobrança de espaço igual para outros candidatos e crítica à transmissão ao vivo [1567566744499245057] [1567531780118388737] [1567611632234151936]. O bloco A concentra anúncios de ações no TSE e análises de comentaristas. O bloco B é mais próximo do deboche e do \"flop\", com memes, trocadilhos e leituras sobre a bolha bolsonarista [1567538028993716224] [1567635153278668800] [1567645688225271811]. Há itens fora do tema, como o vazamento de dados de operadoras [1567547478211280902] e o obituário de um artista [1567708311453159424].",
+    "contas_prevalentes": "A tabela mostra mistura de políticos com mandato ou candidatos, jornalistas e comentaristas, veículos e perfis de militância. Entre os políticos estão André Janones, Randolfe Rodrigues, Boulos, Ivan Valente e Sâmia Bomfim, além do PT e do próprio Lula [1567595941854593026] [1567634601153073157] [1567557612333420547] [1567635035049566209] [1567619955549429761] [1567465717741625346]. Entre jornalistas e comentaristas estão Kennedy Alencar, Reinaldo Azevedo, Guga Noblat e o Blog do Noblat [1567600640750141442] [1567566744499245057] [1567620494626537472] [1567625457184505857]. Os veículos incluem Brasil 247, GloboNews, O Globo, UOL e Estadão [1567534607897174019] [1567652919964483584] [1567663570606821378] [1567610346516480006] [1567636326962401285]. Há ainda perfis de militância e humor, como Pedro Ronchi, Desmentindo Bolsonaro e Sensacionalista [1567464547677528065] [1567619959102050308] [1567638933189656579]. A informação vem de falas de partidos e candidatos, de comentaristas e de reportagens de imprensa profissional, repassadas por perfis de militância.",
+    "inclinacao_politica": {
+     "texto": "A comunidade parece de oposição a Bolsonaro e alinhada a Lula e à esquerda e centro-esquerda. O sinal mais forte é o conteúdo, que é explicitamente contrário a Bolsonaro, com termos como \"golpista\", \"miliciano\" e \"Fora Bolsonaro\" [1567619955549429761] [1567811223911104514] [1567536209437540353]. Há também convocações pró-Lula, como #Lula13 e COM LULA PELO BRASIL [1567664139731861505] [1567467684756946947]. As contas mais retuitadas incluem PT, PSOL, Rede e o próprio Lula [1567504771564568577] [1567619955549429761] [1567465717741625346]. Alckmin e veículos como GloboNews e Estadão também circulam, o que mostra uma parte mais ampla, de crítica institucional ao uso eleitoral do ato [1567456559986348033] [1567636326962401285]. Não há tweets de apoio a Bolsonaro.",
+     "confianca": "alta"
+    },
+    "limites": "O material não permite afirmar o que motivou cada retweet. Alguns, como os de imprensa ou de notícia, podem ser informativos e não de adesão. Não mostra como outras comunidades trataram o evento, nem como a base bolsonarista se descreve, e só se vê a versão da comunidade sobre ela. Não permite medir público, custos ou legalidade, e as acusações sobre dinheiro público, pagamento de ônibus e crimes eleitorais são afirmações dos tweets, não fatos verificados aqui. Não dá para estimar o tamanho de cada tema, porque a seleção favorece tweets muito retuitados. Os 22 tweets indisponíveis ficam de fora. Os dados também não mostram o que aconteceu depois, como as ações no TSE.",
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1",
+    "generated_at": "2026-10-14T02:39:18+00:00",
+    "invalid_ids": []
+   },
+   "curation": {
+    "trecho": [
+     "O material gira quase todo em torno de um enquadramento: o 7 de setembro de 2022 aparece como data \"sequestrada\" por Bolsonaro e transformada em comício de campanha.",
+     "Um segundo eixo é o coro de \"imbrochável\" puxado por Bolsonaro, tratado com deboche e como sinal de \"insegurança masculina\"."
+    ],
+    "eixo": "esquerda",
+    "stale": false
+   },
+   "shared": 0.03340630672289781,
+   "shared_with": {
+    "1": 0.012345569382238557,
+    "2": 0.006586158736631607,
+    "3": 0.011943751199712962,
+    "4": 0.0024062512572002844,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 2.365456228922095e-05,
+    "8": 0.0001009215848251694,
+    "9": 0.0
+   }
   },
   {
    "community": 1,
@@ -56,7 +213,164 @@
    "n_not_authorized": 7,
    "n_other_errors": 0,
    "n_pending": 0,
-   "attrition": 0.38
+   "attrition": 0.38,
+   "n_tail_selected": 50,
+   "n_tail_hydrated": 34,
+   "top_accounts": [
+    {
+     "author_id": "33071040",
+     "username": "rmotta2",
+     "name": "Roberto Motta",
+     "verified": true,
+     "rt_cluster": 1432,
+     "n_tweets": 4
+    },
+    {
+     "author_id": "63542310",
+     "username": "PMESP",
+     "name": "Polícia Militar do Estado de São Paulo",
+     "verified": true,
+     "rt_cluster": 1051,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1505737229985009667",
+     "username": "MarcoPiraja",
+     "name": "Marco Pirajá",
+     "verified": false,
+     "rt_cluster": 790,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "955586323452219393",
+     "username": "PATRlOTAS",
+     "name": "PATRlOTAS",
+     "verified": true,
+     "rt_cluster": 472,
+     "n_tweets": 5
+    },
+    {
+     "author_id": "52189996",
+     "username": "rogeriosmarinho",
+     "name": "Rogério Marinho🇧🇷",
+     "verified": true,
+     "rt_cluster": 369,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "125705585",
+     "username": "RicardoGomesPOA",
+     "name": "Ricardo Gomes",
+     "verified": true,
+     "rt_cluster": 358,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "184210354",
+     "username": "BrunoEnglerDM",
+     "name": "Bruno Engler 2️⃣2️⃣2️⃣2️⃣2️⃣",
+     "verified": true,
+     "rt_cluster": 295,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "1115744123309281280",
+     "username": "OdnaldaW2",
+     "name": "Odnalda Whigson Fênix 🦅🔥",
+     "verified": true,
+     "rt_cluster": 263,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "21823273",
+     "username": "jorgeserrao",
+     "name": "Jorge Serrão",
+     "verified": true,
+     "rt_cluster": 252,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "3060235071",
+     "username": "AdrillesRJorge",
+     "name": "Adrilles Jorge",
+     "verified": true,
+     "rt_cluster": 227,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1505670103723130883",
+     "username": "Tali_Mito22",
+     "name": "Talita - Mulher Patriota 🇧🇷",
+     "verified": true,
+     "rt_cluster": 215,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "1196600981749932033",
+     "username": "oiluiz",
+     "name": "oiluiz",
+     "verified": true,
+     "rt_cluster": 203,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "106175018",
+     "username": "JovemPanNews",
+     "name": "Jovem Pan News",
+     "verified": true,
+     "rt_cluster": 201,
+     "n_tweets": 7
+    },
+    {
+     "author_id": "1222939896349970432",
+     "username": "revistaoeste",
+     "name": "Revista Oeste",
+     "verified": true,
+     "rt_cluster": 187,
+     "n_tweets": 3
+    },
+    {
+     "author_id": "87282944",
+     "username": "viniciuscfp82",
+     "name": "Vinicius Carrion",
+     "verified": true,
+     "rt_cluster": 162,
+     "n_tweets": 1
+    }
+   ],
+   "summary": {
+    "sintese": "O material mostra o 7 de setembro como ato de apoio a Bolsonaro, narrado em tom de vitória. Os tweets descrevem multidões em Brasília, Copacabana, Belo Horizonte, Porto Alegre, Manaus, Belém e Londres [1567584192078270464] [1567686101766119424] [1567624075689840640] [1567668964246839298]. Falam em \"o maior 7 de Setembro da história\" [1567615791138324484] [1567495923248386048], em \"multidão incalculável\" [1567630218075963394] e em 1,3 a 1,4 milhão de pessoas em Brasília, número atribuído à campanha de Bolsonaro [1567582346487947278]. O tweet mais amplificado é da PM-SP, que diz não haver ocorrência policial na Paulista [1567562291268263936]. A ausência de incidentes é reaproveitada para ironizar a expectativa de violência: \"foi pacífico, sem incidente MAS foi antidemocrático\" [1567484899174621186], \"não houve uma lixeira quebrada\" [1567834613745065987], \"democracia saiu mais fortalecida\" [1567703627434790914]. Um enquadramento recorrente é a disputa sobre a posse da data: o povo \"não foi sequestrar. Ele foi resgatar\" [1567850591010934787], a bandeira foi resgatada [1567830922061352961], o povo escolheu Bolsonaro [1567825435634933760]. Respondem também à crítica de que ele \"usou politicamente\" a data, lembrando o 1º de Maio de Lula [1567661897259819008] [1567654525971959809]. Outro eixo é a imprensa, a oposição e as pesquisas, descritas como surpreendidas, chorosas ou \"de luto\" [1567707891418763265] [1567616021749530624] [1567832630242025474] [1567595227862470658]. Lula aparece como ausente, em casa [1567669747948429312] [1567554628060942337]. Há projeção de vitória \"no 1º turno\" [1567615791138324484] [1567638492884176896], gritos de \"prende o Lula\" [1567584192078270464] [1567641614272659458] e queixas de que o Twitter derrubou seguidores e contas [1567680236518522881] [1567697589671272450] [1567837029307764736]. O Bloco B reforça o mesmo quadro, com mais cobertura ao vivo de Brasília e das caravanas nos dias anteriores [1567286485673459714] [1566988163490480128], comentários da Jovem Pan [1567633936007692290] [1567602352949022722] e zombaria de \"esquerdistas\" e jornalistas [1567560643540033537] [1567647948833492994]. Uma voz isolada diverge, anunciando ação no TSE contra os atos [1567672079314452484], e outra afirma que Lula sai fortalecido [1567681212226887681]; ambas parecem irônicas ou de contraponto, mas isso é leitura minha.",
+    "contas_prevalentes": "Domina um conjunto de comentaristas e influenciadores alinhados ao bolsonarismo, como Roberto Motta, Marco Pirajá, Ricardo Gomes, Jorge Serrão e Tali_Mito22. Há políticos com mandato ou candidatos, como o senador Rogério Marinho, Bruno Engler, Adrilles Jorge, Carlos Jordy e Eduardo Cunha [1567631337250504710] [1567570398996217858] [1567657271135551490] [1567604083502059521] [1567610673831575552]. Aparecem também veículos de mídia, como Jovem Pan News, Revista Oeste, R7, Gazeta e O Antagonista, e perfis militantes como PATRlOTAS, que se diz de volta após censura. A única instituição de destaque é a PM-SP, cujo tweet é o mais retuitado [1567562291268263936]. A informação vem, portanto, de figuras e veículos do campo bolsonarista e de militantes, mais do que de agências neutras. Há poucas contas anônimas entre as mais retuitadas, mas elas aparecem na cauda do Bloco B.",
+    "inclinacao_politica": {
+     "texto": "A comunidade é claramente bolsonarista, de direita. Exalta Bolsonaro, torce pela reeleição no 1º turno e ataca Lula, o PT, a imprensa e o Judiciário [1567615791138324484] [1567695423682256903] [1567609758365933569]. As bios usam termos como \"Bolsonarista\" e \"Deus, Pátria, Família e Liberdade\", e há candidatos do campo pedindo voto [1567604083502059521]. Os poucos tweets que parecem críticos a Bolsonaro [1567672079314452484] [1567681212226887681] foram provavelmente amplificados de forma irônica ou de denúncia.",
+     "confianca": "alta"
+    },
+    "limites": "O material não permite afirmar o tamanho real das manifestações. Os números citados vêm de campanha ou de comentaristas alinhados, e não de fontes independentes [1567582346487947278]. Também não mostra a reação de outras comunidades nem o que os retuitadores pensavam: retweets podem ser irônicos ou informativos. Não permite saber o que está nos 54 tweets indisponíveis, nem se as queixas sobre perda de seguidores e a derrubada de contas procedem [1567697589671272450]. O conteúdo dos vídeos e imagens vinculados não está acessível, só o texto dos tweets. Sem tweets de outros momentos, não dá para generalizar além deste dia.",
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1",
+    "generated_at": "2026-10-14T02:40:10+00:00",
+    "invalid_ids": []
+   },
+   "curation": {
+    "trecho": [
+     "O material mostra o 7 de setembro como ato de apoio a Bolsonaro, narrado em tom de vitória.",
+     "Um enquadramento recorrente é a disputa sobre a posse da data: o povo \"não foi sequestrar. Ele foi resgatar\", a bandeira foi resgatada, o povo escolheu Bolsonaro."
+    ],
+    "eixo": "direita",
+    "stale": false
+   },
+   "shared": 0.41056896775325563,
+   "shared_with": {
+    "0": 0.021580571593173413,
+    "2": 0.3874044920844635,
+    "3": 0.0014067377858024465,
+    "4": 1.4301214670559084e-05,
+    "5": 0.0,
+    "6": 3.54421407052986e-05,
+    "7": 1.77210703526493e-05,
+    "8": 0.0,
+    "9": 0.000109701864087829
+   }
   },
   {
    "community": 2,
@@ -73,7 +387,164 @@
    "n_not_authorized": 7,
    "n_other_errors": 0,
    "n_pending": 0,
-   "attrition": 0.39
+   "attrition": 0.39,
+   "n_tail_selected": 50,
+   "n_tail_hydrated": 34,
+   "top_accounts": [
+    {
+     "author_id": "128372940",
+     "username": "jairbolsonaro",
+     "name": "Jair M. Bolsonaro",
+     "verified": true,
+     "rt_cluster": 3185,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "33071040",
+     "username": "rmotta2",
+     "name": "Roberto Motta",
+     "verified": true,
+     "rt_cluster": 1025,
+     "n_tweets": 4
+    },
+    {
+     "author_id": "63542310",
+     "username": "PMESP",
+     "name": "Polícia Militar do Estado de São Paulo",
+     "verified": true,
+     "rt_cluster": 752,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1505737229985009667",
+     "username": "MarcoPiraja",
+     "name": "Marco Pirajá",
+     "verified": false,
+     "rt_cluster": 551,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "52189996",
+     "username": "rogeriosmarinho",
+     "name": "Rogério Marinho🇧🇷",
+     "verified": true,
+     "rt_cluster": 395,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "955586323452219393",
+     "username": "PATRlOTAS",
+     "name": "PATRlOTAS",
+     "verified": true,
+     "rt_cluster": 351,
+     "n_tweets": 4
+    },
+    {
+     "author_id": "125705585",
+     "username": "RicardoGomesPOA",
+     "name": "Ricardo Gomes",
+     "verified": true,
+     "rt_cluster": 248,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1196600981749932033",
+     "username": "oiluiz",
+     "name": "oiluiz",
+     "verified": true,
+     "rt_cluster": 245,
+     "n_tweets": 3
+    },
+    {
+     "author_id": "3060235071",
+     "username": "AdrillesRJorge",
+     "name": "Adrilles Jorge",
+     "verified": true,
+     "rt_cluster": 235,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "184210354",
+     "username": "BrunoEnglerDM",
+     "name": "Bruno Engler 2️⃣2️⃣2️⃣2️⃣2️⃣",
+     "verified": true,
+     "rt_cluster": 216,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "21823273",
+     "username": "jorgeserrao",
+     "name": "Jorge Serrão",
+     "verified": true,
+     "rt_cluster": 200,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "74756085",
+     "username": "BolsonaroSP",
+     "name": "Eduardo Bolsonaro🇧🇷",
+     "verified": true,
+     "rt_cluster": 197,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1222939896349970432",
+     "username": "revistaoeste",
+     "name": "Revista Oeste",
+     "verified": true,
+     "rt_cluster": 181,
+     "n_tweets": 4
+    },
+    {
+     "author_id": "126436384",
+     "username": "PastorMalafaia",
+     "name": "Silas Malafaia",
+     "verified": true,
+     "rt_cluster": 164,
+     "n_tweets": 3
+    },
+    {
+     "author_id": "1115744123309281280",
+     "username": "OdnaldaW2",
+     "name": "Odnalda Whigson Fênix 🦅🔥",
+     "verified": true,
+     "rt_cluster": 154,
+     "n_tweets": 1
+    }
+   ],
+   "summary": {
+    "sintese": "O material mostra o 7 de setembro de 2022 como uma celebração vitoriosa de apoio a Bolsonaro, narrada por quem esteve nos atos ou os defende. O tweet mais amplificado é do próprio presidente, que agradece pela \"uma das maiores e mais lindas festas\" e fecha com \"INDEPENDÊNCIA OU MORTE\" [1567644575027658752]. Vários tweets falam em \"maior 7 de Setembro da história\" ou \"maior manifestação de apoio a um presidente\" [1567615791138324484] [1567609758365933569] [1567495923248386048]. Há muitas imagens de cidades, como Belo Horizonte, Porto Alegre, Copacabana, Fortaleza, Maceió e Londres, usadas como prova de adesão popular [1567570398996217858] [1567686101766119424] [1567630218075963394] [1567825977853595648] [1567541865381072897] [1567589030371463168]. Um segundo enquadramento é o do ato \"pacífico\", sem incidentes, contraposto à expectativa de golpe. Ele aparece na nota da PMESP, que registra nenhuma ocorrência policial [1567562291268263936], e em cobranças à imprensa: \"Cadê?\" [1567697150036918274] [1567625177134923779] [1567703627434790914]. Um terceiro enquadramento é o da bandeira e do verde e amarelo \"resgatados\", não \"sequestrados\" [1567850591010934787] [1567830922061352961] [1567622012813574149]. Muitos tweets atacam a imprensa, descrita como em \"luto\" ou em \"chororô\" [1567707891418763265] [1567609758365933569] [1567654525971959809], e criticam Lula, que não teve ato público [1567669747948429312] [1567834613745065987]. O canto \"prende o Lula\" em desfiles é apresentado como \"vontade do povo\" [1567584192078270464] [1567641614272659458]. Outro assunto é a queda de seguidores e a derrubada de contas no Twitter, lida como ação contra quem apoiou os atos, com pedidos para \"levantar as contas de novo\" [1567692716695322624] [1567700144467972106] [1567702886401941504] [1567680236518522881]. Aparecem também as disputas no TSE, com pedidos do PT e do PDT [1567598831352651780] [1567711307100573697], e pedidos de voto para candidatos [1567604083502059521]. Os blocos A e B apontam na mesma direção. O B tem mais relatos locais, fotos de participantes e contas menores, e menos comentário de figuras de peso. Há poucas exceções: dois tweets da GloboNews e de outro perfil que destoam do tom e circularam pouco aqui, com lift abaixo de 1 [1567652919964483584] [1567496165414813699]. Um tweet irônico sugere o contrário, que o ato mostraria Bolsonaro \"estagnado\" [1567681212226887681].",
+    "contas_prevalentes": "Predominam políticos com mandato ou candidatos, comentaristas e influenciadores alinhados ao bolsonarismo, veículos de imprensa de perfil conservador e perfis de militantes. O presidente Jair Bolsonaro lidera de longe, com 3185 RTs. Há também o senador Rogério Marinho, Eduardo Bolsonaro, Carlos Jordy e Silas Malafaia, que pede votos para deputados na própria bio. Comentaristas como Roberto Motta, Ricardo Gomes, Adrilles Jorge e Jorge Serrão, e veículos como a Revista Oeste e a Jovem Pan News, somam bastante. A PMESP é a única instituição de peso, e seu tweet é uma nota neutra de ocorrências. Entre os perfis menores há contas de militantes como PATRlOTAS e Bruno Engler, que se identifica como \"Bolsonarista de verdade\". A informação vem, portanto, de lideranças e de uma rede de comentaristas e mídia afins que se retroalimentam, e não de reportagem independente. Poucos veículos tradicionais aparecem, como R7 e GloboNews, e esta última circulou menos que o esperado.",
+    "inclinacao_politica": {
+     "texto": "A comunidade parece bolsonarista, de direita e apoiadora da reeleição de Jair Bolsonaro. O principal sinal é a amplificação do presidente e de aliados, em tweets que pedem voto \"Bolsonaro 22\" e falam em vitória \"no 1º turno\" [1567604083502059521] [1567615791138324484]. Há ainda a hostilidade a Lula e ao PT [1567584192078270464] [1567687062299500546], o ataque à imprensa e a lógica de \"resgate\" da bandeira [1567850591010934787]. Os raros retweets que divergem, como o da GloboNews, parecem ser críticos ou ironias, com lift abaixo de 1 [1567652919964483584].",
+     "confianca": "alta"
+    },
+    "limites": "O material cobre apenas os tweets recuperados: 55 dos 150 selecionados estão indisponíveis, e entre eles podem estar conteúdos de contas apagadas ou suspensas, o que pode enviesar o retrato. Os RTs medem amplificação, não adesão, e não dá para saber a intenção de cada usuário. Não permite afirmar tamanho real dos atos, nem a veracidade das alegações sobre queda de seguidores, golpe ou financiamento, que aparecem como falas dos tweets. Também não mostra o que a comunidade disse em outros momentos, nem como é a relação com outras comunidades do evento. A leitura política vem do conteúdo e das bios, não de dados de filiação dos usuários.",
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1",
+    "generated_at": "2026-10-14T02:40:38+00:00",
+    "invalid_ids": []
+   },
+   "curation": {
+    "trecho": [
+     "O tweet mais amplificado é do próprio presidente, que agradece pela \"uma das maiores e mais lindas festas\" e fecha com \"INDEPENDÊNCIA OU MORTE\".",
+     "O B tem mais relatos locais, fotos de participantes e contas menores, e menos comentário de figuras de peso."
+    ],
+    "eixo": "direita",
+    "stale": false
+   },
+   "shared": 0.4710894501513401,
+   "shared_with": {
+    "0": 0.0135693193136475,
+    "1": 0.4566029384754225,
+    "3": 0.0008754195229701705,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 1.392427976662907e-05,
+    "7": 2.784855953325814e-05,
+    "8": 0.0,
+    "9": 0.0
+   }
   },
   {
    "community": 3,
@@ -90,7 +561,140 @@
    "n_not_authorized": 0,
    "n_other_errors": 0,
    "n_pending": 0,
-   "attrition": 0.1
+   "attrition": 0.1,
+   "n_tail_selected": 5,
+   "n_tail_hydrated": 4,
+   "top_accounts": [
+    {
+     "author_id": "33374761",
+     "username": "cirogomes",
+     "name": "Ciro Gomes",
+     "verified": true,
+     "rt_cluster": 1297,
+     "n_tweets": 8
+    },
+    {
+     "author_id": "2880932962",
+     "username": "o_antagonista",
+     "name": "O Antagonista",
+     "verified": true,
+     "rt_cluster": 166,
+     "n_tweets": 4
+    },
+    {
+     "author_id": "142418924",
+     "username": "josesartoce",
+     "name": "Sarto",
+     "verified": true,
+     "rt_cluster": 28,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "64391577",
+     "username": "antonionetopdt",
+     "name": "Antonio Neto",
+     "verified": true,
+     "rt_cluster": 26,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "142393421",
+     "username": "GloboNews",
+     "name": "GloboNews",
+     "verified": true,
+     "rt_cluster": 25,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1357041737093505025",
+     "username": "AnaPaulaMatosBA",
+     "name": "Ana Paula Matos",
+     "verified": false,
+     "rt_cluster": 23,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "2176286621",
+     "username": "meupaiseursal",
+     "name": "Ciro Prado",
+     "verified": false,
+     "rt_cluster": 22,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1500886164366053387",
+     "username": "pdtrjoficial",
+     "name": "PDT RJ 12",
+     "verified": false,
+     "rt_cluster": 20,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1215701266048999424",
+     "username": "fausto_oli",
+     "name": "Fausto Oliveira",
+     "verified": false,
+     "rt_cluster": 19,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "736700514587553792",
+     "username": "tatunotoco",
+     "name": "Tattoonotoco",
+     "verified": false,
+     "rt_cluster": 17,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "3167874665",
+     "username": "senadorasoraya",
+     "name": "Soraya Thronicke",
+     "verified": true,
+     "rt_cluster": 14,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1407001858925809669",
+     "username": "APrimeiraVia",
+     "name": "A Primeira Via",
+     "verified": false,
+     "rt_cluster": 13,
+     "n_tweets": 1
+    }
+   ],
+   "summary": {
+    "sintese": "O material desta comunidade gira quase inteiramente em torno de Ciro Gomes e de como ele se posicionou diante do 7 de Setembro. O núcleo são tweets do próprio candidato e de sua campanha: o pronunciamento feito de Ouro Preto, anunciado e transmitido ao vivo [1567604308144787461] [1567564800707760132] [1567604695690100737] [1567652060484583424], e o programa Mesa 12 na #CiroTV com aliados do PDT [1567665643146682368] [1567664165757636609]. O enquadramento central é a denúncia de que Bolsonaro fez do dia \"o mais desavergonhado comício eleitoral\", com \"outras transgressões políticas, institucionais e morais seríssimas\", e a cobrança de \"uma ação da justiça\" [1567607990462586882]. O PDT-RJ cita a frase \"o começo do fim da Era Bolsonaro\" [1567620238547492865]. A GloboNews noticia que o PDT ingressou no TSE contra a chapa Bolsonaro/Braga Netto por abuso de poder político e econômico [1567618624642334720]. O Antagonista reproduz a crítica de Ciro ao uso político dos atos e a fala em que ele chama o presidente de \"imbecil e criminoso\" e os apoiadores de \"patetas\" [1567623506854121477] [1567613532438421504]. Em tom diferente, há mensagens de paz, fé e conciliação: encontro com o Arcebispo de Mariana e apelo contra \"qualquer ameaça à liberdade\" [1567515621448876032] [1567553920523722753], além de votos de esperança e de \"um novo caminho\" [1567467212574756865] [1567500717581111296]. Também aparecem pedidos de união [1567454295913553921] e uma crítica à sujeira deixada na Praça Portugal, com a frase \"patriotismo combina com civilidade\" [1567647046944817153]. O Bloco B mostra o que é mais próprio do grupo: a defesa de Ciro diante do PT, antecipando que lhe atribuirão a culpa pelo tamanho dos atos [1567600052406722560]. Ali estão ainda a ação judicial de Soraya Thronicke, que pede corte do tempo de TV de Bolsonaro [1567619359211757574], e um item noticioso sobre o ato em Brasília [1567636386664136707]. Um tweet ironiza os tratores no desfile, falando em \"agro salivante na Dependência\" [1567498218807742464]. Os blocos A e B coincidem no foco em Ciro; o B acrescenta a rivalidade com o campo de Lula e itens mais dispersos.",
+    "contas_prevalentes": "Domina uma conta de político com mandato e candidato, @cirogomes, com 1297 RTs na comunidade, muito acima das demais. Em seguida vêm contas ligadas à sua campanha e ao PDT: @josesartoce, ex-prefeito; @antonionetopdt, suplente pelo PDT; @pdtrjoficial, o diretório estadual; e @APrimeiraVia, de perfil militante. Há ainda apoiadores individuais, como @meupaiseursal e @tatunotoco. Veículos de imprensa aparecem em segundo plano: @o_antagonista, com 166 RTs, e @GloboNews, com 25. Eles funcionam sobretudo como repercussão das falas de Ciro [1567623506854121477] [1567618624642334720]. Aparecem também @AnaPaulaMatosBA, vice-prefeita de Salvador, e @senadorasoraya, senadora que se apresenta como apoiadora de Lula [1567619359211757574]. A informação vem, portanto, da fonte primária, a própria campanha e o partido, amplificada por imprensa e militância.",
+    "inclinacao_politica": {
+     "texto": "A comunidade parece ser de apoiadores de Ciro Gomes e do PDT, em oposição explícita a Bolsonaro. O sinal mais direto é a concentração dos retweets em Ciro e na sua campanha [1567607990462586882] [1567665643146682368] e nos ataques ao uso eleitoral do 7 de Setembro [1567620238547492865]. Há também uma marca de distinção em relação ao PT: a defesa de que Ciro seria responsabilizado indevidamente [1567600052406722560]. O perfil é o de um campo ciro-pedetista, crítico de Bolsonaro e, em parte, do PT, com tom de conciliação e apelo religioso em alguns tweets [1567515621448876032]. Nem todos os retweets implicam adesão, mas o volume a Ciro é consistente. A presença de Soraya Thronicke, que se apresenta como pró-Lula, e de itens de imprensa mostra que parte do material não segue essa linha [1567619359211757574].",
+     "confianca": "alta"
+    },
+    "limites": "O material não permite afirmar quem são de fato os 439 usuários, nem se retuitaram por adesão, ironia ou informação. Não mostra a repercussão do evento fora desta comunidade nem o que foi dito pelos apoiadores de Bolsonaro, já que quase todo o conteúdo vem de um só campo. Não dá para medir o tamanho dos atos nem verificar as alegações dos tweets, como a ação no TSE ou a reação do PT. Três dos 25 tweets selecionados não puderam ser recuperados e podem alterar o quadro. Como o evento é um único dia, nada aqui indica o que a comunidade pensava antes ou depois.",
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1",
+    "generated_at": "2026-10-14T02:41:36+00:00",
+    "invalid_ids": []
+   },
+   "curation": {
+    "trecho": [
+     "O material desta comunidade gira quase inteiramente em torno de Ciro Gomes e de como ele se posicionou diante do 7 de Setembro.",
+     "O Bloco B mostra o que é mais próprio do grupo: a defesa de Ciro diante do PT, antecipando que lhe atribuirão a culpa pelo tamanho dos atos."
+    ],
+    "eixo": "outro",
+    "stale": false
+   },
+   "shared": 0.26873037371252034,
+   "shared_with": {
+    "0": 0.24362189947106824,
+    "1": 0.016414849721429293,
+    "2": 0.008666942911655463,
+    "4": 2.6681608367352383e-05,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 0.0,
+    "8": 0.0,
+    "9": 0.0
+   }
   }
  ],
  "files": {

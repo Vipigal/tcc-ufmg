@@ -79,6 +79,43 @@ CREATE TABLE IF NOT EXISTS lookup_errors (
   PRIMARY KEY (resource_type, resource_id)
 );
 
+-- Cauda característica por (evento, cluster) — M8b, D16 (2026-10-13): top-m por lift,
+-- fora do top-K do cluster. Separada de event_top_tweets para não alterar o top-K.
+CREATE TABLE IF NOT EXISTS event_tail_tweets (
+  event_slug TEXT, community INTEGER, tweet_id TEXT,
+  rank INTEGER,
+  rt_cluster INTEGER, rt_graph INTEGER, rt_event INTEGER,
+  lift REAL, m INTEGER,
+  selected_at TEXT,
+  PRIMARY KEY (event_slug, community, tweet_id)
+);
+
+-- Sínteses por LLM (M11, D8 revisado em 2026-10-13). Uma linha por (evento, cluster,
+-- modelo, versão do prompt): mudar o prompt gera linha nova e preserva o histórico.
+-- `raw_response` guarda a saída bruta do modelo (reprodutibilidade sem temperature).
+CREATE TABLE IF NOT EXISTS cluster_summaries (
+  event_slug TEXT, community INTEGER, model TEXT, prompt_version TEXT,
+  status TEXT CHECK (status IN ('ok','error')),
+  output_json TEXT, raw_response TEXT,
+  prompt_sha256 TEXT, input_json TEXT,
+  cited_ids_json TEXT, invalid_ids_json TEXT,
+  generated_at TEXT,
+  PRIMARY KEY (event_slug, community, model, prompt_version)
+);
+
+-- Mídias (M9c, 2026-10-14): objetos de `includes.media` da re-hidratação dos tweets com
+-- `media_key` nas entities. Tabelas próprias para não reescrever `tweets` (snapshot).
+CREATE TABLE IF NOT EXISTS media (
+  media_key TEXT PRIMARY KEY,
+  type TEXT, url TEXT, preview_image_url TEXT,
+  width INTEGER, height INTEGER, alt_text TEXT,
+  raw_json TEXT, hydrated_at TEXT
+);
+CREATE TABLE IF NOT EXISTS tweet_media (
+  tweet_id TEXT, media_key TEXT, position INTEGER,
+  PRIMARY KEY (tweet_id, media_key)
+);
+
 CREATE TABLE IF NOT EXISTS community_membership (
   event_slug TEXT, user_id TEXT,
   community INTEGER, ideological_score REAL, weighted_degree REAL,
@@ -88,6 +125,8 @@ CREATE TABLE IF NOT EXISTS community_membership (
 """
 
 TOP_TWEETS_COLUMNS = ["community", "rank", "tweet_id", "rt_cluster", "rt_graph", "rt_event", "k"]
+TAIL_TWEETS_COLUMNS = ["community", "rank", "tweet_id", "rt_cluster", "rt_graph", "rt_event",
+                       "lift", "m"]
 
 
 def _as_int_bool(v):
@@ -251,6 +290,65 @@ class Database:
                 "VALUES (?,?,?,?,?,?,?,?,?)", rows)
         return len(rows)
 
+    def replace_event_tail_tweets(self, event_slug: str, tail: pd.DataFrame,
+                                  selected_at: str | None = None) -> int:
+        """Substitui a cauda do evento pela saída do M8b (`tail_tweets.parquet`) —
+        *replace* por evento, pelo mesmo motivo de `replace_event_top_tweets`."""
+        when = selected_at or self._now()
+        df = tail[TAIL_TWEETS_COLUMNS]
+        rows = [(event_slug, int(r.community), str(r.tweet_id), int(r.rank),
+                 int(r.rt_cluster), int(r.rt_graph), int(r.rt_event), float(r.lift),
+                 int(r.m), when)
+                for r in df.itertuples(index=False)]
+        with self.conn:
+            self.conn.execute("DELETE FROM event_tail_tweets WHERE event_slug = ?", (event_slug,))
+            self.conn.executemany(
+                "INSERT INTO event_tail_tweets (event_slug, community, tweet_id, rank, "
+                "rt_cluster, rt_graph, rt_event, lift, m, selected_at) "
+                "VALUES (?,?,?,?,?,?,?,?,?,?)", rows)
+        return len(rows)
+
+    # ── sínteses por LLM (M11) ───────────────────────────────────────────
+    def upsert_cluster_summary(self, row: dict) -> int:
+        return self._upsert("cluster_summaries",
+                            ["event_slug", "community", "model", "prompt_version"], [row])
+
+    # ── mídias (M9c) ─────────────────────────────────────────────────────
+    def upsert_media(self, media_objs: list[dict], hydrated_at: str | None = None) -> int:
+        when = hydrated_at or self._now()
+        rows = [{"media_key": str(o["media_key"]), "type": o.get("type"), "url": o.get("url"),
+                 "preview_image_url": o.get("preview_image_url"), "width": o.get("width"),
+                 "height": o.get("height"), "alt_text": o.get("alt_text"),
+                 "raw_json": json.dumps(o, ensure_ascii=False), "hydrated_at": when}
+                for o in media_objs]
+        return self._upsert("media", ["media_key"], rows)
+
+    def replace_tweet_media(self, tweet_id: str, media_keys: list[str]) -> int:
+        with self.conn:
+            self.conn.execute("DELETE FROM tweet_media WHERE tweet_id = ?", (str(tweet_id),))
+            self.conn.executemany(
+                "INSERT INTO tweet_media (tweet_id, media_key, position) VALUES (?,?,?)",
+                [(str(tweet_id), str(k), i) for i, k in enumerate(media_keys)])
+        return len(media_keys)
+
+    def entity_media_keys(self) -> dict[str, list[str]]:
+        """tweet_id → media_keys citados em `entities.urls` (na ordem), para tweets em cache."""
+        out = {}
+        for tid, raw in self.conn.execute("SELECT tweet_id, raw_json FROM tweets"):
+            urls = (json.loads(raw).get("entities") or {}).get("urls", [])
+            keys = list(dict.fromkeys(u["media_key"] for u in urls if u.get("media_key")))
+            if keys:
+                out[tid] = keys
+        return out
+
+    def pending_media_tweet_ids(self, retry_errors: bool = False) -> list[str]:
+        """Tweets em cache com mídia nas entities e ainda sem linha em `tweet_media`."""
+        done = {r[0] for r in self.conn.execute("SELECT DISTINCT tweet_id FROM tweet_media")}
+        pending = set(self.entity_media_keys()) - done
+        if not retry_errors:
+            pending -= self.errored_ids("tweet")
+        return sorted(pending)
+
     # ── erros de lookup (IDs que a API não devolveu) ─────────────────────
     @staticmethod
     def _error_row(resource_type: str, o: dict, attempted_at: str) -> dict:
@@ -293,7 +391,9 @@ class Database:
         return {r[0] for r in self.conn.execute("SELECT tweet_id FROM tweets")}
 
     def selected_tweet_ids(self) -> set[str]:
-        return {r[0] for r in self.conn.execute("SELECT DISTINCT tweet_id FROM event_top_tweets")}
+        """Tudo que alguma seleção pediu: top-K (M8) ∪ cauda (M8b)."""
+        return {r[0] for r in self.conn.execute(
+            "SELECT tweet_id FROM event_top_tweets UNION SELECT tweet_id FROM event_tail_tweets")}
 
     def pending_tweet_ids(self, retry_errors: bool = False) -> list[str]:
         """Selecionados (M8) ainda não hidratados. Sem `retry_errors`, exclui também os

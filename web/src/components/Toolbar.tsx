@@ -1,5 +1,5 @@
 import { Search, X } from "lucide-react";
-import type { ExclusivityFilter, SortKey, StatusFilter, ToolbarState } from "../lib/filter";
+import type { ExclusivityFilter, OriginFilter, SortKey, StatusFilter, ToolbarState } from "../lib/filter";
 import { DEFAULT_TOOLBAR } from "../lib/filter";
 
 interface Props {
@@ -26,6 +26,11 @@ const EXCLUSIVITY_LABELS: Record<ExclusivityFilter, string> = {
   exclusive: "exclusivos (pureza ≥ 0,90)",
   shared: "compartilhados (pureza < 0,50)",
 };
+const ORIGIN_LABELS: Record<OriginFilter, string> = {
+  all: "top-K + cauda",
+  amplified: "só top-K (mais amplificados)",
+  characteristic: "só cauda (característicos)",
+};
 
 function keys<K extends string>(labels: Record<K, string>): K[] {
   return Object.keys(labels) as K[];
@@ -38,6 +43,7 @@ export function Toolbar({ state, onChange, shown, total }: Props) {
     state.sort !== DEFAULT_TOOLBAR.sort ||
     state.status !== DEFAULT_TOOLBAR.status ||
     state.exclusivity !== DEFAULT_TOOLBAR.exclusivity ||
+    state.origin !== DEFAULT_TOOLBAR.origin ||
     state.query !== DEFAULT_TOOLBAR.query;
 
   return (
@@ -72,6 +78,16 @@ export function Toolbar({ state, onChange, shown, total }: Props) {
           {keys(EXCLUSIVITY_LABELS).map((k) => (
             <option key={k} value={k}>
               {EXCLUSIVITY_LABELS[k]}
+            </option>
+          ))}
+        </select>
+      </label>
+      <label className="flex items-center gap-1 text-muted">
+        origem
+        <select className="select" value={state.origin} onChange={(e) => set("origin", e.target.value as OriginFilter)}>
+          {keys(ORIGIN_LABELS).map((k) => (
+            <option key={k} value={k}>
+              {ORIGIN_LABELS[k]}
             </option>
           ))}
         </select>

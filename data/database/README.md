@@ -192,6 +192,19 @@ saiu do top-K numa re-seleção some. A cópia em Parquet fica em
 > Contagens são do **dataset** (usuário×tweet distinto conta 1), não a métrica pública da API,
 > que vive em `tweets.retweet_count`.
 
+### `event_tail_tweets` — cauda característica por (evento, cluster) (D16)
+Saída do M8b (`TailSelector`): até `m` tweets por cluster, fora do top-K dele, com
+`rt_cluster ≥ min_rt` e lift > 1, ranqueados por `lift = (rt_cluster / rt_graph) / (RT_c / RT_graph)`.
+Mesmas colunas de `event_top_tweets`, com `lift` e `m` no lugar de `k`. *Replace* por evento.
+
+### `cluster_summaries` — sínteses por LLM (M11, D8)
+Uma linha por (evento, cluster, modelo, versão do prompt); mudar o prompt gera linha nova.
+`input_json` guarda o insumo exato (contas calculadas + blocos), `raw_response` a saída bruta
+do `claude -p`, `output_json` o JSON validado (`sintese`, `contas_prevalentes`,
+`inclinacao_politica{texto, confianca}`, `limites`) e `invalid_ids_json` os `[tweet_id]`
+citados que não estão no corpus do cluster. `status = 'error'` guarda a mensagem de falha
+em `raw_response`; nunca há saída inventada.
+
 ### `community_membership` — *(fase 2)* projeção analítica por usuário
 Cópia de conveniência do resultado do pipeline por `(evento, usuário, τ)`. **Vazia até a
 análise comparativa começar.** O `user_id` aqui é um **nó do grafo (retweetador)** — população
@@ -249,6 +262,25 @@ sqlite3 data/database/hydrated.sqlite ".schema users"
 ## Changelog
 
 Toda mudança de schema é registrada aqui (mais recente no topo).
+
+### 2026-10-14 — mídias (M9c)
+- Novas `media` (PK `media_key`; `type` photo|video|animated_gif, `url`, `preview_image_url`,
+  `width`, `height`, `alt_text`, `raw_json`, `hydrated_at`) e `tweet_media` (PK `(tweet_id,
+  media_key)`, `position`). Preenchidas por `MediaHydrator` (`modules/hydrate.py`), que pede de
+  novo os tweets com `media_key` nas entities **com** `expansions=attachments.media_keys`. `tweets`
+  **não** é reescrita (snapshot da 1ª hidratação). Tweet que sumiu desde então vai para
+  `lookup_errors` como 'tweet'. Execução de 2026-10-14: 495 pedidos → 492 devolvidos, 3 Not Found;
+  575 mídias (312 fotos, 260 vídeos, 1 GIF); US$ 2,46 em tweets + mídias (preço não informado).
+
+### 2026-10-13 — cauda característica (D16) e sínteses por LLM (D8)
+- Nova `event_tail_tweets` (M8b): cauda por lift de cada (evento, cluster), mesma PK de
+  `event_top_tweets`; colunas `rank`, `rt_cluster`, `rt_graph`, `rt_event`, `lift`, `m`,
+  `selected_at`. Gravada por *replace* por evento (`Database.replace_event_tail_tweets`).
+- `Database.selected_tweet_ids` (e, com ela, `pending_tweet_ids`/M9) = top-K ∪ cauda.
+- Nova `cluster_summaries` (M11, `modules/summarize.py`): PK `(event_slug, community, model,
+  prompt_version)`; `status` ('ok'|'error'), `output_json`, `raw_response` (saída bruta do
+  modelo), `prompt_sha256`, `input_json` (o insumo exato), `cited_ids_json`,
+  `invalid_ids_json` (citados fora do corpus do cluster), `generated_at`.
 
 ### 2026-09-15 — seleção por cluster + migração do legado
 - `event_top_tweets` refeita para a seleção por **(evento, cluster)** do D6 revisado: PK

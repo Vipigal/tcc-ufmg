@@ -29,7 +29,7 @@ export function Avatar({ src, name, color, size = 40 }: Props) {
       referrerPolicy="no-referrer"
       onError={() => setFailed(true)}
       style={style}
-      className="shrink-0 rounded-full bg-gray-100 object-cover"
+      className="shrink-0 rounded-full bg-subtle object-cover"
     />
   );
 }

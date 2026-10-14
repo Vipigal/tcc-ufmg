@@ -39,7 +39,158 @@
    "n_not_authorized": 4,
    "n_other_errors": 0,
    "n_pending": 0,
-   "attrition": 0.21
+   "attrition": 0.21,
+   "n_tail_selected": 50,
+   "n_tail_hydrated": 41,
+   "top_accounts": [
+    {
+     "author_id": "1345206382312775680",
+     "username": "desmentindobozo",
+     "name": "Desmentindo Bolsonaro",
+     "verified": false,
+     "rt_cluster": 10879,
+     "n_tweets": 7
+    },
+    {
+     "author_id": "18286139",
+     "username": "reinaldoazevedo",
+     "name": "Reinaldo Azevedo",
+     "verified": true,
+     "rt_cluster": 9758,
+     "n_tweets": 4
+    },
+    {
+     "author_id": "545643493",
+     "username": "lazarorosa25",
+     "name": "Lázaro Rosa 🇧🇷",
+     "verified": true,
+     "rt_cluster": 9753,
+     "n_tweets": 9
+    },
+    {
+     "author_id": "1270774020808626176",
+     "username": "ThiagoResiste",
+     "name": "Thiago dos Reis 🇧🇷 1399",
+     "verified": true,
+     "rt_cluster": 9367,
+     "n_tweets": 7
+    },
+    {
+     "author_id": "1198004545",
+     "username": "AndreJanonesMG",
+     "name": "André Janones",
+     "verified": true,
+     "rt_cluster": 9225,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "9722452",
+     "username": "antoniotabet",
+     "name": "Antonio Tabet",
+     "verified": true,
+     "rt_cluster": 8075,
+     "n_tweets": 4
+    },
+    {
+     "author_id": "14594698",
+     "username": "UOLNoticias",
+     "name": "UOL Notícias",
+     "verified": true,
+     "rt_cluster": 5778,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "1097073004658470913",
+     "username": "PedroRonchi2",
+     "name": "Pedro Ronchi",
+     "verified": true,
+     "rt_cluster": 5219,
+     "n_tweets": 5
+    },
+    {
+     "author_id": "61198788",
+     "username": "NatuzaNery",
+     "name": "Natuza Nery",
+     "verified": false,
+     "rt_cluster": 4384,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "256730310",
+     "username": "joaodamoedo",
+     "name": "João Amoêdo",
+     "verified": true,
+     "rt_cluster": 3538,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "14594813",
+     "username": "folha",
+     "name": "Folha de S.Paulo",
+     "verified": true,
+     "rt_cluster": 3351,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "3331429624",
+     "username": "Metropoles",
+     "name": "Metrópoles",
+     "verified": true,
+     "rt_cluster": 3227,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "953378142198161409",
+     "username": "choquei",
+     "name": "CHOQUEI",
+     "verified": true,
+     "rt_cluster": 3172,
+     "n_tweets": 3
+    },
+    {
+     "author_id": "45447020",
+     "username": "xicosa",
+     "name": "xico sá",
+     "verified": true,
+     "rt_cluster": 3148,
+     "n_tweets": 3
+    },
+    {
+     "author_id": "58951368",
+     "username": "monicabergamo",
+     "name": "Mônica Bergamo",
+     "verified": true,
+     "rt_cluster": 2661,
+     "n_tweets": 2
+    }
+   ],
+   "summary": {
+    "sintese": "O material gira quase inteiramente em torno do episódio em que Roberto Jefferson, ao receber a Polícia Federal para cumprir uma ordem judicial, teria atirado com fuzil e lançado granadas. Os relatos iniciais são factuais e urgentes: troca de tiros, agente baleado, dois federais feridos, uma mulher e um homem [1584212509917339648] [1584233079165841409] [1584222515475677185]. Logo aparece uma correção de vocabulário: não houve \"troca de tiros\", houve atentado contra a PF [1584231385333927937]. Os números, mais de 20 tiros de fuzil e duas granadas, vêm da investigação citada pela Folha [1584298634165641216].\n\nO enquadramento dominante liga Jefferson a Bolsonaro. A fórmula \"ROBERTO JEFFERSON É BOLSONARO\" se repete, e há pedidos de comentários para subir a tag \"ATENTADO CONTRA A PF\" [1584257160141152257] [1584230321436098560] [1584218772973711361] [1584230237910364160]. Jefferson é descrito como coordenador de campanha, amigo pessoal de Bolsonaro e criador do \"padre falso\" Kelmon [1584232388217167873] [1584232328456417281] [1584267867675320321]. A declaração de Bolsonaro de que \"não tem uma foto dele comigo\" é contestada com fotos [1584254531021725697] [1584271292660088834]. Quando Bolsonaro passa a chamá-lo de criminoso, os tweets tratam isso como recuo forçado e ironizam os bolsonaristas [1584310295392321536] [1584307621829697536] [1584312542725173249].\n\nOutro eixo é o envio do ministro da Justiça ao Rio, lido como apoio ou regalia, em contraste com o tratamento dado a pessoas pobres, negras ou moradoras de favela [1584245755836964864] [1584234779758972929] [1584281003580964866]. Há ainda perguntas sobre como alguém em prisão domiciliar tinha fuzil e granadas [1584227338174070786] [1584280026941227008], suspeita de vazamento da operação [1584260491412545536] [1584245896958525440] e relatos de agressão a repórter da Globo [1584273929148907520].\n\nAparecem também a hipótese de cortina de fumaça ou preparação de cenário de golpe a sete dias da eleição [1584221148392267777] [1584279578242973696] e o argumento de que o caso desvia a atenção do plano de Guedes para salário mínimo e aposentadorias [1584277187875655681] [1584302834899881984]. Há apelo eleitoral explícito a Lula [1584253760238342145] [1584220123895775233]. O bloco B repete os mesmos enquadramentos, com mais ênfase em Kelmon, no ministro e na coletiva exigida por Jefferson, sem assunto novo.",
+    "contas_prevalentes": "Há mistura de políticos, jornalistas e veículos, mais perfis de militância. Entre os políticos estão Janones, deputado federal, e Thiago dos Reis, candidato a deputado federal pelo PT-SP com bio pró-Lula; Haddad, Gleisi, Freixo e Boulos aparecem entre os tweets. Há jornalistas e colunistas, como Reinaldo Azevedo, Natuza Nery, Mônica Bergamo e Xico Sá, e veículos como UOL, Folha, Metrópoles e Choquei. Há também influenciadores e humoristas, como Tabet e Lázaro Rosa, este último \"progressista e ativista pela democracia\". Os perfis mais retuitados são, em boa parte, de militância: \"Desmentindo Bolsonaro\" é o primeiro da tabela, com 10.879 RTs, e tesoureiros e abocadelobo pedem comentários para subir tag. A informação factual vem de imprensa e de fontes da PF citadas por repórteres [1584222515475677185], mas o enquadramento interpretativo vem de políticos, ativistas e comentaristas.",
+    "inclinacao_politica": {
+     "texto": "A comunidade parece oposicionista a Bolsonaro, com alinhamento majoritário à candidatura de Lula e ao campo de esquerda e centro-esquerda. Os tweets chamam o bolsonarismo de violento [1584230138526343168], dizem que \"BOLSONARISMO MATA\" [1584236983005884416] e pedem voto em Lula [1584220123895775233] [1584253760238342145]. Entre as contas mais retuitadas há candidato do PT, deputado da Rede e perfil de conteúdo pró-Lula. Também aparecem vozes menos alinhadas ao PT, como Amoêdo, ex-presidente do Novo [1584307532272586752], e jornalistas de imprensa, o que sugere uma frente anti-Bolsonaro mais ampla que o campo petista. Não aparece nenhum tweet defendendo Bolsonaro ou Jefferson de forma séria.",
+     "confianca": "alta"
+    },
+    "limites": "O material mostra o que foi retuitado, não quem retuitou nem por quê. Retweets podem ser de ironia ou denúncia, embora aqui o tom pareça consistente. Os lifts são quase idênticos (cerca de 1,49), então não permitem distinguir o que é próprio da comunidade, e o bloco B não revela um assunto diferente do bloco A. Sem outras comunidades à vista, não dá para dizer o que a diferencia. Trinta de 150 tweets estão indisponíveis e podem ter conteúdo diferente. Não há aqui posições de bolsonaristas, apenas citações indiretas, então não se pode afirmar como eles enquadraram o evento. As alegações dos tweets, como vazamento da operação, combinação com Bolsonaro, golpe ou cortina de fumaça, são afirmações dos autores e não foram verificadas. O material também não permite medir a adesão individual dos 15.972 usuários nem saber se a inclinação descrita vale para todos.",
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1",
+    "generated_at": "2026-10-14T02:42:09+00:00",
+    "invalid_ids": []
+   },
+   "curation": {
+    "trecho": [
+     "Logo aparece uma correção de vocabulário: não houve \"troca de tiros\", houve atentado contra a PF.",
+     "A fórmula \"ROBERTO JEFFERSON É BOLSONARO\" se repete, e há pedidos de comentários para subir a tag \"ATENTADO CONTRA A PF\"."
+    ],
+    "eixo": "esquerda",
+    "stale": false
+   },
+   "shared": 0.007730430651186578,
+   "shared_with": {
+    "0": 0.004525060803995045,
+    "2": 0.003108780093871874,
+    "3": 9.658975331965841e-05
+   }
   },
   {
    "community": 0,
@@ -56,7 +207,158 @@
    "n_not_authorized": 1,
    "n_other_errors": 0,
    "n_pending": 0,
-   "attrition": 0.34
+   "attrition": 0.34,
+   "n_tail_selected": 50,
+   "n_tail_hydrated": 29,
+   "top_accounts": [
+    {
+     "author_id": "1087259768",
+     "username": "taoquei1",
+     "name": "TeAtualizei 🇧🇷👊🏻❤️",
+     "verified": true,
+     "rt_cluster": 9142,
+     "n_tweets": 5
+    },
+    {
+     "author_id": "128372940",
+     "username": "jairbolsonaro",
+     "name": "Jair M. Bolsonaro",
+     "verified": true,
+     "rt_cluster": 5209,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "40637000",
+     "username": "flferronato",
+     "name": "Flavia Ferronato",
+     "verified": true,
+     "rt_cluster": 4920,
+     "n_tweets": 3
+    },
+    {
+     "author_id": "126436384",
+     "username": "PastorMalafaia",
+     "name": "Silas Malafaia",
+     "verified": true,
+     "rt_cluster": 4724,
+     "n_tweets": 3
+    },
+    {
+     "author_id": "464128120",
+     "username": "JoaquinTeixeira",
+     "name": "Joaquin Teixeira",
+     "verified": true,
+     "rt_cluster": 3114,
+     "n_tweets": 5
+    },
+    {
+     "author_id": "41280003",
+     "username": "RafaelFontana",
+     "name": "Rafael Fontana",
+     "verified": true,
+     "rt_cluster": 3085,
+     "n_tweets": 5
+    },
+    {
+     "author_id": "1058819604741525510",
+     "username": "GeneralMourao",
+     "name": "General Hamilton Mourão",
+     "verified": true,
+     "rt_cluster": 2725,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "64523460",
+     "username": "reportersalles",
+     "name": "Fernanda Salles",
+     "verified": true,
+     "rt_cluster": 2498,
+     "n_tweets": 3
+    },
+    {
+     "author_id": "758264276",
+     "username": "nikolas_dm",
+     "name": "Nikolas Ferreira",
+     "verified": true,
+     "rt_cluster": 2260,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "4369607422",
+     "username": "PrMocellin",
+     "name": "Pastor Rodrigo Mocellin",
+     "verified": false,
+     "rt_cluster": 2149,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "2747048534",
+     "username": "MarceloCarvFr",
+     "name": "Marcelo de Carvalho",
+     "verified": true,
+     "rt_cluster": 1899,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "68712576",
+     "username": "CarlosBolsonaro",
+     "name": "Carlos Bolsonaro",
+     "verified": true,
+     "rt_cluster": 1724,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "357030742",
+     "username": "Biakicis",
+     "name": "Bia Kicis",
+     "verified": true,
+     "rt_cluster": 1603,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "2880932962",
+     "username": "o_antagonista",
+     "name": "O Antagonista",
+     "verified": true,
+     "rt_cluster": 1516,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "1285299871340167173",
+     "username": "Sonaira_sp",
+     "name": "Sonaira Fernandes 22220",
+     "verified": true,
+     "rt_cluster": 1299,
+     "n_tweets": 1
+    }
+   ],
+   "summary": {
+    "sintese": "O material gira quase todo em torno do episódio em que a Polícia Federal foi à casa de Roberto Jefferson cumprir ordem de prisão e houve troca de tiros. Parte do Bloco A é relato em tempo real: \"trocando tiros com a Polícia Federal\" [1584208643137806338], \"PF cumpre ordem de prisão... Já houve tiroteio\" [1584213361050329093], a fala de que só sai morto [1584221218042847232] e a derrubada da conta da filha, Cris Brasil [1584225411373813760]. O enquadramento predominante, porém, é crítico à prisão e a Alexandre de Moraes: \"Gestapo\" [1584225958433026048], \"ditadura da toga\" [1584220815763337217], \"prisões arbitrárias\" [1584225155165061120], \"não existe crime de opinião\" [1584246185514401792]. Aparece também a comparação de \"2 pesos, 2 medidas\" com a jornalista Bárbara Gancia, que teria ofendido a filha de Bolsonaro sem consequência [1584269804260556801] [1584280002928910336]. Outro eixo atribui o pedido de prisão a Randolfe Rodrigues, chamado de coordenador de campanha de Lula [1584261821359280129] [1584276040540909568]. Um terceiro eixo separa Jefferson de Bolsonaro: o presidente o chama de \"criminoso\" [1584306781530230784]; tweets dizem que ele não coordena a campanha e processou Bolsonaro [1584286460164730881] [1584272474723622912], e a esquerda é acusada de tentar associá-los [1584344790249836545]. Muitos tweets combinam repúdio às falas ou ao tiroteio com crítica à prisão [1584225958433026048] [1584249956197863425] [1584270090631274496] [1584251779998359553]. Há ainda humor e ironia [1584240807938121728] [1584258146154950656] e apoio explícito a Jefferson, com relato de concentração de pessoas diante da casa dele [1584260757000441856] [1584216621887160321]. Um tweet discorda do enquadramento de \"só xingou\", lembrando que ele violou a prisão domiciliar [1584245159445008384]. O Bloco B, de contas menores, é mais enfático e mais favorável a Jefferson: alertas em caixa-alta sobre o tiroteio [1584213792572944384], admiração pela resistência [1584215675316248576], pedidos de prisão também para Gancia [1584221376683995136] [1584248112368926720], Randolfe [1584289724662919168] e \"ordens ilegais não podem ser cumpridas\" [1584241535188860928]. Em A, o tom é mais mediado: vários políticos repudiam a ação armada antes de criticar o inquérito.",
+    "contas_prevalentes": "Predominam políticos com mandato ou candidatos e figuras do campo bolsonarista: Jair Bolsonaro, Mourão, Nikolas Ferreira, Carlos Bolsonaro, Bia Kicis, Zambelli e Tarcísio, além de lideranças religiosas como Silas Malafaia e o Pastor Mocellin. Muitos têm bio com número de candidatura ou cargo. Também aparecem influenciadores e comentaristas políticos, como @taoquei1 (a conta mais retuitada), Rafael Fontana, Flavia Ferronato, Joaquin Teixeira (humor) e Fabio Faria. Há veículos e portais alinhados, como Revista Oeste, Conexão Política, Gazeta do Povo e O Antagonista, e jornalistas como Fernanda Salles. No Bloco B há muitos perfis pequenos, aparentemente de cidadãos comuns. A informação vem, portanto, de políticos, influenciadores e mídia de opinião, não de agências de notícias neutras. Parte dos relatos factuais vem de contas como Ferronato e Salles.",
+    "inclinacao_politica": {
+     "texto": "A comunidade parece alinhada à direita bolsonarista. Os tweets mais amplificados são do presidente Bolsonaro e de aliados, e as bios trazem candidaturas pelo grupo (\"Vote 2 2 3\") e referências a Bolsonaro. Os enquadramentos contra Moraes e o STF, a associação de Randolfe a Lula, hashtags como #SuperLiveComBolsonaro22 e o discurso de que a esquerda tenta ligar Jefferson a Bolsonaro reforçam isso [1584306781530230784] [1584261821359280129] [1584233139269877760]. Há nuance: uma parte relevante condena as falas de Jefferson e o tiroteio, e o próprio Bolsonaro o chama de criminoso [1584223233167200256] [1584306781530230784]. O campo é crítico ao Judiciário e defende a campanha de Bolsonaro, sem ser uniforme sobre Jefferson.",
+     "confianca": "alta"
+    },
+    "limites": "O material não permite saber se cada retweet significa adesão, ironia ou informação. Faltam 55 de 150 tweets, o que pode enviesar o quadro. Não há acesso ao conteúdo de links, imagens e vídeos. As alegações sobre quem pediu a prisão, o tiroteio e a situação jurídica de Jefferson aparecem como afirmações dos tweets e não foram verificadas. Não dá para inferir a opinião de membros individuais, o que outras comunidades disseram nem as motivações dos usuários. A inclinação política é inferida das contas e dos textos, não de declarações dos membros.",
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1",
+    "generated_at": "2026-10-14T02:42:39+00:00",
+    "invalid_ids": []
+   },
+   "curation": {
+    "trecho": [
+     "O enquadramento predominante, porém, é crítico à prisão e a Alexandre de Moraes: \"Gestapo\", \"ditadura da toga\", \"prisões arbitrárias\", \"não existe crime de opinião\".",
+     "O Bloco B, de contas menores, é mais enfático e mais favorável a Jefferson"
+    ],
+    "eixo": "direita",
+    "stale": false
+   },
+   "shared": 0.28763613646712505,
+   "shared_with": {
+    "1": 0.01350123742722899,
+    "2": 0.2720045604443442,
+    "3": 0.0021303385955519136
+   }
   },
   {
    "community": 2,
@@ -73,7 +375,158 @@
    "n_not_authorized": 1,
    "n_other_errors": 0,
    "n_pending": 0,
-   "attrition": 0.32
+   "attrition": 0.32,
+   "n_tail_selected": 50,
+   "n_tail_hydrated": 35,
+   "top_accounts": [
+    {
+     "author_id": "128372940",
+     "username": "jairbolsonaro",
+     "name": "Jair M. Bolsonaro",
+     "verified": true,
+     "rt_cluster": 6348,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "1087259768",
+     "username": "taoquei1",
+     "name": "TeAtualizei 🇧🇷👊🏻❤️",
+     "verified": true,
+     "rt_cluster": 5970,
+     "n_tweets": 5
+    },
+    {
+     "author_id": "464128120",
+     "username": "JoaquinTeixeira",
+     "name": "Joaquin Teixeira",
+     "verified": true,
+     "rt_cluster": 1880,
+     "n_tweets": 7
+    },
+    {
+     "author_id": "68712576",
+     "username": "CarlosBolsonaro",
+     "name": "Carlos Bolsonaro",
+     "verified": true,
+     "rt_cluster": 1610,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1058819604741525510",
+     "username": "GeneralMourao",
+     "name": "General Hamilton Mourão",
+     "verified": true,
+     "rt_cluster": 1588,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "40637000",
+     "username": "flferronato",
+     "name": "Flavia Ferronato",
+     "verified": true,
+     "rt_cluster": 1445,
+     "n_tweets": 3
+    },
+    {
+     "author_id": "51827346",
+     "username": "fabiofaria",
+     "name": "Fábio Faria",
+     "verified": true,
+     "rt_cluster": 1426,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "2747048534",
+     "username": "MarceloCarvFr",
+     "name": "Marcelo de Carvalho",
+     "verified": true,
+     "rt_cluster": 1405,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "126436384",
+     "username": "PastorMalafaia",
+     "name": "Silas Malafaia",
+     "verified": true,
+     "rt_cluster": 1349,
+     "n_tweets": 3
+    },
+    {
+     "author_id": "33520195",
+     "username": "Rconstantino",
+     "name": "Rodrigo Constantino",
+     "verified": true,
+     "rt_cluster": 1331,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "1213876635331465216",
+     "username": "mfriasoficial",
+     "name": "MarioFrias 2208",
+     "verified": true,
+     "rt_cluster": 1131,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "1078618844007157761",
+     "username": "tarcisiogdf",
+     "name": "Tarcísio Gomes de Freitas",
+     "verified": true,
+     "rt_cluster": 1070,
+     "n_tweets": 1
+    },
+    {
+     "author_id": "2880932962",
+     "username": "o_antagonista",
+     "name": "O Antagonista",
+     "verified": true,
+     "rt_cluster": 1025,
+     "n_tweets": 6
+    },
+    {
+     "author_id": "955586323452219393",
+     "username": "PATRlOTAS",
+     "name": "PATRlOTAS",
+     "verified": true,
+     "rt_cluster": 916,
+     "n_tweets": 2
+    },
+    {
+     "author_id": "4369607422",
+     "username": "PrMocellin",
+     "name": "Pastor Rodrigo Mocellin",
+     "verified": false,
+     "rt_cluster": 815,
+     "n_tweets": 1
+    }
+   ],
+   "summary": {
+    "sintese": "O material gira quase todo em torno de como reagir ao episódio de Roberto Jefferson (ofensas à ministra Carmen Lúcia, ordem de prisão, tiros contra agentes da PF) a uma semana da eleição. O tweet mais amplificado é do próprio Bolsonaro, que repudia as falas e a \"ação armada\" e critica inquéritos \"sem nenhum respaldo na Constituição\" [1584223233167200256]; depois ele chama Jefferson de \"criminoso\" [1584306781530230784]. Muitos tweets seguem essa linha dupla: condenam a violência contra policiais, mas criticam a prisão, falando em \"Gestapo\" [1584225958433026048], \"ditadura da toga\" [1584220815763337217] e \"crime de opinião\" [1584246185514401792]. Mourão atribui o episódio a freios e contrapesos que não funcionam [1584249956197863425]; Tarcísio manifesta solidariedade aos agentes feridos [1584270090631274496]. Um segundo eixo é a comparação de tratamento: Jefferson preso por xingar uma ministra, enquanto a jornalista que ofendeu a filha de Bolsonaro nada sofreu [1584248690750808065] [1584269804260556801] [1584280002928910336]. Um terceiro é atribuir o pedido de prisão a Randolfe Rodrigues, chamado de coordenador da campanha de Lula [1584276040540909568] [1584254578941460482] [1584261821359280129]. Um quarto é o afastamento de Jefferson: ele não seria coordenador nem aliado, \"fake news do PT\" [1584272474723622912], e teria processado Bolsonaro [1584286460164730881] [1584347934937976833]. Há também retorsão contra a esquerda, ligando Jefferson a Lula e ao mensalão [1584312420033474560] [1584299895527473152]. Apoio explícito a Jefferson e indignação com a prisão existem, mas são minoritários [1584225155165061120] [1584214192667910144]. O bloco B reforça o afastamento e a disciplina de campanha: Jefferson \"não representa em nada o Governo Bolsonaro\" [1584239720053506048], \"mantenham o foco\" [1584299536121352192], além de falas de Bolsonaro na Record [1584339177138626560] [1584309758068396032]. Há ainda humor de @JoaquinTeixeira [1584258146154950656] e quem sugere \"armação\" [1584322949791653888]. A e B convergem; B tem mais tom de campanha e menos crítica à prisão.",
+    "contas_prevalentes": "Predominam políticos e figuras do campo bolsonarista: Bolsonaro, a conta mais retuitada, Carlos Bolsonaro, Mourão, Mario Frias e Tarcísio, cujas bios os apresentam como candidato, senador, deputado ou ex-ministro. Há também influenciadores e comentaristas de direita (@taoquei1, Constantino, Malafaia, Fábio Faria, Marcelo de Carvalho, @PATRlOTAS), o humorista @JoaquinTeixeira e veículos como O Antagonista, Gazeta do Povo, Revista Oeste, Jovem Pan e Metrópoles [1584254578941460482] [1584240342815031296]. O bloco B inclui muitos perfis pequenos de apoio à campanha. A informação vem sobretudo de falas do presidente e de aliados e da imprensa que as reproduz, não de apuração independente [1584306781530230784] [1584309758068396032].",
+    "inclinacao_politica": {
+     "texto": "Direita bolsonarista, favorável à reeleição de Bolsonaro. Os sinais são explícitos: hashtags de campanha como #Bolsonaro22 [1584272474723622912], apelos a \"virar votos\" [1584258321225494528], \"Lula nunca mais\" [1584242466718289921] e as contas mais retuitadas, ligadas ao governo. Há crítica forte ao STF e a Moraes [1584220815763337217] e hostilidade ao PT. A comunidade não é uniforme sobre Jefferson: a maioria o repudia, outros o defendem [1584225155165061120].",
+     "confianca": "alta"
+    },
+    "limites": "O material não permite saber o que pensam os 4.646 usuários, pois retuitar pode não indicar adesão. Também não mostra o que circulou em outras comunidades, nem a proporção de retuítes irônicos ou de denúncia. Faltam 47 tweets de 150 selecionados, e os apagados ou suspensos podem alterar o quadro. Os tweets mostram o que foi dito, não se as alegações são verdadeiras, como a de que Randolfe pediu a prisão ou a comparação com o caso da jornalista. Não dá para inferir efeitos sobre o voto.",
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1",
+    "generated_at": "2026-10-14T02:43:18+00:00",
+    "invalid_ids": []
+   },
+   "curation": {
+    "trecho": [
+     "Muitos tweets seguem essa linha dupla: condenam a violência contra policiais, mas criticam a prisão, falando em \"Gestapo\", \"ditadura da toga\" e \"crime de opinião\".",
+     "O bloco B reforça o afastamento e a disciplina de campanha"
+    ],
+    "eixo": "direita",
+    "stale": false
+   },
+   "shared": 0.6139125250171111,
+   "shared_with": {
+    "0": 0.5924514453985843,
+    "1": 0.02020299403622793,
+    "3": 0.0012580855822989052
+   }
   }
  ],
  "files": {

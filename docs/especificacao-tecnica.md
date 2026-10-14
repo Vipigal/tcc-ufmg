@@ -203,6 +203,12 @@ onde `R_right(u)` é o número de retweets de u a tweets cujos autores foram cla
 
 ## 4. Análise narrativa
 
+> **Atualização (2026-10-13):** a etapa 2 abaixo foi substituída pela síntese em texto livre
+> do M11 (`modules/summarize.py`), sobre top-K + cauda característica (D16), sem categorias
+> impostas e com inclinação política provável — ver D8 (revisão de 2026-10-13) e
+> `docs/superpowers/specs/2026-10-13-sintese-clusters-llm-design.md`. O formato JSON abaixo
+> é histórico.
+
 Para cada par (evento, cluster), produzir uma síntese curta do conteúdo amplificado:
 
 1. **Tomar os tweets hidratados do cluster.** A seleção da Seção 3.1 já é por cluster e já vem ranqueada por retweets de membros do cluster (`rt_cluster`); usar os top-K hidratados de cada (evento, cluster) e reportar junto a atrição (IDs não devolvidos pela API).

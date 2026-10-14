@@ -21,6 +21,7 @@ O contrato completo dos arquivos está em
 from __future__ import annotations
 
 import json
+import re
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -32,6 +33,7 @@ import pyarrow.parquet as pq
 from modules.hydrate import hydration_status
 from modules.layout import PALETTE, CommunityLayout
 from modules.stage import Stage
+from modules.summarize import build_input
 
 STATUS_BY_TITLE = {"Not Found Error": "not_found", "Authorization Error": "not_authorized"}
 TWEET_METRICS = ("retweet_count", "reply_count", "like_count", "quote_count",
@@ -39,18 +41,42 @@ TWEET_METRICS = ("retweet_count", "reply_count", "like_count", "quote_count",
 USER_METRICS = ("followers_count", "following_count", "tweet_count", "listed_count")
 
 SLOTS_SQL = """
-    SELECT e.community, e.rank, e.tweet_id, e.rt_cluster, e.rt_graph, e.rt_event, e.k,
+    WITH sel AS (
+        SELECT 'amplified' AS origin, 0 AS origin_order, community, rank, tweet_id,
+               rt_cluster, rt_graph, rt_event, k, NULL AS lift
+        FROM event_top_tweets WHERE event_slug = :slug
+        UNION ALL
+        SELECT 'characteristic', 1, community, rank, tweet_id,
+               rt_cluster, rt_graph, rt_event, m, lift
+        FROM event_tail_tweets WHERE event_slug = :slug
+    )
+    SELECT e.origin, e.community, e.rank, e.tweet_id, e.rt_cluster, e.rt_graph, e.rt_event,
+           e.k, e.lift,
            t.raw_json AS tweet_json, t.author_id,
            u.raw_json AS user_json,
            le.title AS err_title, le.detail AS err_detail,
            lu.title AS user_err_title
-    FROM event_top_tweets e
+    FROM sel e
     LEFT JOIN tweets t         ON t.tweet_id = e.tweet_id
     LEFT JOIN users u          ON u.user_id = t.author_id
     LEFT JOIN lookup_errors le ON le.resource_type = 'tweet' AND le.resource_id = e.tweet_id
     LEFT JOIN lookup_errors lu ON lu.resource_type = 'user'  AND lu.resource_id = t.author_id
-    WHERE e.event_slug = ?
-    ORDER BY e.community, e.rank"""
+    ORDER BY e.community, e.origin_order, e.rank"""
+
+MEDIA_SQL = """
+    SELECT tm.tweet_id, m.media_key, m.type, m.url, m.preview_image_url, m.width, m.height,
+           m.alt_text
+    FROM tweet_media tm JOIN media m ON m.media_key = tm.media_key
+    ORDER BY tm.tweet_id, tm.position"""
+
+EIXOS = ("direita", "esquerda", "outro")
+CITATION_RE = re.compile(r"\s*\[[\d,;\s]+\]")
+
+SUMMARY_SQL = """
+    SELECT model, prompt_version, generated_at, output_json, invalid_ids_json
+    FROM cluster_summaries
+    WHERE event_slug = ? AND community = ? AND status = 'ok'
+    ORDER BY generated_at DESC LIMIT 1"""
 
 
 def _status(hydrated: bool, err_title) -> str:
@@ -120,8 +146,12 @@ class WebExporter(Stage):
 
     FILES = ()                    # sempre re-exporta (fonte = banco; barato)
 
-    def __init__(self, db):
+    def __init__(self, db, curation_path=None):
         self.db = db
+        self.curation = {}
+        if curation_path is not None and Path(curation_path).exists():
+            items = json.loads(Path(curation_path).read_text())["clusters"]
+            self.curation = {(i["event"], int(i["community"])): i for i in items}
 
     # --- exportação -------------------------------------------------------
     def export(self, processed_dir) -> dict:
@@ -131,6 +161,8 @@ class WebExporter(Stage):
         n_edges = pq.read_metadata(d / "graph_edges.parquet").num_rows
         run_config = json.loads((d / "run_config.json").read_text())
         stats = json.loads((d / "top_tweets_stats.json").read_text())
+        ov_path = d / "content_overlap.json"
+        self._overlap = json.loads(ov_path.read_text())["clusters"] if ov_path.exists() else {}
         layout = CommunityLayout.load(d)
 
         sizes = nodes["community"].value_counts()                 # descendente = "Grupo k"
@@ -164,6 +196,12 @@ class WebExporter(Stage):
                 "n_other_errors": int(st["outros_erros"]) if st is not None else 0,
                 "n_pending": int(st["pendentes"]) if st is not None else 0,
                 "attrition": float(st["atricao"]) if st is not None else 0.0,
+                **self._tail_counts(slug, c),
+                "top_accounts": self._top_accounts(slug, c, cs),
+                "summary": self._summary(slug, c),
+                "curation": self._curation(slug, c),
+                "shared": self._overlap.get(str(c), {}).get("shared"),
+                "shared_with": self._overlap.get(str(c), {}).get("shared_with"),
             })
         clusters.sort(key=lambda x: x["group"])
         return {
@@ -178,11 +216,68 @@ class WebExporter(Stage):
             "files": {"tweets": f"{slug}/tweets.json", "layout": f"{slug}/layout.json"},
         }
 
+    def _tail_counts(self, slug, c) -> dict:
+        r = self.db.conn.execute(
+            "SELECT COUNT(*), COUNT(t.tweet_id) FROM event_tail_tweets e "
+            "LEFT JOIN tweets t ON t.tweet_id = e.tweet_id "
+            "WHERE e.event_slug = ? AND e.community = ?", (slug, c)).fetchone()
+        return {"n_tail_selected": int(r[0]), "n_tail_hydrated": int(r[1])}
+
+    def _top_accounts(self, slug, c, cs) -> list[dict]:
+        """As mesmas contas que o M11 põe no prompt (soma de rt_cluster por autor)."""
+        inp = build_input(self.db, slug, c, {"n_nodes": cs["n_nodes"],
+                                             "frac_nodes": cs["frac_nodes"]})
+        keys = ("author_id", "username", "name", "verified", "rt_cluster", "n_tweets")
+        return [{k: a[k] for k in keys} for a in inp["top_accounts"]]
+
+    def _summary(self, slug, c) -> dict | None:
+        r = self.db.conn.execute(SUMMARY_SQL, (slug, c)).fetchone()
+        if r is None:
+            return None
+        return {**json.loads(r["output_json"]),
+                "model": r["model"], "prompt_version": r["prompt_version"],
+                "generated_at": r["generated_at"],
+                "invalid_ids": json.loads(r["invalid_ids_json"] or "[]")}
+
+    def _curation(self, slug, c) -> dict | None:
+        """Curadoria humana do cartão (spec 2026-10-14 §3): trecho = fragmentos literais da
+        síntese referenciada (comparados sem as citações); `stale` se há síntese mais nova."""
+        item = self.curation.get((slug, c))
+        if item is None:
+            return None
+        if item["eixo"] not in EIXOS:
+            raise ValueError(f"{slug} c{c}: eixo {item['eixo']!r} fora de {EIXOS}")
+        ref = item["summary"]
+        row = self.db.conn.execute(
+            "SELECT output_json FROM cluster_summaries WHERE event_slug=? AND community=? "
+            "AND model=? AND prompt_version=? AND status='ok'",
+            (slug, c, ref["model"], ref["prompt_version"])).fetchone()
+        if row is None:
+            raise ValueError(f"{slug} c{c}: síntese referenciada pela curadoria não existe ({ref})")
+        text = CITATION_RE.sub("", json.loads(row["output_json"])["sintese"])
+        trecho = item["trecho"] if isinstance(item["trecho"], list) else [item["trecho"]]
+        for frag in trecho:
+            if frag not in text:
+                raise ValueError(f"{slug} c{c}: trecho não é literal da síntese: {frag[:80]!r}")
+        latest = self._summary(slug, c)
+        stale = (latest is None or (latest["model"], latest["prompt_version"])
+                 != (ref["model"], ref["prompt_version"]))
+        return {"trecho": trecho, "eixo": item["eixo"], "stale": stale}
+
+    def _media_by_tweet(self) -> dict[str, list[dict]]:
+        out = defaultdict(list)
+        for r in self.db.conn.execute(MEDIA_SQL):
+            out[r["tweet_id"]].append({k: r[k] for k in ("media_key", "type", "url",
+                                                          "preview_image_url", "width",
+                                                          "height", "alt_text")})
+        return out
+
     def _slots(self, slug, group_of) -> list[dict]:
-        rows = self.db.conn.execute(SLOTS_SQL, (slug,)).fetchall()
-        where = defaultdict(list)                                  # tweet_id -> [(community, rank)]
+        media = self._media_by_tweet()
+        rows = self.db.conn.execute(SLOTS_SQL, {"slug": slug}).fetchall()
+        where = defaultdict(list)                  # tweet_id -> [(community, rank, origin)]
         for r in rows:
-            where[r["tweet_id"]].append((int(r["community"]), int(r["rank"])))
+            where[r["tweet_id"]].append((int(r["community"]), int(r["rank"]), r["origin"]))
 
         slots = []
         for r in rows:
@@ -199,15 +294,19 @@ class WebExporter(Stage):
             rt_graph = int(r["rt_graph"])
             slots.append({
                 "community": c, "group": group_of[c], "rank": int(r["rank"]), "k": int(r["k"]),
+                "origin": r["origin"],
+                "lift": round(float(r["lift"]), 4) if r["lift"] is not None else None,
                 "tweet_id": r["tweet_id"],
                 "rt_cluster": int(r["rt_cluster"]), "rt_graph": rt_graph, "rt_event": int(r["rt_event"]),
                 "purity": round(int(r["rt_cluster"]) / rt_graph, 4) if rt_graph else None,
-                "also_in": [{"community": oc, "group": group_of[oc], "rank": orank}
-                            for oc, orank in where[r["tweet_id"]] if oc != c],
+                "also_in": [{"community": oc, "group": group_of[oc], "rank": orank,
+                             "origin": oorigin}
+                            for oc, orank, oorigin in where[r["tweet_id"]] if oc != c],
                 "status": _status(hydrated, r["err_title"]),
                 "error": ({"title": r["err_title"], "detail": r["err_detail"]}
                           if (not hydrated and r["err_title"]) else None),
-                "tweet": _tweet_view(tweet_raw) if hydrated else None,
+                "tweet": ({**_tweet_view(tweet_raw), "media": media.get(r["tweet_id"], [])}
+                          if hydrated else None),
                 "author_id": r["author_id"],
                 "author": _author_view(user_raw) if user_raw else None,
                 "author_status": author_status,

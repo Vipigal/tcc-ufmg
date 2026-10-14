@@ -153,8 +153,10 @@ def test_also_in_lists_other_clusters_of_same_event(db, processed, tmp_path):
     db.replace_event_top_tweets("ev", sel)
     out, _ = _export(db, processed, tmp_path)
     slots = {(s["community"], s["tweet_id"]): s for s in json.loads((out / "tweets.json").read_text())}
-    assert slots[(0, "t1")]["also_in"] == [{"community": 1, "group": 2, "rank": 1}]
-    assert slots[(1, "t1")]["also_in"] == [{"community": 0, "group": 1, "rank": 1}]
+    assert slots[(0, "t1")]["also_in"] == [{"community": 1, "group": 2, "rank": 1,
+                                            "origin": "amplified"}]
+    assert slots[(1, "t1")]["also_in"] == [{"community": 0, "group": 1, "rank": 1,
+                                            "origin": "amplified"}]
 
 
 def test_layout_json_has_coords_communities_and_centroids(db, processed, tmp_path):
@@ -182,3 +184,130 @@ def test_write_index_collects_events_and_palette(db, processed, tmp_path):
     assert idx["palette"] == PALETTE and "generated_at" in idx
     assert [e["slug"] for e in idx["events"]] == ["ev"]
     assert idx["events"][0]["clusters"][0]["label"] == "Grupo 1"
+
+
+# ---- cauda (M8b) e síntese (M11) ----
+def _with_tail(db):
+    tail = pd.DataFrame([(1, 1, "t1", 1, 4, 5, 1.25, 50)],
+                        columns=["community", "rank", "tweet_id", "rt_cluster", "rt_graph",
+                                 "rt_event", "lift", "m"])
+    db.replace_event_tail_tweets("ev", tail)
+
+
+def test_slots_carry_origin_and_tail_slots_carry_lift(db, processed, tmp_path):
+    _with_tail(db)
+    out, _ = _export(db, processed, tmp_path)
+    slots = json.loads((out / "tweets.json").read_text())
+    key = {(s["community"], s["origin"], s["tweet_id"]): s for s in slots}
+    amp = key[(0, "amplified", "t1")]
+    tail = key[(1, "characteristic", "t1")]
+    assert amp["lift"] is None and amp["k"] == 2
+    assert tail["lift"] == 1.25 and tail["rank"] == 1 and tail["k"] == 50
+    assert tail["status"] == "hydrated" and tail["author"]["username"] == "fulano"
+    assert {"community": 1, "group": 2, "rank": 1, "origin": "characteristic"} in amp["also_in"]
+    # ordem: por cluster; dentro do cluster, amplificados antes dos característicos
+    assert [(s["community"], s["origin"]) for s in slots] == [
+        (0, "amplified"), (0, "amplified"), (1, "amplified"), (1, "characteristic")]
+
+
+def test_clusters_carry_top_accounts_and_tail_counts(db, processed, tmp_path):
+    _with_tail(db)
+    out, _ = _export(db, processed, tmp_path)
+    c = {c["community"]: c for c in json.loads((out / "event.json").read_text())["clusters"]}
+    assert c[0]["top_accounts"][0]["username"] == "fulano"
+    assert c[0]["top_accounts"][0]["rt_cluster"] == 3
+    assert (c[1]["n_tail_selected"], c[1]["n_tail_hydrated"]) == (1, 1)
+    assert c[0]["summary"] is None
+
+
+def test_cluster_summary_is_the_latest_ok_row(db, processed, tmp_path):
+    base = {"event_slug": "ev", "community": 0, "model": "claude-sonnet-5-5",
+            "raw_response": "{}", "prompt_sha256": "x", "input_json": "{}",
+            "cited_ids_json": '["t1"]', "invalid_ids_json": '["t9"]'}
+    out_v1 = {"sintese": "s1 [t1]", "contas_prevalentes": "c", "limites": "l",
+              "inclinacao_politica": {"texto": "i", "confianca": "media"}}
+    db.upsert_cluster_summary(dict(base, prompt_version="v1", status="ok",
+                                   output_json=json.dumps(out_v1),
+                                   generated_at="2026-10-13T10:00:00+00:00"))
+    db.upsert_cluster_summary(dict(base, prompt_version="v2", status="error", output_json=None,
+                                   generated_at="2026-10-13T11:00:00+00:00"))
+    out, _ = _export(db, processed, tmp_path)
+    c0 = json.loads((out / "event.json").read_text())["clusters"][0]
+    s = c0["summary"]
+    assert s["sintese"] == "s1 [t1]" and s["inclinacao_politica"]["confianca"] == "media"
+    assert (s["model"], s["prompt_version"]) == ("claude-sonnet-5-5", "v1")
+    assert s["invalid_ids"] == ["t9"]
+
+
+# ---- curadoria, conteúdo compartilhado e mídias (spec 2026-10-14) ----
+def _summary_row(db, sintese, version="v1", when="2026-10-13T10:00:00+00:00"):
+    out = {"sintese": sintese, "contas_prevalentes": "c", "limites": "l",
+           "inclinacao_politica": {"texto": "i", "confianca": "media"}}
+    db.upsert_cluster_summary({"event_slug": "ev", "community": 0, "model": "m",
+                               "prompt_version": version, "status": "ok",
+                               "output_json": json.dumps(out), "raw_response": "{}",
+                               "prompt_sha256": "x", "input_json": "{}", "cited_ids_json": "[]",
+                               "invalid_ids_json": "[]", "generated_at": when})
+
+
+def _curation(tmp_path, trecho, eixo="esquerda", version="v1"):
+    p = tmp_path / "clusters.json"
+    p.write_text(json.dumps({"clusters": [{"event": "ev", "community": 0,
+                                           "summary": {"model": "m", "prompt_version": version},
+                                           "trecho": trecho, "eixo": eixo}]}))
+    return p
+
+
+def _export_with(db, processed, tmp_path, curation):
+    d, _ = processed
+    return WebExporter(db, curation_path=curation).run(d, out_dir=tmp_path / "export" / "ev")
+
+
+def test_curated_excerpt_must_be_literal_fragments_of_the_synthesis(db, processed, tmp_path):
+    _summary_row(db, "Primeira frase [123]. Segunda frase com [4, 5] citações. Terceira.")
+    res = _export_with(db, processed, tmp_path,
+                       _curation(tmp_path, ["Primeira frase.", "Segunda frase com citações."]))
+    c0 = {c["community"]: c for c in res["event"]["clusters"]}[0]
+    assert c0["curation"] == {"trecho": ["Primeira frase.", "Segunda frase com citações."],
+                              "eixo": "esquerda", "stale": False}
+    assert {c["community"]: c for c in res["event"]["clusters"]}[1]["curation"] is None
+    with pytest.raises(ValueError, match="não é literal"):
+        _export_with(db, processed, tmp_path, _curation(tmp_path, ["Frase inventada."]))
+
+
+def test_curation_is_stale_when_a_newer_synthesis_exists(db, processed, tmp_path):
+    _summary_row(db, "Texto antigo.")
+    _summary_row(db, "Texto novo.", version="v2", when="2026-10-14T10:00:00+00:00")
+    res = _export_with(db, processed, tmp_path, _curation(tmp_path, ["Texto antigo."]))
+    assert res["event"]["clusters"][0]["curation"]["stale"] is True
+
+
+def test_curation_rejects_unknown_axis(db, processed, tmp_path):
+    _summary_row(db, "Texto.")
+    with pytest.raises(ValueError, match="eixo"):
+        _export_with(db, processed, tmp_path, _curation(tmp_path, ["Texto."], eixo="centro"))
+
+
+def test_clusters_carry_content_overlap_when_computed(db, processed, tmp_path):
+    d, _ = processed
+    (d / "content_overlap.json").write_text(json.dumps({"clusters": {
+        "0": {"n_retweets": 5, "shared": 0.25, "shared_with": {"1": 0.2, "2": 0.05}},
+        "1": {"n_retweets": 4, "shared": 0.5, "shared_with": {"0": 0.5, "2": 0.0}}}}))
+    out, _ = _export(db, processed, tmp_path)
+    c = {c["community"]: c for c in json.loads((out / "event.json").read_text())["clusters"]}
+    assert c[0]["shared"] == 0.25 and c[0]["shared_with"] == {"1": 0.2, "2": 0.05}
+
+
+def test_tweet_view_carries_media_in_order(db, processed, tmp_path):
+    db.upsert_media([{"media_key": "3_1", "type": "photo", "url": "https://pbs/a.jpg",
+                      "width": 4, "height": 3},
+                     {"media_key": "7_2", "type": "video", "preview_image_url": "https://pbs/v.jpg"}])
+    db.replace_tweet_media("t1", ["7_2", "3_1", "16_9"])          # 16_9 não veio: fica de fora
+    out, _ = _export(db, processed, tmp_path)
+    t1 = next(s for s in json.loads((out / "tweets.json").read_text()) if s["tweet_id"] == "t1")
+    assert [m["type"] for m in t1["tweet"]["media"]] == ["video", "photo"]
+    assert t1["tweet"]["media"][1] == {"media_key": "3_1", "type": "photo", "url": "https://pbs/a.jpg",
+                                       "preview_image_url": None, "width": 4, "height": 3,
+                                       "alt_text": None}
+    t8 = next(s for s in json.loads((out / "tweets.json").read_text()) if s["tweet_id"] == "t8")
+    assert t8["tweet"]["media"] == []

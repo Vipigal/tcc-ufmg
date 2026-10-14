@@ -24,6 +24,7 @@ function tweet(over: Partial<Tweet> & { text: string; created_at: string; retwee
     entities: { urls: [], hashtags: [], mentions: [] },
     referenced_tweets: [],
     url: "https://x.com/i/web/status/1",
+    media: [],
   };
 }
 
@@ -32,6 +33,8 @@ function slot(over: Partial<Slot> & { rank: number }): Slot {
     community: 0,
     group: 1,
     k: 100,
+    origin: "amplified",
+    lift: null,
     tweet_id: String(over.rank),
     rt_cluster: 10,
     rt_graph: 10,
@@ -112,5 +115,21 @@ describe("applyToolbar", () => {
     const before = slots.map((s) => s.rank);
     applyToolbar(slots, { ...DEFAULT_TOOLBAR, sort: "rt_graph" });
     expect(slots.map((s) => s.rank)).toEqual(before);
+  });
+
+  it("filtra por origem e, no ranking, põe amplificados antes dos característicos", () => {
+    const mixed = [
+      slot({ rank: 1, origin: "characteristic", lift: 3, tweet_id: "c1" }),
+      slot({ rank: 2, tweet_id: "a2" }),
+      slot({ rank: 1, tweet_id: "a1" }),
+    ];
+    expect(applyToolbar(mixed, DEFAULT_TOOLBAR).map((s) => s.tweet_id)).toEqual(["a1", "a2", "c1"]);
+    expect(applyToolbar(mixed, { ...DEFAULT_TOOLBAR, origin: "characteristic" }).map((s) => s.tweet_id)).toEqual([
+      "c1",
+    ]);
+    expect(applyToolbar(mixed, { ...DEFAULT_TOOLBAR, origin: "amplified" }).map((s) => s.tweet_id)).toEqual([
+      "a1",
+      "a2",
+    ]);
   });
 });

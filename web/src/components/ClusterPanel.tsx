@@ -2,6 +2,8 @@ import type { EventMeta } from "../types";
 import { withAlpha } from "../lib/color";
 import { formatCompact, formatInt, formatPct } from "../lib/format";
 import { GLOSSARY } from "../lib/glossary";
+import { useShowTags } from "../lib/nav";
+import { InclinationTag } from "./InclinationTag";
 
 interface Props {
   event: EventMeta;
@@ -12,8 +14,9 @@ interface Props {
 /** RF2 / spec §7.2: um item por ClusterMeta na ordem `group`; rodapé com os parâmetros da fase 1. */
 export function ClusterPanel({ event, selected, onSelect }: Props) {
   const rc = event.run_config;
+  const showTags = useShowTags();
   return (
-    <section className="rounded-xl border border-line bg-white">
+    <section className="rounded-xl border border-line bg-surface">
       <h2 className="px-4 pt-3 text-[11px] font-semibold uppercase tracking-wider text-muted">Clusters</h2>
       <ul className="mt-1">
         {event.clusters.map((c) => {
@@ -24,7 +27,7 @@ export function ClusterPanel({ event, selected, onSelect }: Props) {
                 type="button"
                 onClick={() => onSelect(c.community)}
                 aria-pressed={active}
-                className="w-full border-l-4 px-4 py-2 text-left hover:bg-gray-50"
+                className="w-full border-l-4 px-4 py-2 text-left hover:bg-hover"
                 style={{
                   borderLeftColor: active ? c.color : "transparent",
                   backgroundColor: active ? withAlpha(c.color, 0.1) : undefined,
@@ -34,6 +37,7 @@ export function ClusterPanel({ event, selected, onSelect }: Props) {
                   <span className="inline-block h-3 w-3 shrink-0 rounded-full" style={{ backgroundColor: c.color }} />
                   <span className="font-semibold">{c.label}</span>
                   <span className="text-muted">(c{c.community})</span>
+                  {showTags && c.curation && <InclinationTag eixo={c.curation.eixo} compact />}
                   <span className="ml-auto cursor-help" title={GLOSSARY.frac_nodes}>
                     {formatPct(c.frac_nodes)}
                   </span>

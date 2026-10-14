@@ -45,14 +45,17 @@ class HydrationReport:
     n_errors: int                 # IDs que a API não devolveu (com motivo)
     errors_by_title: dict = field(default_factory=dict)
     cost_usd: float = 0.0
+    n_media: int = 0              # só M9c: objetos de mídia devolvidos (custo à parte, a confirmar)
     started_at: str = ""
     finished_at: str = ""
 
     def summary(self) -> str:
         unit = "tweets" if self.resource_type == "tweet" else "usuários"
         motivos = ", ".join(f"{k}: {v}" for k, v in self.errors_by_title.items()) or "nenhum"
+        extra = (f" · {self.n_media} mídias (custo das mídias não incluído)"
+                 if self.resource_type == "tweet" and self.n_media else "")
         return (f"{self.n_pending} {unit} pendentes → {self.n_returned} devolvidos, "
-                f"{self.n_errors} não devolvidos ({motivos}) · US$ {self.cost_usd:.2f}")
+                f"{self.n_errors} não devolvidos ({motivos}) · US$ {self.cost_usd:.2f}{extra}")
 
 
 class _Hydrator(Stage):
@@ -151,6 +154,47 @@ class UserHydrator(_Hydrator):
 
     def _store(self, data) -> None:
         self.db.upsert_users(data)
+
+
+class MediaHydrator(_Hydrator):
+    """M9c — mídias dos tweets em cache que têm `media_key` nas entities.
+
+    Pede os tweets de novo **com** `expansions=attachments.media_keys` e grava só `media`
+    e `tweet_media`; `tweets` não é reescrita (o snapshot da 1ª hidratação vale). Se o
+    tweet voltar sem `attachments`, o mapeamento usa os `media_key` das entities e a mídia
+    fica faltando (o card mostra o chip "Mídia ↗"). Erros vão para `lookup_errors` como
+    'tweet' — o tweet deixou de estar disponível desde a 1ª hidratação.
+    """
+
+    resource_type = "tweet"
+    cost_per_item = COST_PER_TWEET
+
+    def __init__(self, *args, **kw):
+        super().__init__(*args, **kw)
+        self._batch_media: list[dict] = []
+        self._n_media = 0
+
+    def _pending(self) -> list[str]:
+        return self.db.pending_media_tweet_ids(retry_errors=self.retry_errors)
+
+    def _lookup(self, ids):
+        data, errors, media = self.client.lookup_tweets_media(ids)
+        self._batch_media = media
+        return data, errors
+
+    def _store(self, data) -> None:
+        self.db.upsert_media(self._batch_media)
+        self._n_media += len(self._batch_media)
+        entity_keys = self.db.entity_media_keys()
+        for d in data:
+            keys = (d.get("attachments") or {}).get("media_keys") or entity_keys.get(str(d["id"]), [])
+            self.db.replace_tweet_media(str(d["id"]), keys)
+
+    def hydrate(self) -> HydrationReport:
+        self._n_media = 0
+        rep = super().hydrate()
+        rep.n_media = self._n_media
+        return rep
 
 
 def hydration_status(db) -> pd.DataFrame:

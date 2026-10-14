@@ -26,7 +26,14 @@ interface Item {
 export function ResearchStrip({ slot, color }: Props) {
   const apiRetweets = slot.tweet?.metrics.retweet_count ?? null;
   const items: Item[] = [
-    { key: "rank", text: `#${slot.rank} de ${slot.k}`, title: GLOSSARY.rank, className: "font-semibold text-ink" },
+    slot.origin === "characteristic"
+      ? {
+          key: "rank",
+          text: `cauda #${slot.rank} de ${slot.k} · lift ${formatDec(slot.lift, 2)}`,
+          title: `${GLOSSARY.characteristic} ${GLOSSARY.lift}`,
+          className: "font-semibold text-violet-800 dark:text-violet-300",
+        }
+      : { key: "rank", text: `#${slot.rank} de ${slot.k}`, title: GLOSSARY.rank, className: "font-semibold text-ink" },
     { key: "rt_cluster", text: `${formatInt(slot.rt_cluster)} RTs de membros`, title: GLOSSARY.rt_cluster },
     { key: "purity", text: `pureza ${formatDec(slot.purity, 2)}`, title: GLOSSARY.purity, className: purityClass(slot.purity) },
     { key: "rt_graph", text: `${formatInt(slot.rt_graph)} no grafo`, title: GLOSSARY.rt_graph },
@@ -37,7 +44,12 @@ export function ResearchStrip({ slot, color }: Props) {
     items.push({ key: "api", text: `API ${formatInt(apiRetweets)} (${ratio})`, title: GLOSSARY.api });
   }
   for (const a of slot.also_in) {
-    items.push({ key: `also-${a.community}`, text: `também em Grupo ${a.group} (#${a.rank})`, title: GLOSSARY.also_in });
+    const where = a.origin === "characteristic" ? `cauda #${a.rank}` : `#${a.rank}`;
+    items.push({
+      key: `also-${a.community}-${a.origin}`,
+      text: `também em Grupo ${a.group} (${where})`,
+      title: GLOSSARY.also_in,
+    });
   }
 
   return (
@@ -69,7 +81,7 @@ export function ResearchStrip({ slot, color }: Props) {
 /** Sinalização de leitura (spec §7.6): ≥ 0,90 verde-escuro discreto; < 0,50 laranja discreto; entre, neutro. */
 function purityClass(purity: number | null): string {
   if (purity == null) return "";
-  if (purity >= EXCLUSIVE_MIN_PURITY) return "text-emerald-800";
-  if (purity < SHARED_MAX_PURITY) return "text-orange-700";
+  if (purity >= EXCLUSIVE_MIN_PURITY) return "text-emerald-800 dark:text-emerald-400";
+  if (purity < SHARED_MAX_PURITY) return "text-orange-700 dark:text-orange-400";
   return "";
 }

@@ -31,6 +31,12 @@ TWEET_FIELDS = ",".join([
     "referenced_tweets", "reply_settings", "source", "text", "withheld",
 ])
 
+# M9c (mídias): só o necessário para ligar tweet → mídia; a mídia vem em `includes.media`.
+MEDIA_FIELDS = ",".join([
+    "alt_text", "duration_ms", "height", "media_key", "preview_image_url", "type", "url",
+    "variants", "width",
+])
+
 USER_FIELDS = ",".join([
     "created_at", "description", "entities", "location", "name",
     "profile_image_url", "protected", "public_metrics", "url", "username",
@@ -57,6 +63,20 @@ class XClient:
     def lookup_tweets(self, ids) -> tuple[list[dict], list[dict]]:
         """Até 100 tweets, sem expansions. Retorna (data, errors)."""
         return self._lookup("tweets", {"tweet.fields": TWEET_FIELDS}, ids)
+
+    def lookup_tweets_media(self, ids) -> tuple[list[dict], list[dict], list[dict]]:
+        """Até 100 tweets **com** a expansion de mídia (M9c). Retorna (data, errors, media),
+        com `media` = `includes.media`. Os objetos de mídia podem ser cobrados à parte."""
+        ids = [str(i) for i in ids]
+        if len(ids) > BATCH_SIZE:
+            raise ValueError(f"lote de {len(ids)} IDs excede o máximo de {BATCH_SIZE}")
+        if not ids:
+            return [], [], []
+        payload = self._get("tweets", {"ids": ",".join(ids), "tweet.fields": "attachments",
+                                       "expansions": "attachments.media_keys",
+                                       "media.fields": MEDIA_FIELDS})
+        return (payload.get("data", []), payload.get("errors", []),
+                (payload.get("includes") or {}).get("media", []))
 
     def lookup_users(self, ids) -> tuple[list[dict], list[dict]]:
         """Até 100 usuários. Retorna (data, errors)."""

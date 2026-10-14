@@ -1,0 +1,28 @@
+{
+  "params": {
+    "m": 50,
+    "min_rt": 10
+  },
+  "clusters": {
+    "0": {
+      "baseline_share": 0.3735676101253093,
+      "n_candidates": 1988,
+      "n_selected": 50,
+      "min_lift_selected": 2.6768916064874055
+    },
+    "1": {
+      "baseline_share": 0.4701116800973893,
+      "n_candidates": 1824,
+      "n_selected": 50,
+      "min_lift_selected": 2.1271541260000983
+    },
+    "2": {
+      "baseline_share": 0.15523566617707382,
+      "n_candidates": 561,
+      "n_selected": 50,
+      "min_lift_selected": 5.368182157203286
+    }
+  },
+  "n_slots": 150,
+  "n_unique_ids": 150
+}

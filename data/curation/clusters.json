@@ -1,0 +1,214 @@
+{
+ "_doc": "Curadoria humana dos cartões da visão geral (spec 2026-10-14 §3). 'trecho' = fragmentos LITERAIS da síntese referenciada (sem as citações [id]); 'eixo' ∈ direita|esquerda|outro, atribuído lendo inclinacao_politica do LLM.",
+ "clusters": [
+  {
+   "event": "mobilizacao-0709",
+   "community": 0,
+   "summary": {
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1"
+   },
+   "trecho": [
+    "O material gira quase todo em torno de um enquadramento: o 7 de setembro de 2022 aparece como data \"sequestrada\" por Bolsonaro e transformada em comício de campanha.",
+    "Um segundo eixo é o coro de \"imbrochável\" puxado por Bolsonaro, tratado com deboche e como sinal de \"insegurança masculina\"."
+   ],
+   "eixo": "esquerda",
+   "notas": "rascunho do agente (2026-10-14), a revisar pelo autor"
+  },
+  {
+   "event": "mobilizacao-0709",
+   "community": 1,
+   "summary": {
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1"
+   },
+   "trecho": [
+    "O material mostra o 7 de setembro como ato de apoio a Bolsonaro, narrado em tom de vitória.",
+    "Um enquadramento recorrente é a disputa sobre a posse da data: o povo \"não foi sequestrar. Ele foi resgatar\", a bandeira foi resgatada, o povo escolheu Bolsonaro."
+   ],
+   "eixo": "direita",
+   "notas": "rascunho do agente (2026-10-14), a revisar pelo autor"
+  },
+  {
+   "event": "mobilizacao-0709",
+   "community": 2,
+   "summary": {
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1"
+   },
+   "trecho": [
+    "O tweet mais amplificado é do próprio presidente, que agradece pela \"uma das maiores e mais lindas festas\" e fecha com \"INDEPENDÊNCIA OU MORTE\".",
+    "O B tem mais relatos locais, fotos de participantes e contas menores, e menos comentário de figuras de peso."
+   ],
+   "eixo": "direita",
+   "notas": "rascunho do agente (2026-10-14), a revisar pelo autor"
+  },
+  {
+   "event": "mobilizacao-0709",
+   "community": 3,
+   "summary": {
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1"
+   },
+   "trecho": [
+    "O material desta comunidade gira quase inteiramente em torno de Ciro Gomes e de como ele se posicionou diante do 7 de Setembro.",
+    "O Bloco B mostra o que é mais próprio do grupo: a defesa de Ciro diante do PT, antecipando que lhe atribuirão a culpa pelo tamanho dos atos."
+   ],
+   "eixo": "outro",
+   "notas": "rascunho do agente (2026-10-14), a revisar pelo autor"
+  },
+  {
+   "event": "roberto-jefferson",
+   "community": 0,
+   "summary": {
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1"
+   },
+   "trecho": [
+    "O enquadramento predominante, porém, é crítico à prisão e a Alexandre de Moraes: \"Gestapo\", \"ditadura da toga\", \"prisões arbitrárias\", \"não existe crime de opinião\".",
+    "O Bloco B, de contas menores, é mais enfático e mais favorável a Jefferson"
+   ],
+   "eixo": "direita",
+   "notas": "rascunho do agente (2026-10-14), a revisar pelo autor"
+  },
+  {
+   "event": "roberto-jefferson",
+   "community": 1,
+   "summary": {
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1"
+   },
+   "trecho": [
+    "Logo aparece uma correção de vocabulário: não houve \"troca de tiros\", houve atentado contra a PF.",
+    "A fórmula \"ROBERTO JEFFERSON É BOLSONARO\" se repete, e há pedidos de comentários para subir a tag \"ATENTADO CONTRA A PF\"."
+   ],
+   "eixo": "esquerda",
+   "notas": "rascunho do agente (2026-10-14), a revisar pelo autor"
+  },
+  {
+   "event": "roberto-jefferson",
+   "community": 2,
+   "summary": {
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1"
+   },
+   "trecho": [
+    "Muitos tweets seguem essa linha dupla: condenam a violência contra policiais, mas criticam a prisão, falando em \"Gestapo\", \"ditadura da toga\" e \"crime de opinião\".",
+    "O bloco B reforça o afastamento e a disciplina de campanha"
+   ],
+   "eixo": "direita",
+   "notas": "rascunho do agente (2026-10-14), a revisar pelo autor"
+  },
+  {
+   "event": "eleicoes",
+   "community": 0,
+   "summary": {
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1"
+   },
+   "trecho": [
+    "O material gira quase todo em torno de uma única denúncia: no dia do 2º turno, a Polícia Rodoviária Federal (PRF) faria blitze e barreiras que impediriam eleitores, sobretudo do Nordeste, de chegar às urnas.",
+    "Há mobilização de fandoms, com menção ao app \"Pardal\" e à hashtag #ArmyNasUrnas."
+   ],
+   "eixo": "esquerda",
+   "notas": "rascunho do agente (2026-10-14), a revisar pelo autor"
+  },
+  {
+   "event": "eleicoes",
+   "community": 1,
+   "summary": {
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1"
+   },
+   "trecho": [
+    "\"Democracia\" é o enquadramento geral: o ataque aparece como \"crime contra a democracia\" e a ida às urnas como defesa dela.",
+    "O Bloco B é menos de denúncia e mais de mobilização afetiva e identitária"
+   ],
+   "eixo": "esquerda",
+   "notas": "rascunho do agente (2026-10-14), a revisar pelo autor"
+  },
+  {
+   "event": "eleicoes",
+   "community": 2,
+   "summary": {
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1"
+   },
+   "trecho": [
+    "O tweet mais amplificado, de @poty_oficial, diz ser a \"primeira vez na história da democracia brasileira que um dos lados tenta evitar que as pessoas possam ir votar\", usando PRF e PF."
+   ],
+   "eixo": "esquerda",
+   "notas": "rascunho do agente (2026-10-14), a revisar pelo autor"
+  },
+  {
+   "event": "eleicoes",
+   "community": 3,
+   "summary": {
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1"
+   },
+   "trecho": [
+    "O material gira em torno da palavra \"democracia\", usada como termo em disputa no dia do 2º turno.",
+    "Quase todos os tweets a mobilizam a favor do voto em Bolsonaro/22 ou contra Lula, o STF e o TSE."
+   ],
+   "eixo": "direita",
+   "notas": "rascunho do agente (2026-10-14), a revisar pelo autor"
+  },
+  {
+   "event": "eleicoes",
+   "community": 4,
+   "summary": {
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1"
+   },
+   "trecho": [
+    "O material gira quase todo em torno de um assunto: denúncias de que a PRF, polícias militares, o Exército e prefeituras estariam dificultando o acesso de eleitores, sobretudo do Nordeste, às urnas no dia do segundo turno.",
+    "O bloco B reforça esse perfil: muitas respostas ao deputado André Janones com lift alto, canais de denúncia e declarações de voto."
+   ],
+   "eixo": "esquerda",
+   "notas": "rascunho do agente (2026-10-14), a revisar pelo autor"
+  },
+  {
+   "event": "invasao-3-poderes",
+   "community": 0,
+   "summary": {
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1"
+   },
+   "trecho": [
+    "O material trata o 8 de janeiro quase inteiramente como ataque \"terrorista\", \"golpista\" e \"antidemocrático\" feito por \"bolsonaristas\", em tom de denúncia, indignação e cobrança de punição.",
+    "Outro eixo é a conivência da polícia, com vídeos de PMs conversando e tirando foto com manifestantes."
+   ],
+   "eixo": "esquerda",
+   "notas": "rascunho do agente (2026-10-14), a revisar pelo autor"
+  },
+  {
+   "event": "invasao-3-poderes",
+   "community": 1,
+   "summary": {
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1"
+   },
+   "trecho": [
+    "O material mostra o 8 de janeiro visto de dentro da manifestação, com relato quase em tempo real de Brasília.",
+    "O enquadramento mais forte é o dos \"infiltrados\"."
+   ],
+   "eixo": "direita",
+   "notas": "rascunho do agente (2026-10-14), a revisar pelo autor"
+  },
+  {
+   "event": "invasao-3-poderes",
+   "community": 2,
+   "summary": {
+    "model": "claude-sonnet-5-5",
+    "prompt_version": "v1"
+   },
+   "trecho": [
+    "O material mostra uma comunidade que acompanha os ataques em tempo real e os enquadra, de forma quase uniforme, como 'terrorismo', 'golpe' e 'barbárie' de 'bolsonaristas'.",
+    "O bloco B, mais próprio da comunidade, é dominado por humor e fandoms"
+   ],
+   "eixo": "esquerda",
+   "notas": "rascunho do agente (2026-10-14), a revisar pelo autor"
+  }
+ ]
+}

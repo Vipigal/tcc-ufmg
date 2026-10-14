@@ -1,4 +1,4 @@
-import type { Slot } from "../types";
+import type { Slot, SlotOrigin } from "../types";
 import { normalize } from "./format";
 
 /** Estado da barra de ferramentas (RF9). Vive fora da URL. */
@@ -6,15 +6,23 @@ import { normalize } from "./format";
 export type SortKey = "rank" | "purity" | "rt_graph" | "api_retweets" | "date";
 export type StatusFilter = "all" | "hydrated" | "ghost";
 export type ExclusivityFilter = "all" | "exclusive" | "shared";
+export type OriginFilter = "all" | SlotOrigin;
 
 export interface ToolbarState {
   sort: SortKey;
   status: StatusFilter;
   exclusivity: ExclusivityFilter;
+  origin: OriginFilter;
   query: string;
 }
 
-export const DEFAULT_TOOLBAR: ToolbarState = { sort: "rank", status: "all", exclusivity: "all", query: "" };
+export const DEFAULT_TOOLBAR: ToolbarState = {
+  sort: "rank",
+  status: "all",
+  exclusivity: "all",
+  origin: "all",
+  query: "",
+};
 
 /** Limiares de leitura do spec §7.6/§7.7 — sinalização, não juízo. */
 export const EXCLUSIVE_MIN_PURITY = 0.9;
@@ -27,6 +35,7 @@ export function applyToolbar(slots: Slot[], state: ToolbarState): Slot[] {
     if (state.status === "ghost" && s.status === "hydrated") return false;
     if (state.exclusivity === "exclusive" && !(s.purity != null && s.purity >= EXCLUSIVE_MIN_PURITY)) return false;
     if (state.exclusivity === "shared" && !(s.purity != null && s.purity < SHARED_MAX_PURITY)) return false;
+    if (state.origin !== "all" && s.origin !== state.origin) return false;
     if (q !== "" && !matchesQuery(s, q)) return false;
     return true;
   });
@@ -38,9 +47,12 @@ function matchesQuery(s: Slot, q: string): boolean {
   return fields.some((f) => typeof f === "string" && normalize(f).includes(q));
 }
 
+const ORIGIN_ORDER: Record<SlotOrigin, number> = { amplified: 0, characteristic: 1 };
+
 export function sortSlots(slots: Slot[], sort: SortKey): Slot[] {
   const out = [...slots];
-  const byRank = (a: Slot, b: Slot) => a.rank - b.rank;
+  // amplificados (top-K) antes dos característicos (cauda); dentro de cada um, pelo ranking próprio
+  const byRank = (a: Slot, b: Slot) => ORIGIN_ORDER[a.origin] - ORIGIN_ORDER[b.origin] || a.rank - b.rank;
   switch (sort) {
     case "rank":
       return out.sort(byRank);
