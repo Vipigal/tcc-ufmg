@@ -62,7 +62,7 @@
 
 O segundo turno da eleição presidencial de 2022 terminou com a vitória de Lula sobre Jair Bolsonaro por margem estreita. Pouco mais de dois meses depois, em 8 de janeiro de 2023, apoiadores de Bolsonaro invadiram e depredaram as sedes dos três poderes em Brasília, contestando o resultado das urnas \cite{bastos2023}. Para boa parte do país, esses fatos representavam um ataque à democracia. Para outra parcela, eram um ato legítimo de protesto. Não havia vocabulário comum entre as duas leituras.
 
-Que o Brasil está dividido é quase um consenso intuitivo. O que é menos óbvio, e mais interessante de investigar, é a \textbf{forma} dessa divisão. Dois grupos opostos podem trocar informação o tempo todo ou se fechar em ambientes paralelos que quase não se tocam, e esses dois cenários têm consequências diferentes. No Twitter, a experiência de cada usuário é moldada pelo que ele escolhe amplificar e pelo que os algoritmos lhe entregam \cite{pariser2012}, \cite{sunstein2017}. Assim, duas pessoas expostas ao mesmo evento podem ter contato com versões quase opostas dele. Interian e Rodrigues \cite{interian2023} observaram um isolamento acentuado da comunidade de direita no Twitter durante a eleição de 2022 e levantaram a hipótese de que ele tenha influenciado o 8 de janeiro. Bastos e Recuero \cite{bastos2023} acrescentam que a narrativa de fraude foi também oferecida pela própria liderança, ao longo da campanha. A hipótese deste trabalho é que a divergência foi construída ao longo do ciclo eleitoral, e não de uma vez no 8 de janeiro. Por isso são analisados quatro eventos que formam um arco de tensionamento institucional:
+Que o Brasil está dividido é quase um consenso intuitivo. O que é menos óbvio, e mais interessante de investigar, é a forma dessa divisão. Dois grupos opostos podem trocar informação o tempo todo ou se fechar em ambientes paralelos que quase não se tocam, e esses dois cenários têm consequências diferentes. No Twitter, a experiência de cada usuário é moldada pelo que ele escolhe amplificar e pelo que os algoritmos lhe entregam \cite{pariser2012}, \cite{sunstein2017}. Assim, duas pessoas expostas ao mesmo evento podem ter contato com versões quase opostas dele. Interian e Rodrigues \cite{interian2023} observaram um isolamento acentuado da comunidade de direita no Twitter durante a eleição de 2022 e levantaram a hipótese de que ele tenha influenciado o 8 de janeiro. Bastos e Recuero \cite{bastos2023} acrescentam que a narrativa de fraude foi também oferecida pela própria liderança, ao longo da campanha. A hipótese deste trabalho é que a divergência foi construída ao longo do ciclo eleitoral, e não de uma vez no 8 de janeiro. Por isso são analisados quatro eventos que formam um arco de tensionamento institucional:
 
 \begin{itemize}
 \item a mobilização de 7 de setembro de 2022;
@@ -115,15 +115,15 @@ Há também um problema de comunicação. Análises desse tipo costumam chegar a
 
 \textbf{Da rede de retweet ao co-retweet.} Conover et al. \cite{conover2011} mostraram que a rede de retweets do Twitter político americano se divide em dois grupos segregados, com base na premissa de que o retweet funciona, em geral, como endosso. A rede dirigida exige conhecer o autor de cada tweet, informação ausente no dataset \cite{alabarse2024}. A rede de co-retweet liga usuários pelo conjunto de tweets que retuitaram em comum. Ela segue a lógica do acoplamento bibliográfico de Kessler \cite{kessler1963}, em que dois documentos são próximos quando citam as mesmas referências; formalmente, é a projeção da matriz de incidência usuário $\times$ tweet sobre o lado dos usuários, $C = M \cdot M^{\mathsf{T}}$. A analogia é proposta deste trabalho. A normalização por Jaccard é uma escolha analítica, declarada como tal. As comunidades resultantes são chamadas aqui de \textbf{comunidades discursivas}: grupos identificados por padrões de amplificação, sem rótulo prévio de orientação.
 
-\textbf{Robustez da detecção de comunidades.} Uma partição produzida pelo Leiden \cite{traag2019} não deve ser tomada como verdade, por três motivos bem estabelecidos na literatura de detecção de comunidades:
+\textbf{Robustez da detecção de comunidades.} O Leiden \cite{traag2019}, na forma usada aqui, busca a partição que maximiza a modularidade, medida de quanto as arestas se concentram dentro dos grupos em relação ao que se esperaria ao acaso. Uma partição assim produzida não deve ser tomada cegamente como verdade, por três limitações bem documentadas na literatura de detecção de comunidades:
 
 \begin{itemize}
-\item a modularidade admite muitas partições quase ótimas e distintas entre si;
-\item a modularidade tem um limite de resolução, que o Constant Potts Model não tem;
-\item execuções estocásticas variam, e o \emph{consensus clustering} permite medir a robustez de cada comunidade.
+\item \emph{Degenerescência.} Good, de Montjoye e Clauset \cite{good2010} mostraram que, em redes reais, a modularidade admite um número muito grande de partições com valores quase máximos e estruturalmente distintas entre si. A partição encontrada é, portanto, uma entre muitas plausíveis, e pequenas mudanças nos dados ou na execução podem levar a outra.
+\item \emph{Limite de resolução.} Fortunato e Barthélemy \cite{fortunato2007} demonstraram que a modularidade pode deixar de separar comunidades menores que uma escala que depende do tamanho total da rede, fundindo grupos que seriam distintos. Traag, Van Dooren e Nesterov \cite{traag2011} propuseram o \emph{Constant Potts Model} (CPM), função de qualidade alternativa em que um grupo é aceito como comunidade quando sua densidade interna supera um limiar fixo, que não depende do tamanho da rede; por isso o CPM não sofre desse limite e serve de contraprova à modularidade.
+\item \emph{Estocasticidade.} O Leiden é um algoritmo aleatorizado: execuções com sementes diferentes podem produzir partições diferentes. Lancichinetti e Fortunato \cite{lancichinetti2012} propuseram o \emph{consensus clustering}, que combina muitas execuções registrando com que frequência cada par de nós cai na mesma comunidade; comunidades cujos membros permanecem juntos na maioria das execuções são robustas, e as demais são instáveis.
 \end{itemize}
 
-Se esses testes divergirem, o modelo de blocos estocásticos aninhado, com seleção por descrição mínima, oferece um critério independente para avaliar se uma subdivisão é sustentada pelos dados.
+Essas limitações não invalidam o uso do Leiden, mas implicam que nenhuma subdivisão deve ser interpretada antes de testada. Este trabalho as reconhece e procura mitigá-las por testes empíricos de robustez (etapa E1), e não por escolha de um único resultado. Se os testes divergirem, o modelo de blocos estocásticos (SBM) aninhado de Peixoto \cite{peixoto2014} oferece um critério independente: em vez de otimizar uma medida de qualidade, ajusta aos dados um modelo estatístico hierárquico da rede e escolhe o número de grupos pelo princípio da descrição mínima, que só aceita uma subdivisão adicional se ela explicar a estrutura das conexões melhor do que o custo de descrevê-la.
 
 \textbf{Métodos digitais e ferramentas existentes.} A pesquisa em comunicação sobre plataformas tende a métodos mistos, que combinam mapeamento quantitativo e leitura qualitativa, e a literatura brasileira caracteriza clusters pela leitura manual de seus conteúdos e atores centrais \cite{recuero2021}, \cite{hoffmann2025}. O TCC2 mantém a leitura humana como validação, feita no grupo focal. As ferramentas mais usadas na área resolvem problemas vizinhos:
 
@@ -160,7 +160,13 @@ São seis etapas, em ordem de dependência. Cada uma é implementada como estág
 \begin{itemize}
 \item Calcular a hermeticidade por super-polo, ao lado da hermeticidade por comunidade.
 \item Abandonar a modularidade e a assortatividade como métricas de comparação entre eventos, porque misturam abertura entre polos com subdivisão interna.
-\item Para cada par de comunidades entrelaçadas, testar a robustez: várias seeds do Leiden (com coassignação e ARI/NMI), varredura de resolução com o CPM como contraprova, variação do limiar de backbone e, se necessário, o SBM aninhado.
+\item Para cada par de comunidades entrelaçadas, testar se a subdivisão resiste a perturbações da análise:
+  \begin{itemize}
+  \item executar o Leiden com várias sementes aleatórias e comparar as partições obtidas. A comparação usa dois índices: o Índice de Rand Ajustado (ARI), que mede a fração de pares de usuários classificados da mesma forma nas duas partições, descontada a concordância esperada ao acaso \cite{hubert1985}, e a Informação Mútua Normalizada (NMI), que mede quanto conhecer uma partição informa sobre a outra \cite{danon2005}. Ambos valem 1 para partições idênticas e ficam próximos de 0 quando a concordância é casual;
+  \item variar o parâmetro de resolução do Leiden e repetir a detecção com o CPM, verificando se a subdivisão persiste em mais de uma escala;
+  \item variar o limiar de peso do \emph{backbone}, que define quais ligações de co-retweet entram no grafo;
+  \item se esses testes divergirem, recorrer ao SBM aninhado como critério de desempate.
+  \end{itemize}
 \item Registrar o critério de ``subdivisão robusta'' antes da execução.
 \item \emph{Entregável:} tabela estrutural revisada e um veredito por par.
 \end{itemize}
@@ -279,6 +285,20 @@ São seis etapas, em ordem de dependência. Cada uma é implementada como estág
 \bibitem{kessler1963} M. M. Kessler, ``Bibliographic coupling between scientific papers,'' \emph{American Documentation}, vol. 14, no. 1, pp. 10–25, 1963, doi: 10.1002/asi.5090140103.
 
 \bibitem{traag2019} V. A. Traag, L. Waltman, and N. J. van Eck, ``From Louvain to Leiden: guaranteeing well-connected communities,'' \emph{Sci. Rep.}, vol. 9, Art. no. 5233, 2019, doi: 10.1038/s41598-019-41695-z.
+
+\bibitem{good2010} B. H. Good, Y.-A. de Montjoye, and A. Clauset, ``Performance of modularity maximization in practical contexts,'' \emph{Phys. Rev. E}, vol. 81, no. 4, Art. no. 046106, 2010, doi: 10.1103/PhysRevE.81.046106.
+
+\bibitem{fortunato2007} S. Fortunato and M. Barthélemy, ``Resolution limit in community detection,'' \emph{Proc. Natl. Acad. Sci. U.S.A.}, vol. 104, no. 1, pp. 36–41, 2007, doi: 10.1073/pnas.0605965104.
+
+\bibitem{traag2011} V. A. Traag, P. Van Dooren, and Y. Nesterov, ``Narrow scope for resolution-limit-free community detection,'' \emph{Phys. Rev. E}, vol. 84, no. 1, Art. no. 016114, 2011, doi: 10.1103/PhysRevE.84.016114.
+
+\bibitem{lancichinetti2012} A. Lancichinetti and S. Fortunato, ``Consensus clustering in complex networks,'' \emph{Sci. Rep.}, vol. 2, Art. no. 336, 2012, doi: 10.1038/srep00336.
+
+\bibitem{peixoto2014} T. P. Peixoto, ``Hierarchical block structures and high-resolution model selection in large networks,'' \emph{Phys. Rev. X}, vol. 4, no. 1, Art. no. 011047, 2014, doi: 10.1103/PhysRevX.4.011047.
+
+\bibitem{hubert1985} L. Hubert and P. Arabie, ``Comparing partitions,'' \emph{J. Classification}, vol. 2, no. 1, pp. 193–218, 1985, doi: 10.1007/BF01908075.
+
+\bibitem{danon2005} L. Danon, A. Díaz-Guilera, J. Duch, and A. Arenas, ``Comparing community structure identification,'' \emph{J. Stat. Mech.: Theory Exp.}, vol. 2005, no. 9, Art. no. P09008, 2005, doi: 10.1088/1742-5468/2005/09/P09008.
 
 \end{thebibliography}
 
