@@ -166,6 +166,8 @@ score(u) = (R_right(u) - R_left(u)) / (R_right(u) + R_left(u))
 - Classificação binária por usuário (esquerda/direita) — perde informação, especialmente sobre usuários moderados ou indefinidos.
 - Score baseado em outras métricas além do retweet — fora do escopo (não temos texto dos tweets do usuário, só dos retuitados).
 
+**Revisão (2026-10-06): fora do escopo do TCC2.** O score ideológico por usuário não será calculado. Motivos: (a) a leitura preliminar do conteúdo (`docs/relatorio-narrativa-preliminar.md`, §2.5) mostrou que "esquerda" e "direita" descrevem mal os polos encontrados — um deles reúne candidatos de centro, Gilmar Mendes e a imprensa de referência —, de modo que a régua do score forçaria uma estrutura que o dado não tem; (b) dentro de um polo o score seria quase constante (as metades de um polo subdividido estão sempre do mesmo lado), e a pergunta do TCC2 sobre as subdivisões é de organização interna, não ideológica; (c) a rotulagem dos polos passa a ser feita a posteriori, pelo conteúdo (sínteses por LLM, ver D8) e pela leitura manual dos participantes do grupo focal. Consequência: o painel longitudinal de radicalização previsto no relatório do TCC1, que dependia do score, também sai do escopo (trabalho futuro). Registrado na proposta do TCC2 (`docs/proposta-tcc2.md`, "O que muda em relação ao plano do MSI I").
+
 ---
 
 ## D8. Uso de LLM como assistente, com revisão manual obrigatória
@@ -183,6 +185,8 @@ score(u) = (R_right(u) - R_left(u)) / (R_right(u) + R_left(u))
 - Treinar classificador supervisionado próprio — overkill para o escopo.
 
 **Compromisso:** documentar explicitamente no TCC os prompts usados, os critérios de revisão e exemplos de casos em que a revisão alterou a classificação do LLM.
+
+**Revisão (2026-10-06): o LLM deixa de classificar autores e passa a sintetizar conteúdo com ancoragem.** Com a revisão de D7, a primeira tarefa (classificação ideológica dos autores) deixa de existir. O LLM fica com uma função: gerar, por evento e comunidade, sínteses narrativas (temas, protagonistas, antagonistas, tese central) a partir do top-K e dos tweets-assinatura hidratados, sem rótulo ideológico prévio e com cada afirmação citando os identificadores dos tweets que a sustentam. A revisão manual obrigatória se mantém e ganha duas camadas antes dela: checagem automática de que os tweets citados existem e pertencem à comunidade, e comparação item a item com a leitura manual preliminar (o que o modelo capturou, omitiu ou inventou). Modelo, versão e prompt ficam registrados. A rotulagem manual dos polos migra para o grupo focal (proposta do TCC2, etapas E3 e E5).
 
 ---
 
@@ -215,6 +219,8 @@ score(u) = (R_right(u) - R_left(u)) / (R_right(u) + R_left(u))
 - Animação pré-renderizada como vídeo — perde a interatividade.
 
 **Complemento:** calcular modularidade Q por janela de 3h (sobre subgrafos induzidos pelos nós ativos em cada janela) e exibir como gráfico de linha ao lado. Isso mostra a evolução estrutural sem comprometer a coerência do grafo principal.
+
+**Revisão (2026-10-06): fora do escopo do TCC2.** O controle temporal do 8 de janeiro (slider de hora sobre o grafo fixo e Q por janela de 3h) não entra na ferramenta do TCC2, cujo foco passa a ser a comparação entre polos e comunidades (sínteses, tweets-assinatura, explicação do método), validada em grupo focal. O desenho acima continua válido como trabalho futuro; o atributo de "primeiro instante de atividade" já existe nos dados, e os horários por cluster foram usados na leitura preliminar (`docs/relatorio-narrativa-preliminar.md`, §1.4).
 
 ---
 
@@ -322,3 +328,6 @@ Este espaço é para registrar mudanças futuras de decisão. Toda vez que uma d
 | 2026-06-17 | D5 — filtragem de ruído | Removido o filtro de tweets virais; mantido apenas o filtro de usuários inativos | Tweets de alto alcance são o material central da análise narrativa, não ruído; e o limiar de 30% não removia nenhum tweet na validação preliminar |
 | 2026-06-18 | D4 / implementação | Backbone (corte τ) fundido na projeção (M4), em blocos; módulo `backbone.py` removido | Cortar τ na projeção evita materializar o grafo inteiro e dá resultado idêntico (Jaccard é por par). Ver D14. |
 | 2026-09-10 | D6 — hidratação seletiva | Seleção passa de top-200 por evento para top-100 por cluster (≥1% dos nós), ranqueada por retweets internos ao cluster; K=20 para clusters com ≤5% do peso interno de arestas | Clusters agora são conhecidos (premissa da rejeição original caiu); top-200 global sub-representa clusters menores; custo caiu para ~US$ 4 com o pay-per-use da API |
+| 2026-10-06 | D7 — score ideológico | Sai do escopo do TCC2: sem score por usuário nem painel de radicalização | "Esquerda/direita" descreve mal os polos (um reúne centro e imprensa de referência); as subdivisões internas não são ideológicas; rótulos passam a emergir do conteúdo e do grupo focal |
+| 2026-10-06 | D8 — uso de LLM | Deixa de classificar autores; gera sínteses narrativas ancoradas em tweets citados, com checagem automática das citações, comparação com a leitura manual e revisão humana | Decorre da revisão de D7; a ancoragem torna a síntese verificável |
+| 2026-10-06 | D10 — controle temporal do 8/1 | Sai do escopo do TCC2 (trabalho futuro) | O foco da ferramenta passa à comparação entre polos e comunidades, validada em grupo focal |

@@ -7,14 +7,20 @@ Este arquivo registra a visão fixa do projeto. O que está aqui **não deve mud
 - **Autor:** Vinicius
 - **Orientadora:** Eliane
 - **Curso:** Bacharelado em Sistemas de Informação
-- **Entrega da proposta:** fim de maio de 2026
-- **Defesa final:** novembro de 2026 (aprox. 24 semanas de desenvolvimento)
+- **TCC1 (MSI I):** proposta entregue em maio de 2026; relatório final entregue (`reports/final-report-msi-1.tex`, artefato congelado)
+- **TCC2 (MSI II):** proposta em outubro de 2026; apresentação parcial, pôster e entrega final conforme o calendário do Moodle (datas a preencher pelo autor)
 
 ## Pergunta central
 
-> Como apoiadores de esquerda e de direita no Twitter brasileiro construíram e amplificaram narrativas distintas sobre o mesmo evento — os ataques de 8 de janeiro de 2023 — e como essa divergência pode ser tornada visível e navegável para um leitor?
+> O Twitter brasileiro estava polarizado no ciclo eleitoral de 2022, qual é a forma dessa polarização — na estrutura das comunidades e no conteúdo que cada polo amplificou ao longo do arco que leva ao 8 de janeiro de 2023 — e como essa divergência pode ser tornada compreensível e navegável para pesquisadores de comunicação e ciência política?
 
 Esta pergunta orienta todas as decisões do projeto. Qualquer escolha técnica ou metodológica deve poder ser justificada como contribuição para respondê-la.
+
+**Reformulação registrada em 2026-10-06 (proposta do TCC2).** Até o relatório do TCC1 a pergunta era: *"Como apoiadores de esquerda e de direita no Twitter brasileiro construíram e amplificaram narrativas distintas sobre o mesmo evento — os ataques de 8 de janeiro de 2023 — e como essa divergência pode ser tornada visível e navegável para um leitor?"*. Três mudanças, discutidas com o autor:
+
+1. **Saem "esquerda" e "direita" como premissa.** A leitura preliminar do conteúdo (`docs/relatorio-narrativa-preliminar.md`) mostrou que um dos polos reúne candidatos de centro e a imprensa de referência; os rótulos passam a emergir do conteúdo e da leitura dos participantes do grupo focal, não de uma classificação prévia.
+2. **O 8 de janeiro deixa de ser o objeto único** e passa a ser o ponto final de um arco de quatro eventos, como o relatório do TCC1 já praticava.
+3. **O leitor-alvo da ferramenta** passa de "leitor não-técnico" genérico a pesquisadores de comunicação e ciência política, e a navegabilidade da análise vira a tese tecnológica do trabalho.
 
 ## Postura intelectual
 
@@ -39,6 +45,7 @@ Três entregáveis concretos:
    - Ataques de 8 de janeiro de 2023
 
 3. **Aplicação web interativa pública** em React que permita a um leitor não-técnico explorar os grafos, comparar lado a lado o conteúdo amplificado por cada comunidade, e visualizar a evolução temporal do 8 de janeiro.
+   *Revisto em 2026-10-06:* o público-alvo passa a ser pesquisadores de comunicação e ciência política (validação por grupo focal) e a evolução temporal do 8 de janeiro sai do escopo do TCC2 (trabalho futuro; ver D10 em `decisoes-metodologicas.md`).
 
 ## O que está fora do escopo
 

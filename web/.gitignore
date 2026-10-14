@@ -3,3 +3,5 @@ dist
 *.local
 *.tsbuildinfo
 npm-debug.log*
+.vercel
+.env*
