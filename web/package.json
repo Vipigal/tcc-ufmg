@@ -11,13 +11,10 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "graphology": "^0.26.0",
-    "graphology-types": "^0.24.8",
     "lucide-react": "^1.46.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
-    "react-router-dom": "^7.18.4",
-    "sigma": "^3.0.3"
+    "react-router-dom": "^7.18.4"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",

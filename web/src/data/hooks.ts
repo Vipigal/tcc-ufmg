@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import type { EventData, EventMeta, Index } from "../types";
+import type { EventData, EventMeta, GroupMap, Index } from "../types";
 import { loadEvent } from "./loadEvent";
+import { loadGroupMap } from "./loadGroupMap";
 import { loadIndex } from "./loadIndex";
 
 export type AsyncState<T> =
@@ -42,4 +43,8 @@ export function useIndex(): AsyncState<Index> {
 
 export function useEvent(meta: EventMeta): AsyncState<EventData> {
   return useAsync(() => loadEvent(meta), meta.slug);
+}
+
+export function useGroupMap(slug: string): AsyncState<GroupMap> {
+  return useAsync(() => loadGroupMap(slug), `grafo:${slug}`);
 }

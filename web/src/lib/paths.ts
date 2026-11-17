@@ -1,39 +1,26 @@
-import type { EventMeta, Index } from "../types";
+export const HOME_PATH = "/";
+export const HOW_PATH = "/como-funciona";
+export const COMPARE_PARAM = "comparar";
 
-/** Rotas (spec 2026-10-14 §2): visão geral, leitor do grupo e comparação. */
-export type Mode = "overview" | "reader" | "compare";
-
-export function overviewPath(slug: string): string {
+export function eventPath(slug: string): string {
   return `/${slug}`;
 }
 
-export function clusterPath(slug: string, community: number): string {
+export function bubblePath(slug: string, community: number): string {
   return `/${slug}/${community}`;
 }
 
-export function comparePath(slug: string, a: number, b: number): string {
-  return `/${slug}/comparar/${a}/${b}`;
+/** Bolha aberta na página do evento: a pedida na URL, ou a primeira (maior). */
+export function pickBubble<T extends { community: number }>(clusters: T[], requested: string | undefined): T | undefined {
+  return clusters.find((c) => String(c.community) === requested) ?? clusters[0];
 }
 
-/** Entrada do evento = visão geral. */
-export function eventDefaultPath(meta: EventMeta): string {
-  return overviewPath(meta.slug);
-}
-
-export function indexDefaultPath(index: Index): string {
-  return eventDefaultPath(index.events[0]);
-}
-
-/** Mesmo modo em outro evento: grupo 1 no leitor; grupos 1 e 2 na comparação. */
-export function pathForMode(mode: Mode, meta: EventMeta, a?: number, b?: number): string {
-  const first = meta.clusters[0]?.community ?? 0;
-  const second = meta.clusters[1]?.community ?? first;
-  const has = (c?: number) => c !== undefined && meta.clusters.some((x) => x.community === c);
-  if (mode === "reader") return clusterPath(meta.slug, has(a) ? a! : first);
-  if (mode === "compare") {
-    const x = has(a) ? a! : first;
-    const y = has(b) && b !== x ? b! : x === first ? second : first;
-    return comparePath(meta.slug, x, y);
-  }
-  return overviewPath(meta.slug);
+/** Bolha de `?comparar=`: precisa existir e ser outra que a aberta. */
+export function pickCompare<T extends { community: number }>(
+  clusters: T[],
+  current: number,
+  requested: string | null,
+): T | undefined {
+  if (requested === null) return undefined;
+  return clusters.find((c) => String(c.community) === requested && c.community !== current);
 }

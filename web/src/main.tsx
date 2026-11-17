@@ -1,23 +1,31 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import App, { RootRedirect } from "./App";
+import { ThemeProvider } from "./App";
 import { applyTheme, browserStorage, readTheme } from "./lib/theme";
+import { HOW_PATH } from "./lib/paths";
+import { EventPage } from "./pages/EventPage";
+import { Home } from "./pages/Home";
+import { HowItWorks } from "./pages/HowItWorks";
 import "./styles.css";
 
-// tema antes do primeiro render, para não piscar claro → escuro
 applyTheme(readTheme(browserStorage));
 
-createRoot(document.getElementById("root")!).render(
+const root = document.getElementById("root");
+if (!root) throw new Error("sem #root no index.html");
+
+createRoot(root).render(
   <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<RootRedirect />} />
-        <Route path="/:evento" element={<App mode="overview" />} />
-        <Route path="/:evento/comparar/:a/:b" element={<App mode="compare" />} />
-        <Route path="/:evento/:community" element={<App mode="reader" />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path={HOW_PATH} element={<HowItWorks />} />
+          <Route path="/:evento" element={<EventPage />} />
+          <Route path="/:evento/:community" element={<EventPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   </StrictMode>,
 );

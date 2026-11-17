@@ -1,89 +1,210 @@
 @import "tailwindcss";
 
-/* `dark:` segue o tema escolhido (atributo data-theme no <html>), não o do sistema */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-/* Tokens de cor (referência: X, sem assets de marca). Claro por padrão no CSS; o app liga
-   o escuro (padrão do produto, spec 2026-10-14 §2.4) gravando data-theme no <html>. */
 :root {
   --bg: #ffffff;
-  --surface: #ffffff;
-  --subtle: #f7f9f9;
-  --hover: #eff3f4;
-  --ink: #0f1419;
-  --muted: #536471;
-  --line: #eff3f4;
-  --line-strong: #cfd9de;
-  --halo: #ffffff;
-  --map-grey: #c7ccd6;
+  --ink: #262335;
+  --muted: #4a4660;
+  --faint: #5e5a72;
+  --soft: #f7f5fc;
+  --chip: #f3f1f8;
+  --line: #ece9f3;
+  --line-strong: #d9d4e6;
+  --rule: #b9b4cc;
+  --warn: #fff1e2;
+
+  --group-1: #5e4fa2;
+  --group-2: #26a69a;
+  --group-3: #e8852b;
+  --group-4: #e2b33c;
+  --group-5: #b5651d;
+
+  --right-ink: #1f4fa3;
+  --right-tint: #eef4fd;
+  --right-line: #a9c6f7;
+  --left-ink: #a62b24;
+  --left-tint: #fdeeec;
+  --left-line: #f7a8a0;
+  --other-ink: #7a5600;
+  --other-tint: #fff6dd;
+  --other-line: #f2ce7a;
   color-scheme: light;
 }
+
 :root[data-theme="dark"] {
-  --bg: #000000;
-  --surface: #16181c;
-  --subtle: #0b0d10;
-  --hover: #1d1f23;
-  --ink: #e7e9ea;
-  --muted: #8b9095;
-  --line: #2f3336;
-  --line-strong: #3e4144;
-  --halo: #000000;
-  --map-grey: #34383d;
+  --bg: #13111b;
+  --ink: #eceaf4;
+  --muted: #bdb8cf;
+  --faint: #a19cb5;
+  --soft: #1d1a27;
+  --chip: #262232;
+  --line: #2e2a3b;
+  --line-strong: #3d3850;
+  --rule: #57516c;
+  --warn: #2e2416;
+
+  --group-1: #7a6eb4;
+  --group-2: #4db4aa;
+  --group-3: #ec974b;
+  --group-4: #e6bf5c;
+  --group-5: #c27f43;
+
+  --right-ink: #9dbdf7;
+  --right-tint: #17223a;
+  --right-line: #3d5f99;
+  --left-ink: #f4a097;
+  --left-tint: #35191a;
+  --left-line: #94443c;
+  --other-ink: #f0cb70;
+  --other-tint: #2f2712;
+  --other-line: #7d6424;
   color-scheme: dark;
 }
 
 @theme {
+  --font-sans: "Rethink Sans", system-ui, sans-serif;
   --color-bg: var(--bg);
-  --color-surface: var(--surface);
-  --color-subtle: var(--subtle);
-  --color-hover: var(--hover);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-soft: var(--soft);
+  --color-subtle: var(--soft);
+  --color-chip: var(--chip);
   --color-line: var(--line);
   --color-line-strong: var(--line-strong);
+  --color-rule: var(--rule);
+  --color-warn: var(--warn);
   --color-x-blue: #1d9bf0;
-  /* tag de inclinação (spec §3.2): direita azul, esquerda vermelho, outro amarelo */
-  --color-axis-right: #2563eb;
-  --color-axis-left: #dc2626;
-  --color-axis-other: #eab308;
 }
 
 html,
 body,
 #root {
-  height: 100%;
+  min-height: 100%;
 }
 
 body {
   margin: 0;
   background: var(--bg);
-  color: var(--color-ink);
+  color: var(--ink);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
 }
 
-@layer components {
-  .chip {
-    @apply inline-flex items-center gap-1 rounded-full border border-line bg-subtle px-2.5 py-1 text-[13px] text-ink hover:bg-hover;
+a {
+  text-underline-offset: 3px;
+}
+
+:where(a, button, summary):focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.lift {
+  transition:
+    border-color 200ms,
+    transform 200ms;
+}
+.lift:hover {
+  transform: translateY(-2px);
+}
+
+.slide {
+  transition: transform 700ms cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+.grow {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: grow 700ms cubic-bezier(0.3, 0.7, 0.2, 1) both;
+}
+@keyframes grow {
+  from {
+    transform: scale(0.2);
+    opacity: 0;
   }
-  .badge {
-    @apply inline-flex items-center gap-1 rounded border border-line px-1.5 py-0.5 text-[11px] uppercase tracking-wide text-muted;
-  }
-  .select {
-    @apply rounded-md border border-line-strong bg-surface px-2 py-1 text-[13px] text-ink;
-  }
-  /* rótulo do mini-mapa: halo da cor do fundo (branco no claro, como na figura da fase 1) */
-  .label-halo {
-    text-shadow:
-      0 0 3px var(--halo),
-      0 0 3px var(--halo),
-      0 0 4px var(--halo),
-      0 0 4px var(--halo);
+  to {
+    transform: scale(1);
+    opacity: 1;
   }
 }
 
-/* citação da síntese → card: destaque breve no card de destino */
+/* Passo 3 do "como funciona": bolha → ponto, sobreposição → linha. */
+.morph {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: morph 900ms cubic-bezier(0.5, 0, 0.2, 1) both;
+}
+@keyframes morph {
+  from {
+    transform: var(--from);
+    fill: var(--from-fill);
+    fill-opacity: var(--from-alpha);
+  }
+}
+.vanish {
+  animation: vanish 300ms ease-out both;
+}
+@keyframes vanish {
+  to {
+    opacity: 0;
+  }
+}
+.appear {
+  animation: appear 400ms ease-out both;
+}
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+}
+.draw {
+  stroke-dasharray: 1;
+  animation: draw 500ms ease-out both;
+}
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.zoom-out {
+  transform-origin: 280px 200px;
+  animation: zoom-out 1100ms cubic-bezier(0.3, 0.7, 0.2, 1) both;
+}
+@keyframes zoom-out {
+  from {
+    transform: scale(2.4);
+    opacity: 0.2;
+  }
+}
+
 .cite-flash {
   outline: 3px solid #1d9bf0;
-  outline-offset: 2px;
+  outline-offset: 4px;
+  border-radius: 12px;
   transition: outline-color 1.2s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lift,
+  .slide {
+    transition: none;
+  }
+  .lift:hover {
+    transform: none;
+  }
+  .grow,
+  .morph,
+  .appear,
+  .draw,
+  .zoom-out {
+    animation: none;
+  }
+  .vanish {
+    animation: none;
+    opacity: 0;
+  }
 }

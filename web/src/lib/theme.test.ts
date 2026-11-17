@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { lighten } from "./color";
 import { readTheme, writeTheme } from "./theme";
 
 describe("tema", () => {
@@ -19,13 +18,5 @@ describe("tema", () => {
         throw new Error("SecurityError");
       }, "light"),
     ).not.toThrow();
-  });
-});
-
-describe("lighten", () => {
-  it("mistura com branco na proporção dada e preserva entradas inválidas", () => {
-    expect(lighten("#000000", 0.5)).toBe("#808080");
-    expect(lighten("#5E4FA2", 0)).toBe("#5e4fa2");
-    expect(lighten("nada", 0.3)).toBe("nada");
   });
 });

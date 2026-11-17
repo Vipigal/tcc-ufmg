@@ -186,9 +186,35 @@ export interface Layout {
   groups: Record<string, number>; // community → group (todas as comunidades, inclusive < 1%)
 }
 
-/** Tudo que o front carrega para um evento (tweets.json + layout.json), em memória por slug. */
+/** Tudo que o front carrega para um evento (tweets.json), em memória por slug. */
 export interface EventData {
   meta: EventMeta;
   slots: Slot[];
-  layout: Layout;
+}
+
+/** `grafo.json` do M12 (`modules/group_map.py`, D18): rótulos e grade de clique sobre a imagem. */
+export interface GroupMapGrid {
+  n: number;
+  cells: number[]; // n×n, linha a linha de cima; community ou -1
+}
+
+export interface DominantPair {
+  a: number;
+  b: number;
+  share: number;
+}
+
+export interface GroupMapLabel {
+  community: number;
+  group: number;
+  label_x: number; // 0–1
+  label_y: number; // 0–1, de cima
+  anchor: "bottom" | "top"; // rótulo acima (bottom) ou abaixo (top) do ponto
+}
+
+export interface GroupMap {
+  groups: GroupMapLabel[];
+  dominant_pairs: DominantPair[];
+  grid: GroupMapGrid;
+  params: Record<string, unknown>;
 }

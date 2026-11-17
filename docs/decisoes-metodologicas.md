@@ -192,6 +192,8 @@ score(u) = (R_right(u) - R_left(u)) / (R_right(u) + R_left(u))
 
 *Adendo (2026-10-14), visão geral do leitor:* a inclinação aparece também como **tag binária colorida** (direita azul, esquerda vermelho, "outro" amarelo), atribuída pelo autor lendo o `inclinacao_politica` do LLM e guardada na curadoria (`data/curation/clusters.json`), junto com um trecho **literal** da síntese (validado no export). É decisão do autor e contraria a revisão de D7 e a proposta ("esquerda e direita descrevem mal os polos"); "outro" existe para o que não cabe no binário (7/9 Grupo 4, Ciro/PDT). Mitigação disponível: `?tags=0` oculta as tags (ex.: nas sessões do grupo focal). Spec: `docs/superpowers/specs/2026-10-14-visao-geral-comparacao-design.md`.
 
+*Adendo (2026-11-17), redesign do leitor (proposta E):* o **mapa do evento** (o grafo de grupos do D18 e as miniaturas da abertura) não carrega cor de inclinação: cada grupo tem uma cor da paleta do app **sem azul e vermelho** (roxo, verde, laranja, amarelo, marrom, pela ordem do grupo), que só o identifica. A cor do eixo (azul/vermelho/amarelo) fica no que se lê **depois de abrir** um grupo: etiqueta, painel, linha da thread, faixa dos tweets, botões e colunas da comparação. Decisão do autor: o mapa não deve sugerir lados antes da leitura do conteúdo. `?tags=0` continua neutralizando também o painel. (Primeira versão do mesmo dia usava bolhas em tons de lilás; trocada pela paleta a pedido do autor.)
+
 *Trade-offs assumidos:* (a) a **inclinação política reintroduz um rótulo ideológico**, que a revisão de 2026-10-06 tinha tirado ("sem rótulo ideológico prévio"); ele entra como palpite descrito e com confiança, não como categoria; (b) a síntese **e a inclinação ficam visíveis aos rotuladores desde o início** (alternativa considerada: esconder a inclinação atrás de um "revelar"). Isso acelera a rotulagem, mas a ancora no palpite do modelo: a rotulagem humana não é independente da do LLM, e a comparação LLM × humano prevista acima deve ser lida com essa ressalva; (c) `temperature` não é controlável pelo `claude -p`, então reprodutibilidade = prompt + modelo + resposta bruta guardados, não reexecução.
 
 ---
@@ -357,6 +359,26 @@ score(u) = (R_right(u) - R_left(u)) / (R_right(u) + R_left(u))
 **Alternativas rejeitadas:**
 - Nº de tweets em comum entre as seleções (top-K ∪ cauda) — depende de K e da atrição; fica só como dado secundário na comparação.
 - Hermeticidade por super-polo — exige definir os polos primeiro.
+
+---
+
+## D18. Mapa dos grupos no leitor: "grupos primeiro", com par dominante desenhado junto
+
+**Decisão (2026-11-17):** a página do evento mostra o grafo de co-retweet como imagem gerada no pipeline (M12, `modules/group_map.py`): cada pessoa é um ponto (tamanho pelo nº de ligações no grafo completo), cada grupo ocupa uma região com raio ∝ √pessoas e forma interna do **ForceAtlas2** (`fa2_modified`, sem pesos, sobre o mesmo grafo top-12 e componente gigante do M7, semente 42, 800 iterações). Um **par dominante** — um grupo manda ≥ 40% do que retuíta ao outro e esse parceiro concentra ≥ 70% de tudo o que ele compartilha (`shared_with`, D17) — é desenhado como **uma unidade**, com a forma conjunta do **DRL** (M7). Grupos sem par dominante ficam separados por ≥ `gap` × soma dos raios (1,25; 1,75 no 30/10); grupos com < 10% compartilhado com todos vão para a borda. Arestas: a mais forte de cada pessoa no próprio grupo (textura quase transparente) e, entre grupos, as mais fortes de cada par, em quantidade ∝ √(total do par), até 90 por par (45 no 30/10). O clique usa uma grade 64×64 com o grupo majoritário de cada célula.
+
+**Por quê:**
+- O autor quer que o leitor veja **comunidades de nós** (nós com peso visual muito maior que as arestas) e, secundariamente, o entrelaçamento entre elas; e que o grupo seja clicável.
+- Pesquisa e prévias de 2026-11-17 (16 figuras, quatro rodadas): o ForceAtlas2 separa muito mais os grupos que o DRL (distância média dentro ÷ entre grupos: 0,06 × 0,48 no 8/1; 0,33 × 0,71 no 30/10, com o FA2 do graphology; o `fa2_modified` dá 0,42 no 30/10), mas, global, afasta demais os grupos isolados — daí o arranjo "grupos primeiro". Estudo com usuários (Rodgers et al., 2016) favorece desenhar os conjuntos primeiro.
+- No 7/9, 23/10 e 8/1, os grupos 2 e 3 compartilham 46–59% e são "quase o mesmo grupo" com detalhes diferentes; o FA2 os separa em duas regiões com fronteira reta, o DRL os mostra entrelaçados. No 30/10 ninguém é par dominante (compartilhamento espalhado, máx. 35%): os grupos ficam separados e as linhas contam o entrelaçamento.
+
+**Observação:** é **apresentação**. Distâncias entre grupos, cortes de arestas, limites de par dominante e `gap` são escolhas de desenho, ajustadas olhando as figuras; nenhuma medida da pesquisa sai do layout. A figura mistura dois layouts (FA2 para grupos, DRL para pares dominantes) — a legenda do app diz isso.
+
+**Alternativas rejeitadas:**
+- Bolhas lúdicas (proposta E) — não mostram os nós.
+- Bubble Sets sobre o DRL (proposta D) — rejeitado esteticamente pelo autor.
+- DRL ou ForceAtlas2 globais com todas as arestas — emaranhado; grupos do 30/10 impossíveis de clicar.
+- Edge bundling — caro com estes volumes e sem evidência de legibilidade.
+- ForceAtlas2 LinLog — separou pior que o DRL nas prévias.
 
 ---
 
